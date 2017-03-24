@@ -71,7 +71,7 @@ class PostComment (Resource):
 			query = text('select c.content, c.owner, c.date from comment c, relationship r, user u where c.postID=' + str(request.args['postID']) + ' and c.owner=u.userName and r.follower_id=u.id and r.following_id=' + str(current_identity.id))
 			result = db.engine.execute(query)
 			cmts = []
-			print result
+			
 			for c in result:
 				tmp = {}
 				tmp['content'] = c.content
