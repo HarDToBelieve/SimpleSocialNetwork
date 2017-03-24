@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0049)http://flask-sqlalchemy.pocoo.org/2.1/quickstart/ -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <title>Quickstart — Flask-SQLAlchemy Documentation (2.1)</title>
+    
+    <link rel="stylesheet" href="./Quickstart — Flask-SQLAlchemy Documentation (2.1)_files/flask-sqlalchemy.css" type="text/css">
+    <link rel="stylesheet" href="./Quickstart — Flask-SQLAlchemy Documentation (2.1)_files/pygments.css" type="text/css">
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.1-20170305',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="./Quickstart — Flask-SQLAlchemy Documentation (2.1)_files/jquery.js"></script>
+    <script type="text/javascript" src="./Quickstart — Flask-SQLAlchemy Documentation (2.1)_files/underscore.js"></script>
+    <script type="text/javascript" src="./Quickstart — Flask-SQLAlchemy Documentation (2.1)_files/doctools.js"></script>
+    <link rel="index" title="Index" href="http://flask-sqlalchemy.pocoo.org/2.1/genindex/">
+    <link rel="search" title="Search" href="http://flask-sqlalchemy.pocoo.org/2.1/search/">
+    <link rel="next" title="Introduction into Contexts" href="http://flask-sqlalchemy.pocoo.org/2.1/contexts/">
+    <link rel="prev" title="Flask-SQLAlchemy" href="http://flask-sqlalchemy.pocoo.org/2.1/">
+   
+  
+    
+  
+  <link rel="canonical" href="http://flask-sqlalchemy.pocoo.org/latest/quickstart/">
+  <link media="only screen and (max-device-width: 480px)" href="./Quickstart — Flask-SQLAlchemy Documentation (2.1)_files/small.css" type="text/css" rel="stylesheet">
+
+  <script id="_carbonads_projs" type="text/javascript" src="http://srv.carbonads.net/ads/C6AILKT.json?segment=placement:pocooorg&amp;callback=_carbonads_go"></script><script type="text/javascript" src="http://fallbacks.carbonads.com/home/e99a260b94849497ea962f674f0aebd9//pocooorg/8/"></script></head>
+  <body role="document">
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="http://flask-sqlalchemy.pocoo.org/2.1/genindex/" title="General Index" accesskey="I">index</a></li>
+        <li class="right">
+          <a href="http://flask-sqlalchemy.pocoo.org/2.1/contexts/" title="Introduction into Contexts" accesskey="N">next</a> |</li>
+        <li class="right">
+          <a href="http://flask-sqlalchemy.pocoo.org/2.1/" title="Flask-SQLAlchemy" accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="http://flask-sqlalchemy.pocoo.org/2.1/">Flask-SQLAlchemy Documentation (2.1)</a> »</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+  
+  
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="quickstart">
+<span id="id1"></span><h1>Quickstart<a class="headerlink" href="http://flask-sqlalchemy.pocoo.org/2.1/quickstart/#quickstart" title="Permalink to this headline">¶</a></h1>
+<p>Flask-SQLAlchemy is fun to use, incredibly easy for basic applications, and
+readily extends for larger applications.  For the complete guide, checkout
+the API documentation on the <a class="reference internal" href="http://flask-sqlalchemy.pocoo.org/2.1/api/#flask.ext.sqlalchemy.SQLAlchemy" title="flask.ext.sqlalchemy.SQLAlchemy"><code class="xref py py-class docutils literal"><span class="pre">SQLAlchemy</span></code></a> class.</p>
+<div class="section" id="a-minimal-application">
+<h2>A Minimal Application<a class="headerlink" href="http://flask-sqlalchemy.pocoo.org/2.1/quickstart/#a-minimal-application" title="Permalink to this headline">¶</a></h2>
+<p>For the common case of having one Flask application all you have to do is
+to create your Flask application, load the configuration of choice and
+then create the <a class="reference internal" href="http://flask-sqlalchemy.pocoo.org/2.1/api/#flask.ext.sqlalchemy.SQLAlchemy" title="flask.ext.sqlalchemy.SQLAlchemy"><code class="xref py py-class docutils literal"><span class="pre">SQLAlchemy</span></code></a> object by passing it the application.</p>
+<p>Once created, that object then contains all the functions and helpers
+from both <code class="xref py py-mod docutils literal"><span class="pre">sqlalchemy</span></code> and <a class="reference external" href="http://docs.sqlalchemy.org/en/latest/orm/scalar_mapping.html#module-sqlalchemy.orm" title="(in SQLAlchemy v1.1)"><code class="xref py py-mod docutils literal"><span class="pre">sqlalchemy.orm</span></code></a>.  Furthermore it
+provides a class called <cite>Model</cite> that is a declarative base which can be
+used to declare models:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="k">import</span> <span class="n">Flask</span>
+<span class="kn">from</span> <span class="nn">flask_sqlalchemy</span> <span class="k">import</span> <span class="n">SQLAlchemy</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">'SQLALCHEMY_DATABASE_URI'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'sqlite:////tmp/test.db'</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">SQLAlchemy</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">80</span><span class="p">),</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">120</span><span class="p">),</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">email</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">email</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">'&lt;User </span><span class="si">%r</span><span class="s1">&gt;'</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span>
+</pre></div>
+</div>
+<p>To create the initial database, just import the <cite>db</cite> object from an
+interactive Python shell and run the
+<a class="reference internal" href="http://flask-sqlalchemy.pocoo.org/2.1/api/#flask.ext.sqlalchemy.SQLAlchemy.create_all" title="flask.ext.sqlalchemy.SQLAlchemy.create_all"><code class="xref py py-meth docutils literal"><span class="pre">SQLAlchemy.create_all()</span></code></a> method to create the
+tables and database:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">yourapplication</span> <span class="k">import</span> <span class="n">db</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">create_all</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Boom, and there is your database.  Now to create some users:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">yourapplication</span> <span class="k">import</span> <span class="n">User</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">admin</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="s1">'admin'</span><span class="p">,</span> <span class="s1">'admin@example.com'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">guest</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="s1">'guest'</span><span class="p">,</span> <span class="s1">'guest@example.com'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>But they are not yet in the database, so let’s make sure they are:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">admin</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">guest</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Accessing the data in database is easy as a pie:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">users</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="go">[&lt;User u'admin'&gt;, &lt;User u'guest'&gt;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">admin</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">'admin'</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+<span class="go">&lt;User u'admin'&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="simple-relationships">
+<h2>Simple Relationships<a class="headerlink" href="http://flask-sqlalchemy.pocoo.org/2.1/quickstart/#simple-relationships" title="Permalink to this headline">¶</a></h2>
+<p>SQLAlchemy connects to relational databases and what relational databases
+are really good at are relations.  As such, we shall have an example of an
+application that uses two tables that have a relationship to each other:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+
+
+<span class="k">class</span> <span class="nc">Post</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">80</span><span class="p">))</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Text</span><span class="p">)</span>
+    <span class="n">pub_date</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">DateTime</span><span class="p">)</span>
+
+    <span class="n">category_id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s1">'category.id'</span><span class="p">))</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span><span class="s1">'Category'</span><span class="p">,</span>
+        <span class="n">backref</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">backref</span><span class="p">(</span><span class="s1">'posts'</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s1">'dynamic'</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">category</span><span class="p">,</span> <span class="n">pub_date</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">body</span>
+        <span class="k">if</span> <span class="n">pub_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pub_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pub_date</span> <span class="o">=</span> <span class="n">pub_date</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">category</span> <span class="o">=</span> <span class="n">category</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">'&lt;Post </span><span class="si">%r</span><span class="s1">&gt;'</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+
+
+<span class="k">class</span> <span class="nc">Category</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">'&lt;Category </span><span class="si">%r</span><span class="s1">&gt;'</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+</pre></div>
+</div>
+<p>First let’s create some objects:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">py</span> <span class="o">=</span> <span class="n">Category</span><span class="p">(</span><span class="s1">'Python'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Post</span><span class="p">(</span><span class="s1">'Hello Python!'</span><span class="p">,</span> <span class="s1">'Python is pretty cool'</span><span class="p">,</span> <span class="n">py</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">py</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now because we declared <cite>posts</cite> as dynamic relationship in the backref
+it shows up as query:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">py</span><span class="o">.</span><span class="n">posts</span>
+<span class="go">&lt;sqlalchemy.orm.dynamic.AppenderBaseQuery object at 0x1027d37d0&gt;</span>
+</pre></div>
+</div>
+<p>It behaves like a regular query object so we can ask it for all posts that
+are associated with our test “Python” category:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">py</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="go">[&lt;Post 'Hello Python!'&gt;]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="road-to-enlightenment">
+<h2>Road to Enlightenment<a class="headerlink" href="http://flask-sqlalchemy.pocoo.org/2.1/quickstart/#road-to-enlightenment" title="Permalink to this headline">¶</a></h2>
+<p>The only things you need to know compared to plain SQLAlchemy are:</p>
+<ol class="arabic simple">
+<li><a class="reference internal" href="http://flask-sqlalchemy.pocoo.org/2.1/api/#flask.ext.sqlalchemy.SQLAlchemy" title="flask.ext.sqlalchemy.SQLAlchemy"><code class="xref py py-class docutils literal"><span class="pre">SQLAlchemy</span></code></a> gives you access to the following things:<ul>
+<li>all the functions and classes from <code class="xref py py-mod docutils literal"><span class="pre">sqlalchemy</span></code> and
+<a class="reference external" href="http://docs.sqlalchemy.org/en/latest/orm/scalar_mapping.html#module-sqlalchemy.orm" title="(in SQLAlchemy v1.1)"><code class="xref py py-mod docutils literal"><span class="pre">sqlalchemy.orm</span></code></a></li>
+<li>a preconfigured scoped session called <cite>session</cite></li>
+<li>the <a class="reference internal" href="http://flask-sqlalchemy.pocoo.org/2.1/api/#flask.ext.sqlalchemy.SQLAlchemy.metadata" title="flask.ext.sqlalchemy.SQLAlchemy.metadata"><code class="xref py py-attr docutils literal"><span class="pre">metadata</span></code></a></li>
+<li>the <a class="reference internal" href="http://flask-sqlalchemy.pocoo.org/2.1/api/#flask.ext.sqlalchemy.SQLAlchemy.engine" title="flask.ext.sqlalchemy.SQLAlchemy.engine"><code class="xref py py-attr docutils literal"><span class="pre">engine</span></code></a></li>
+<li>a <a class="reference internal" href="http://flask-sqlalchemy.pocoo.org/2.1/api/#flask.ext.sqlalchemy.SQLAlchemy.create_all" title="flask.ext.sqlalchemy.SQLAlchemy.create_all"><code class="xref py py-meth docutils literal"><span class="pre">SQLAlchemy.create_all()</span></code></a> and <a class="reference internal" href="http://flask-sqlalchemy.pocoo.org/2.1/api/#flask.ext.sqlalchemy.SQLAlchemy.drop_all" title="flask.ext.sqlalchemy.SQLAlchemy.drop_all"><code class="xref py py-meth docutils literal"><span class="pre">SQLAlchemy.drop_all()</span></code></a>
+methods to create and drop tables according to the models.</li>
+<li>a <a class="reference internal" href="http://flask-sqlalchemy.pocoo.org/2.1/api/#flask.ext.sqlalchemy.Model" title="flask.ext.sqlalchemy.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> baseclass that is a configured declarative base.</li>
+</ul>
+</li>
+<li>The <a class="reference internal" href="http://flask-sqlalchemy.pocoo.org/2.1/api/#flask.ext.sqlalchemy.Model" title="flask.ext.sqlalchemy.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> declarative base class behaves like a regular
+Python class but has a <cite>query</cite> attribute attached that can be used to
+query the model.  (<a class="reference internal" href="http://flask-sqlalchemy.pocoo.org/2.1/api/#flask.ext.sqlalchemy.Model" title="flask.ext.sqlalchemy.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> and <a class="reference internal" href="http://flask-sqlalchemy.pocoo.org/2.1/api/#flask.ext.sqlalchemy.BaseQuery" title="flask.ext.sqlalchemy.BaseQuery"><code class="xref py py-class docutils literal"><span class="pre">BaseQuery</span></code></a>)</li>
+<li>You have to commit the session, but you don’t have to remove it at
+the end of the request, Flask-SQLAlchemy does that for you.</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><p class="logo"><a href="http://flask-sqlalchemy.pocoo.org/2.1/">
+  <img class="logo" src="./Quickstart — Flask-SQLAlchemy Documentation (2.1)_files/flask-sqlalchemy-small.png" alt="Flask-SQLAlchemy Logo">
+</a></p>
+  <h3><a href="http://flask-sqlalchemy.pocoo.org/2.1/">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="http://flask-sqlalchemy.pocoo.org/2.1/quickstart/#">Quickstart</a><ul>
+<li><a class="reference internal" href="http://flask-sqlalchemy.pocoo.org/2.1/quickstart/#a-minimal-application">A Minimal Application</a></li>
+<li><a class="reference internal" href="http://flask-sqlalchemy.pocoo.org/2.1/quickstart/#simple-relationships">Simple Relationships</a></li>
+<li><a class="reference internal" href="http://flask-sqlalchemy.pocoo.org/2.1/quickstart/#road-to-enlightenment">Road to Enlightenment</a></li>
+</ul>
+</li>
+</ul>
+<h3>Versions</h3>
+<ul class="versions">
+  
+    
+      
+        
+      
+      <li><a href="http://flask-sqlalchemy.pocoo.org/dev/quickstart/">Development</a>
+    
+    <span class="note">(unstable)</span>
+  
+    
+      
+        
+      
+      </li><li><a href="http://flask-sqlalchemy.pocoo.org/2.2/quickstart/">Flask-SQLAlchemy 2.2</a>
+    
+    <span class="note">(stable)</span>
+  
+    
+      </li><li><a href="http://flask-sqlalchemy.pocoo.org/2.1/quickstart/" class="current">Flask-SQLAlchemy 2.1</a>
+    
+    <span class="note">(stable)</span>
+  
+</li></ul>
+<div class="carbon_ads">
+  <script async="" type="text/javascript" src="./Quickstart — Flask-SQLAlchemy Documentation (2.1)_files/carbon.js" id="_carbonads_js"></script>
+</div><h3>Related Topics</h3>
+<ul>
+  <li><a href="http://flask-sqlalchemy.pocoo.org/2.1/">Documentation overview</a><ul>
+      <li>Previous: <a href="http://flask-sqlalchemy.pocoo.org/2.1/" title="previous chapter">Flask-SQLAlchemy</a></li>
+      <li>Next: <a href="http://flask-sqlalchemy.pocoo.org/2.1/contexts/" title="next chapter">Introduction into Contexts</a></li>
+  </ul></li>
+</ul>
+<div id="searchbox">
+  <h3>Quick search</h3>
+    <form class="search" action="http://flask-sqlalchemy.pocoo.org/2.1/search/" method="get">
+      <input type="text" name="q">
+      <input type="submit" value="Go">
+    </form>
+</div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      © Copyright 2010-2014, Armin Ronacher.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    </div>
+  
+  
+</body></html>
