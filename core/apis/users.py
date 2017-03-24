@@ -4,6 +4,7 @@ from flask_jwt import jwt_required, current_identity
 from .errors import JsonRequiredError, JsonInvalidError, BadInput
 from .errors import ResourceNotFoundError, UserExistedError
 from database import db, User, Relationship, Post
+from base64 import b64decode, b64encode
 
 class UserInfo (Resource):
 	decorators = [jwt_required()]
@@ -18,7 +19,9 @@ class UserInfo (Resource):
 			json['id'] = result.id
 			json['name'] = result.userName
 			json['birthday'] = result.birthday
-			json['image'] = result.image
+			with open(result.image, 'r') as f:
+				json['image'] = b64encode(f.read())
+				f.close()
 
 			query = text('select u.userName from user u, relationship r where r.following_id = u.id and u.userName = ' + result.userName)
 			json['following_id'] = db.engine.execute(query)
@@ -50,6 +53,12 @@ class UserReg (Resource):
 			if result:
 				raise UserExistedError()
 
+			directory = '../imgs/' + reqs['userName']
+			with open(directory, 'w') as f:
+				f.write(b64decode(reqs['image']))
+				f.close()
+
+			reqs['image'] = directory
 			new_user = User(**reqs)
 			db.session.add(new_user)
 			db.session.commit()
@@ -84,3 +93,12 @@ class UserFlw (Resource):
 			return {}, 201
 		except KeyError:
 			raise JsonInvalidError()
+
+class ListUser (Resource):
+	def get(self):
+		query = text('select userName, id from user')
+		result = db.engine.execute(query)
+		json = {}
+		for u, i in result:
+			json[i] = u
+		return json, 200

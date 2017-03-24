@@ -1,2 +1,1 @@
 # SimpleSocialNetwork
-# SimpleSocialNetwork

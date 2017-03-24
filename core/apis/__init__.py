@@ -1,5 +1,5 @@
 from flask_restful import abort, Api, Resource
-from users import UserInfo, UserFlw, UserReg
+from users import UserInfo, UserFlw, UserReg, ListUser
 from posts import PostInfo, PostLike, PostComment
 
 errors = {
@@ -41,3 +41,4 @@ api.add_resource(UserFlw, '/user/flw')
 api.add_resource(PostInfo, '/post')
 api.add_resource(PostLike, '/post/like')
 api.add_resource(PostComment, '/post/cmt')
+api.add_resource(ListUser, '/user/list')
