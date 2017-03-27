@@ -25,29 +25,31 @@ class UserInfo (Resource):
 				json['image'] = b64encode(tmp)
 				f.close()
 
-			query = text('select u.id from user u, relationship r where r.following_id = u.id and u.userName = \'' + result.userName + '\'')
+			query = text('select u.userName, u.id from user u, relationship r where r.following_id = ' + str(current_identity.id) + ' and u.id = r.follower_id')
 			rel_res = db.engine.execute(query)
 			rel = []
-			for r in rel_res:
-				rel.append(r[0])
-			json['following_id'] = rel
-			
+
+			if request.args['name'] == current_identity.userName:
+				for r in rel_res:
+					rel.append(r[0])
+				json['following_name'] = rel
 			posts = []
-			result2 = Relationship.query.filter_by(follower_id = result.id, following_id = current_identity.id).first()
-			
-			if result2:
-				result3 = Post.query.filter_by(owner = result.userName).order_by(Post.date.desc()).first()
-				if result3:
-					for p in result3:
-						tmp = {}
-						tmp['postID'] = p.postID
-						tmp['like'] = p.like
-						tmp['content'] = p.content
-						tmp['date'] = p.date
-						posts.append(tmp)
+				
+			for r in rel:
+				query = text('select * from post where owner = \'' + r + '\' order by date desc')
+				result3 = db.engine.execute(query)
+				for p in result3:
+					tmp = {}
+					tmp['postID'] = p.postID
+					tmp['like'] = p.like
+					tmp['owner'] = r
+					tmp['content'] = p.content
+					tmp['date'] = p.date
+					posts.append(tmp)		
 			json['posts'] = posts
 			return json, 200
-		except:
+		except Exception, e:
+			print 'DEBUG', e
 			raise BadInput()
 
 class UserReg (Resource):
