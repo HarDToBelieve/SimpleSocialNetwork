@@ -109,6 +109,6 @@ class ListUser (Resource):
 		query = text('select userName, id from user')
 		result = db.engine.execute(query)
 		json = {}
-		for u, i in result:
-			json[i] = u
+		for r in result:
+			json[r.id] = r.userName
 		return json, 200
