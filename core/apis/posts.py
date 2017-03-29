@@ -10,7 +10,7 @@ class PostInfo (Resource):
 	decorators = [jwt_required()]
 	def get (self):
 		try:
-			query = text('select p.owner, p.postID, p.like, p.content, p.date from post p, relationship r, user u where p.owner = u.userName and r.follower_id = u.id and r.following_id = ' + str(current_identity.id) + ' order by p.date desc')
+			query = text('select p.owner, p.postID, p.like, p.content, p.date from post p, relationship r, user u where p.owner = \'' + request.args['name'] + '\' and p.owner = u.userName and r.follower_id = u.id and r.following_id = ' + str(current_identity.id) + ' order by p.date desc')
 			result = db.engine.execute(query)
 
 			json = {}
@@ -88,6 +88,9 @@ class PostComment (Resource):
 		reqs = request.get_json(force=True)
 		if not reqs:
 			raise JsonRequiredError()
+
+		if reqs['owner'] != current_identity.userName:
+			raise InsufficientPermissionError();
 
 		try:
 			query = text('select p.postID from relationship r, user u, post p where p.postID=' + str(reqs['postID']) + ' and p.owner=u.userName and r.follower_id=u.id and r.following_id=' + str(current_identity.id))

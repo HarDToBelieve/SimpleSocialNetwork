@@ -30,8 +30,8 @@ def flwUser (flwer):
 	}
 	r = requests.post(url + '/user/flw', headers=headers, json=data)
 
-def getPost ():
-	return requests.get(url + '/post', headers=headers).text
+def getPost (name):
+	return requests.get(url + '/post?name=' + name, headers=headers).text
 
 def addPost (content, owner, date, like):
 	data = {
@@ -60,15 +60,15 @@ def addCmt (content, owner, date, postID):
 	}
 	r = requests.post(url + '/post/cmt', headers=headers, json=data)
 
-#addUser ("minhanh", "minhanh123", "1-2-2012", "string")
-#addUser ("tuan", "tuan1234", "1-2-2012", "string")
+#addUser ("minhanh", "minhanh123", "1-2-2012", "YWJj")
+#addUser ("tuan", "tuan1234", "1-2-2012", "YWJj")
+
+#token = login("tuan", "tuan1234")
 token = login("minhanh", "minhanh123")
 headers = {'Authorization' : 'JWT ' + token}
-print '[+] Token: ' + token
 
 #addPost ("Good luck!", "tuan", "1-2-2017", "0")
 #flwUser ("tuan")
-addCmt (':)', "minhanh", "1-2-2017", "1")
-#print getPost ()
+#addCmt (':)', "minhanh", "1-2-2017", "1")
+print getPost ("tuan")
 #likePost ("1")
-
