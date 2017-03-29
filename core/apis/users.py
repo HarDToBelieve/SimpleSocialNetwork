@@ -30,12 +30,12 @@ class UserInfo (Resource):
 
 			if request.args['name'] == current_identity.userName:
 				query = text('select u.userName, u.id from user u, relationship r where r.following_id = ' + str(current_identity.id) + ' and u.id = r.follower_id')
-				rel_res = db.engine.execute(query)
+				rel_res = db.engine.execute(query).first()
 				for r in rel_res:
 					rel.append(r[0])
 			else:
-				query = text('select * from relationship where following_id = ' + str(current_identity.id) + ' and follower_id = ' + request.args['name'])
-				result1 = db.engine.execute(query)
+				query = text('select * from relationship r, user u where r.following_id = ' + str(current_identity.id) + ' and u.userName = \'' + request.args['name'] + '\' and r.follower_id = u.id')
+				result1 = db.engine.execute(query).first()
 				if result1:
 					rel.append(request.args['name'])
 
