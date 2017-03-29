@@ -25,16 +25,20 @@ class UserInfo (Resource):
 				json['image'] = b64encode(tmp)
 				f.close()
 
-			query = text('select u.userName, u.id from user u, relationship r where r.following_id = ' + str(current_identity.id) + ' and u.id = r.follower_id')
-			rel_res = db.engine.execute(query)
+			posts = []
 			rel = []
 
 			if request.args['name'] == current_identity.userName:
+				query = text('select u.userName, u.id from user u, relationship r where r.following_id = ' + str(current_identity.id) + ' and u.id = r.follower_id')
+				rel_res = db.engine.execute(query)
 				for r in rel_res:
 					rel.append(r[0])
-				json['following_name'] = rel
-			posts = []
-				
+			else:
+				query = text('select * from relationship where following_id = ' + str(current_identity.id) + ' and follower_id = ' + request.args['name'])
+				result1 = db.engine.execute(query)
+				if result1:
+					rel.append(request.args['name'])
+
 			for r in rel:
 				query = text('select * from post where owner = \'' + r + '\' order by date desc')
 				result3 = db.engine.execute(query)
@@ -45,8 +49,9 @@ class UserInfo (Resource):
 					tmp['owner'] = r
 					tmp['content'] = p.content
 					tmp['date'] = p.date
-					posts.append(tmp)		
+					posts.append(tmp)
 			json['posts'] = posts
+			json['following_name'] = rel
 			return json, 200
 		except Exception, e:
 			print 'DEBUG', e
