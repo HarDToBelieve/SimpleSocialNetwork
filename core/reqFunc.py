@@ -64,11 +64,11 @@ def addCmt (content, owner, date, postID):
 #addUser ("tuan", "tuan1234", "1-2-2012", "YWJj")
 
 #token = login("tuan", "tuan1234")
-token = login("minhanh", "minhanh123")
+token = login("tuan", "tuan1234")
 headers = {'Authorization' : 'JWT ' + token}
 
 #addPost ("Good luck!", "tuan", "1-2-2017", "0")
 #flwUser ("tuan")
 #addCmt (':)', "minhanh", "1-2-2017", "1")
-print getPost ("tuan")
+print getUser ("tuan")
 #likePost ("1")

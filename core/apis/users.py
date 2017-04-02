@@ -32,7 +32,11 @@ class UserInfo (Resource):
 				query = text('select u.userName, u.id from user u, relationship r where r.following_id = ' + str(current_identity.id) + ' and u.id = r.follower_id')
 				rel_res = db.engine.execute(query).first()
 				for r in rel_res:
-					rel.append(r[0])
+					if type(r) is long:
+						tmp = unicode(r)
+					else:
+						tmp = r
+					rel.append(tmp)
 			else:
 				query = text('select * from relationship r, user u where r.following_id = ' + str(current_identity.id) + ' and u.userName = \'' + request.args['name'] + '\' and r.follower_id = u.id')
 				result1 = db.engine.execute(query).first()
