@@ -5,11 +5,9 @@ webpackJsonp([0],{
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _reactRouterDom = __webpack_require__(1);
 
-	var _reactRouter = __webpack_require__(1);
-
-	var _reactDom = __webpack_require__(59);
+	var _reactDom = __webpack_require__(76);
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
@@ -17,7 +15,7 @@ webpackJsonp([0],{
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Header = __webpack_require__(205);
+	var _Header = __webpack_require__(222);
 
 	var _Header2 = _interopRequireDefault(_Header);
 
@@ -39,52 +37,26 @@ webpackJsonp([0],{
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } //React libraries
-
+	//React libraries
+	_reactDom2.default.render(_react2.default.createElement(
+	  _reactRouterDom.HashRouter,
+	  null,
+	  _react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(_reactRouterDom.Route, { path: '/', component: _Login2.default }),
+	    _react2.default.createElement(_reactRouterDom.Route, { path: '/login', component: _Login2.default }),
+	    _react2.default.createElement(_reactRouterDom.Route, { path: '/register', component: _Register2.default }),
+	    _react2.default.createElement(_reactRouterDom.Route, { path: '/newfeed', component: _NewFeed2.default }),
+	    _react2.default.createElement(_reactRouterDom.Route, { path: '/profile', component: _Profile2.default })
+	  )
+	), document.getElementById('contents'));
 
 	//Import Container component
 
-
-	var AppRouter = function (_React$Component) {
-	  _inherits(AppRouter, _React$Component);
-
-	  function AppRouter() {
-	    _classCallCheck(this, AppRouter);
-
-	    return _possibleConstructorReturn(this, (AppRouter.__proto__ || Object.getPrototypeOf(AppRouter)).apply(this, arguments));
-	  }
-
-	  _createClass(AppRouter, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        _reactRouter.Router,
-	        { history: _reactRouter.browserHistory },
-	        _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _Login2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _Register2.default }),
-	        _react2.default.createElement(
-	          _reactRouter.Route,
-	          { path: '/', component: _Header2.default },
-	          _react2.default.createElement(_reactRouter.IndexRedirect, { to: '/newfeed' }),
-	          _react2.default.createElement(_reactRouter.Route, { path: 'newfeed', component: _NewFeed2.default }),
-	          _react2.default.createElement(_reactRouter.Route, { path: 'profile', component: _Profile2.default })
-	        )
-	      );
-	    }
-	  }]);
-
-	  return AppRouter;
-	}(_react2.default.Component);
-
-	_reactDom2.default.render(_react2.default.createElement(AppRouter, null), document.getElementById('contents'));
-
 /***/ }),
 
-/***/ 205:
+/***/ 222:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -97,11 +69,11 @@ webpackJsonp([0],{
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactBootstrap = __webpack_require__(206);
+	var _reactBootstrap = __webpack_require__(223);
 
-	var _reactRouterBootstrap = __webpack_require__(457);
+	var _reactRouterBootstrap = __webpack_require__(474);
 
-	var _reactRouter = __webpack_require__(1);
+	var _reactRouter = __webpack_require__(49);
 
 	var _reactSelect = __webpack_require__(477);
 
@@ -176,7 +148,7 @@ webpackJsonp([0],{
 /***/ 489:
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -187,6 +159,10 @@ webpackJsonp([0],{
 	var _react = __webpack_require__(3);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _Header = __webpack_require__(222);
+
+	var _Header2 = _interopRequireDefault(_Header);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -206,12 +182,17 @@ webpackJsonp([0],{
 	  }
 
 	  _createClass(NewFeed, [{
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
-	        "div",
+	        'div',
 	        { style: { top: "100px" } },
-	        "Placeholder NewFeed."
+	        _react2.default.createElement(_Header2.default, null),
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          'Placeholder NewFeed.'
+	        )
 	      );
 	    }
 	  }]);
@@ -238,6 +219,10 @@ webpackJsonp([0],{
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _Header = __webpack_require__(222);
+
+	var _Header2 = _interopRequireDefault(_Header);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -261,7 +246,12 @@ webpackJsonp([0],{
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        'Placeholder Profile.'
+	        _react2.default.createElement(_Header2.default, null),
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          'Placeholder Profile.'
+	        )
 	      );
 	    }
 	  }]);
@@ -288,9 +278,9 @@ webpackJsonp([0],{
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactBootstrap = __webpack_require__(206);
+	var _reactBootstrap = __webpack_require__(223);
 
-	var _reactRouterBootstrap = __webpack_require__(457);
+	var _reactRouterBootstrap = __webpack_require__(474);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -393,9 +383,9 @@ webpackJsonp([0],{
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactBootstrap = __webpack_require__(206);
+	var _reactBootstrap = __webpack_require__(223);
 
-	var _reactRouterBootstrap = __webpack_require__(457);
+	var _reactRouterBootstrap = __webpack_require__(474);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

@@ -2,7 +2,7 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    app: './src/Routes.js',
+    app: './src/Routes.jsx',
     vendor: [
       'react', 'react-dom', 'react-router', 'react-bootstrap', 'react-router-bootstrap',
       'isomorphic-fetch', 'babel-polyfill', 'react-select',
