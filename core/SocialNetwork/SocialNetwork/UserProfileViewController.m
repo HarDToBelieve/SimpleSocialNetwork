@@ -30,6 +30,7 @@
     [_profileCollectionView registerNib:[UINib nibWithNibName:@"InfoCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"InfoCollectionViewCell"];
     
     [self getUserProfile];
+    [self requestUserPost];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -66,6 +67,8 @@
         
         cell.userNameLabel.text = inspectedUser.name;
         cell.birthdayLabel.text = inspectedUser.birthday;
+        
+        [cell.followButton addTarget:self action:@selector(followButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         return cell;
         
@@ -129,6 +132,35 @@
             
             NSLog(@"%@", responseObject);
             
+//            NSDictionary *jsonObject = (NSDictionary *)responseObject;
+//            NSDictionary *arrTemp = [jsonObject objectForKey:@"posts"];
+//            
+//            userPostArray = [[NSMutableArray alloc] init];
+//            
+//            for (NSDictionary *row in arrTemp) {
+//                Post *post = [[Post alloc] initWithDictionary:row error:nil];
+//                [userPostArray addObject:post];
+//            }
+            
+            [_profileCollectionView reloadData];
+        } else {
+            NSLog(@"%@ %@", error, response);
+        }
+    }] resume ];
+}
+
+- (void) requestUserPost {
+    NSString *url = [NSString stringWithFormat:@"http://161.202.20.61:5000/post?name=%@", currentUser.otherUserName];
+    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"GET" URLString:url parameters:nil error:nil];
+    NSLog(@"%@", currentUser.getToken);
+    [request setValue:[NSString stringWithFormat:@"JWT %@", currentUser.getToken] forHTTPHeaderField:@"Authorization"];
+    
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        
+        if (!error) {
+            NSLog(@"%@", responseObject);
+            
             NSDictionary *jsonObject = (NSDictionary *)responseObject;
             NSDictionary *arrTemp = [jsonObject objectForKey:@"posts"];
             
@@ -141,39 +173,28 @@
             
             [_profileCollectionView reloadData];
         } else {
-            NSLog(@"%@ %@", error, response);
+            NSLog(@"Failed");
         }
-    }] resume ];
+    }] resume];
 }
 
-//- (void) requestUserPost {
-//    NSString *url = [NSString stringWithFormat:@"http://161.202.20.61:5000/post?name=%@", currentUser.otherUserName];
-//    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"GET" URLString:url parameters:nil error:nil];
-//    NSLog(@"%@", currentUser.getToken);
-//    [request setValue:[NSString stringWithFormat:@"JWT %@", currentUser.getToken] forHTTPHeaderField:@"Authorization"];
-//    
-//    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-//    [[manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-//        
-//        if (!error) {
-//            NSLog(@"%@", responseObject);
-//            
-//            NSDictionary *jsonObject = (NSDictionary *)responseObject;
-//            NSDictionary *arrTemp = [jsonObject objectForKey:@"posts"];
-//            
-//            userPostArray = [[NSMutableArray alloc] init];
-//            
-//            for (NSDictionary *row in arrTemp) {
-//                Post *post = [[Post alloc] initWithDictionary:row error:nil];
-//                [userPostArray addObject:post];
-//            }
-//            
-//            [_profileCollectionView reloadData];
-//        } else {
-//            NSLog(@"Failed");
-//        }
-//    }] resume];
-//}
+- (void) followButtonPressed: (UIButton *)sender {
+    
+    NSString *url = @"http://161.202.20.61:5000/user/flw";
+    NSDictionary *parameters = @{@"follower": inspectedUser.name};
+    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:parameters error:nil];
+    [request setValue:[NSString stringWithFormat:@"JWT %@", currentUser.getToken] forHTTPHeaderField:@"Authorization"];
+    
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        
+        if (!error) {
+            NSLog(@"Success");
+        } else {
+            NSLog(@"Failed");
+        }
+    }] resume];
+}
 
 - (UIImage *)decodeBase64ToImage:(NSString *)strEncodeData {
     NSData *data = [[NSData alloc]initWithBase64EncodedString:strEncodeData options:NSDataBase64DecodingIgnoreUnknownCharacters];
