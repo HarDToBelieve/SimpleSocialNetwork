@@ -19,6 +19,7 @@
     isFirstBeginEditting = true;
     currentUser = [User shareCurrentUser];
 
+    _userNameLabel.text = currentUser.name;
     _profileImageView.layer.masksToBounds = TRUE;
     _profileImageView.layer.cornerRadius = _profileImageView.frame.size.height / 2;
     _profileImageView.image = currentUser.profilePicture;
@@ -46,7 +47,7 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    return textView.text.length + (text.length - range.length) <= 140;
+    return textView.text.length + (text.length - range.length) <= 100;
 }
 
 #pragma mark - Action
