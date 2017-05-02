@@ -51,7 +51,7 @@
         NSString *birthday = [NSString stringWithFormat:@"%@-%@-%@", _dayTextField.text, _monthTextField.text, _yearTextField.text];
         NSString *imageString = [self encodeToBase64String:_profileImage.image];
         
-        NSDictionary *parameters = @{@"userName": _userNameTextField.text, @"password": _passwordTextField.text, @"birthday": birthday, @"image": @"YWJj"};
+        NSDictionary *parameters = @{@"userName": _userNameTextField.text, @"password": _passwordTextField.text, @"birthday": birthday, @"image": imageString};
     
         NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:parameters error:nil];
         
