@@ -1,35 +1,28 @@
 import React from 'react';
-import { Navbar, Nav, NavDropdown, NavItem,MenuItem, Col } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
-import { withRouter } from 'react-router';
-import Select from 'react-select';
 
-const Header = (props) => {
-  return (
-    <Navbar inverse collapseOnSelect>
-    <Navbar.Header>
-      <Navbar.Brand>
-        <a href="#">Social Network</a>
-      </Navbar.Brand>
-      <Navbar.Toggle />
-    </Navbar.Header>
-    <Navbar.Collapse>
-      <Nav>
-        <LinkContainer to="newfeed">
-          <NavItem eventKey={1} href="#">New Feed</NavItem>
-        </LinkContainer>
-        <LinkContainer to="profile">
-          <NavItem eventKey={1} href="#">Profile</NavItem>
-        </LinkContainer>
-      </Nav>
-      <Nav pullRight>
-        <LinkContainer to="login">
-          <NavItem eventKey={1} href="#">Logout</NavItem>
-        </LinkContainer>
-      </Nav>
-    </Navbar.Collapse>
-  </Navbar>
-  );
-};
+const Header = (props) => (
+  <nav className="navbar navbar-fixed-top" role="navigation">
+      <div className="container">
+          <div className="row navbar-collapse">
+              <img className="top-logo margin-left-logo" width="60px" height="60px" src="images/logo.png"/>
+              <ul className="nav navbar-nav col-md-6">
+                  <li className="d-inline-block navbar-brand">
+                    Simple Social Network
+                  </li>
+                  <li className="btn btn-nav">
+                    Profile
+                  </li>
+              </ul>
+              <form className="form-inline pull-right">
+                <div className="top-search">
+                  <input className="form-control mr-sm-2" type="text" placeholder="Search" />
+                  <button className="btn btn-outline-success my-2 my-sm-0 button-search" type="submit">Search</button>
+                </div>
+                <a className="btn-logout">Logout</a>
+              </form>
+          </div>
+      </div>
+  </nav>
+);
 
 export default Header;

@@ -1,5 +1,5 @@
 //React libraries
-import {HashRouter, Route, IndexRedirect} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
 import ReactDOM from 'react-dom';
 import React from 'react';
 
@@ -8,13 +8,19 @@ import Header from './Header.jsx';
 import NewFeed from './NewFeed.jsx';
 import Profile from './Profile.jsx';
 import Home from './Home.jsx';
+import Helper from './Helper.jsx';
 
-ReactDOM.render((
-    <HashRouter>
-      <div>
-        <Route path="/" component={Home} />
-        <Route path="/newfeed" component={NewFeed} />
-        <Route path="/profile" component={Profile} />
-      </div>
-    </HashRouter>
-), document.getElementById('contents'));
+class AppRoute extends React.Component {
+
+  render() {
+    return(
+      <Router>
+        <div>
+          <Route exact path="/" component={Home} />
+        </div>
+      </Router>
+    )
+  }
+}
+
+ReactDOM.render(<AppRoute />, document.getElementById('contents'));
