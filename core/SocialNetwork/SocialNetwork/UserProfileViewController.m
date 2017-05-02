@@ -82,6 +82,7 @@
         cell.postLabel.text = post.content;
         cell.commentButton.tag = post.postID;
         cell.likeButton.tag = post.postID;
+        cell.likeLabel.text = [NSString stringWithFormat:@"%d likes", post.like];
         [cell.commentButton addTarget:self action:@selector(commentButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [cell.likeButton addTarget:self action:@selector(likeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         return cell;
@@ -106,6 +107,7 @@
         
         if (!error) {
             NSLog(@"Success");
+            [self requestUserPost];
         } else {
             NSLog(@"Failed");
             NSLog(@"%d", currentPost.postID);

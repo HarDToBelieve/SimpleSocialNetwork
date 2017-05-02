@@ -84,7 +84,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) return CGSizeMake(SCREEN_WIDTH, 180);
-    else return CGSizeMake(SCREEN_WIDTH, 153);
+    else return CGSizeMake(SCREEN_WIDTH, 180);
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -114,6 +114,7 @@
             cell.postLabel.text = post.content;
             cell.commentButton.tag = post.postID;
             cell.likeButton.tag = post.postID;
+            cell.likeLabel.text = [NSString stringWithFormat:@"%d likes", post.like];
             [cell.commentButton addTarget:self action:@selector(commentButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             [cell.likeButton addTarget:self action:@selector(likeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             [cell.userNameButton addTarget:self action:@selector(userNameButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -129,6 +130,7 @@
         cell.postLabel.text = post.content;
         cell.commentButton.tag = post.postID;
         cell.likeButton.tag = post.postID;
+        cell.likeLabel.text = [NSString stringWithFormat:@"%d likes", post.like];
         [cell.commentButton addTarget:self action:@selector(commentButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [cell.likeButton addTarget:self action:@selector(likeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [cell.userNameButton addTarget:self action:@selector(userNameButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -183,6 +185,8 @@
         
         if (!error) {
             NSLog(@"Success");
+            [self getCurrentUser];
+            [self requestCurrentUserPost];
         } else {
             NSLog(@"Failed");
             NSLog(@"%d", currentPost.postID);

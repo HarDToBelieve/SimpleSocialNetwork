@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -71,6 +71,12 @@
                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                     </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 Like" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cGU-pb-GPM">
+                        <rect key="frame" x="16" y="83" width="244" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
             </view>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -83,8 +89,11 @@
                 <constraint firstItem="6aB-76-uOv" firstAttribute="leading" secondItem="kl0-Rx-eBS" secondAttribute="trailing" id="HqX-BU-3oB"/>
                 <constraint firstAttribute="trailing" secondItem="6aB-76-uOv" secondAttribute="trailing" id="JLO-1i-8bh"/>
                 <constraint firstItem="kVm-0z-MV2" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="Quz-iw-XYW"/>
+                <constraint firstAttribute="trailing" secondItem="cGU-pb-GPM" secondAttribute="trailing" constant="16" id="U0q-Nh-OxA"/>
+                <constraint firstItem="kl0-Rx-eBS" firstAttribute="top" secondItem="cGU-pb-GPM" secondAttribute="bottom" constant="8" id="Zvt-qD-edD"/>
                 <constraint firstAttribute="trailing" secondItem="kVm-0z-MV2" secondAttribute="trailing" constant="16" id="hKs-pt-JJ5"/>
                 <constraint firstItem="ZyE-cN-xqJ" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="jrw-3a-RGE"/>
+                <constraint firstItem="cGU-pb-GPM" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="l7l-RQ-U1T"/>
                 <constraint firstItem="kl0-Rx-eBS" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="qIN-iL-aSb"/>
                 <constraint firstItem="6aB-76-uOv" firstAttribute="width" secondItem="kl0-Rx-eBS" secondAttribute="width" id="riw-dc-muQ"/>
                 <constraint firstAttribute="trailing" secondItem="A6p-wS-Z2q" secondAttribute="trailing" id="rrK-4t-lzP"/>
@@ -95,6 +104,7 @@
             <connections>
                 <outlet property="commentButton" destination="daV-8k-TTc" id="afq-S7-NRc"/>
                 <outlet property="likeButton" destination="ZUN-75-gBK" id="D0f-i5-AP6"/>
+                <outlet property="likeLabel" destination="cGU-pb-GPM" id="AfW-ZB-ZDG"/>
                 <outlet property="postLabel" destination="kVm-0z-MV2" id="4VQ-aI-dXh"/>
                 <outlet property="userNameButton" destination="ZyE-cN-xqJ" id="AFa-7n-Zvg"/>
             </connections>
