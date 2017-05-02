@@ -1,0 +1,62 @@
+.blue-btn{
+  width: 100px;
+  color: white;
+  background-image: none;
+  background-color: #3498db;
+}
+
+.post-list{
+  margin-top: 105px;
+}
+
+.post-box{
+  padding: 10px 25px;
+  background-color: #eee;
+  border-radius: 3px;
+  width: 70%;
+  margin: 5px 10px;
+}
+
+.post-content{
+  padding-left: 18px;
+  padding-top: 3px;
+}
+
+.post-owner{
+  padding-bottom: 5px;
+  color: #3498db;
+  font-size: 15px;
+}
+
+.post-owner:hover{
+  text-decoration: underline;
+}
+
+.inline-block{
+  margin-bottom: 0px;
+}
+
+.post-btn:hover{
+  text-decoration: underline;
+}
+
+.post-form{
+  margin-bottom: 15px;
+}
+
+.post-input{
+  width: 70%;
+}
+
+.green{
+  color: green;
+}
+
+@media only screen and (max-width : 767px) {
+  .post-box{
+    width: 90%;
+  }
+  .post-input{
+    width: 90%;
+  }
+}

@@ -3,6 +3,8 @@ import {ModalContainer, ModalDialog} from 'react-modal-dialog';
 
 import LoginModal from './LoginModal.jsx'
 import RegisterModal from './RegisterModal.jsx'
+import NewFeed from './NewFeed.jsx'
+import Helper from './Helper.jsx'
 
 class Home extends React.Component {
 
@@ -12,12 +14,22 @@ class Home extends React.Component {
       isShowingLoginModal: false,
       isShowingRegisterModal: false,
       username: "",
+      logedIn: false
     }
     this.openLoginModal = this.openLoginModal.bind(this);
     this.openRegisterModal = this.openRegisterModal.bind(this);
     this.closeLoginModal = this.closeLoginModal.bind(this);
     this.closeRegisterModal = this.closeRegisterModal.bind(this);
+    this.checkAuth = this.checkAuth.bind(this);
   }
+
+  componentDidMount() {
+    this.interval = setInterval(this.checkAuth, 1000);
+  }
+
+  componentWillUnmount() {
+		clearInterval(this.interval);
+	}
 
   openLoginModal() {
     this.setState({
@@ -32,10 +44,18 @@ class Home extends React.Component {
     })
   }
 
+  checkAuth() {
+      if(Helper.access_token != ""){
+        this.setState({
+          logedIn: true
+        });
+      }
+  }
+
   openRegisterModal() {
     this.setState({
-      isShowingLoginModal: false,
-      isShowingRegisterModal: true
+      isShowingRegisterModal: true,
+      isShowingLoginModal: false
       })
     }
 
@@ -52,37 +72,45 @@ class Home extends React.Component {
   }
 
   render() {
-      return (
-        <div className="row justify-content-md-center">
-          <div className="col-sm-4">
-          </div>
-          <div className="col-sm-4">
-            <button onClick={this.openLoginModal}>Login</button>
-            { this.state.isShowingLoginModal &&
-              <ModalContainer onClose={this.closeLoginModal}>
-                <ModalDialog onClose={this.closeLoginModal}>
-                  <LoginModal
-                    openRegisterModal = {this.openRegisterModal}
-                    openLoginModal = {this.openLoginModal}
-                    closeLoginModal = {this.closeLoginModal}
-                  />
-                </ModalDialog>
-              </ModalContainer>
-            }
-            <button onClick={this.openRegisterModal}>Register</button>
-            { this.state.isShowingRegisterModal &&
-              <ModalContainer onClose={this.closeRegisterModal}>
-                <ModalDialog onClose={this.closeRegisterModal}>
-                  <RegisterModal
-                    openLoginModal = {this.openLoginModal}
-                    getRegisterInfo = {this.getRegisterInfo}
-                  />
-                </ModalDialog>
-              </ModalContainer>
-            }
-          </div>
-        </div>
-      );
+      return this.state.logedIn === false ?
+            (
+              <div className="row">
+                <div className="col col-md-6 home-right">
+                  <div className="ml-3">
+                    <button className="btn btn-outline-success" onClick={this.openLoginModal}>Login</button>
+                    { this.state.isShowingLoginModal &&
+                      <ModalContainer onClose={this.closeLoginModal}>
+                        <ModalDialog onClose={this.closeLoginModal}>
+                          <LoginModal
+                            checkAuth = {this.checkAuth}
+                            openRegisterModal = {this.openRegisterModal}
+                          />
+                        </ModalDialog>
+                      </ModalContainer>
+                    }
+                    <button className="btn btn-outline-info" onClick={this.openRegisterModal}>Register</button>
+                    { this.state.isShowingRegisterModal &&
+                      <ModalContainer onClose={this.closeRegisterModal}>
+                        <ModalDialog onClose={this.closeRegisterModal}>
+                          <RegisterModal
+                            getRegisterInfo = {this.getRegisterInfo}
+                            openLoginModal = {this.openLoginModal}
+                          />
+                        </ModalDialog>
+                      </ModalContainer>
+                    }
+                  </div>
+                </div>
+                <div className="col col-md-6 hidden-sm-down home-left">
+                </div>
+              </div>
+            )
+          :
+            (
+              <div>
+                <NewFeed />
+              </div>
+            )
   }
 }
 

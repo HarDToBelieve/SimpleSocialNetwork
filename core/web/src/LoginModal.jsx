@@ -10,8 +10,39 @@ class LoginModal extends React.Component {
     this.state = {
       username: '',
       password: '',
-      userExist: false
+      path: '',
+      error: false
     };
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.getToken = this.getToken.bind(this);
+    this.checkLogin = this.checkLogin.bind(this);
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(this.checkLogin, 1000);
+  }
+
+  componentWillUnmount() {
+		clearInterval(this.interval);
+	}
+
+  checkLogin() {
+    if(Helper.errorLogin){
+      this.setState({
+        error: true
+      });
+    }
+  }
+
+  handleInputChange(event) {
+    const value = event.target.value;
+    const name = event.target.name;
+    if(name == "username") {
+      Helper.setUsername(value);
+    }
+    this.setState({
+      [name]: value
+    });
   }
 
   getToken() {
@@ -29,13 +60,13 @@ class LoginModal extends React.Component {
                 return null
             }
         }).then(function(response) {
-            if (response.access_token) {
+            if (!response) {
+                Helper.setAccessToken('');
+                Helper.setErrorLogin();
+                console.log(response.message);
+            } else{
                 console.log(response.access_token);
                 Helper.setAccessToken(response.access_token);
-                Helper.setUsername(this.state.username);
-            } else{
-                Helper.setAccessToken('');
-                Helper.setUsername('');
             }
         });
   }
@@ -45,20 +76,23 @@ class LoginModal extends React.Component {
         <form className="login">
           <h3>Login</h3>
           <div className="mt-2">
-            <input className="form-control" type="text" name="username" placeholder="Username" />
-            <input className="form-control" type="password" name="password" placeholder="Password" />
+            <input className="form-control" type="text" name="username" placeholder="Username" onChange={this.handleInputChange}/>
+            <input className="form-control" type="password" name="password" placeholder="Password" onChange={this.handleInputChange}/>
+            {
+              this.state.error ?
+              <span className="red">{"Username and password are not match."}</span>
+              :""
+            }
           </div>
-          <button className="btn btn-outline-success" onClick={this.props.closeLoginModal}>Login</button>
-          <button className="btn btn-outline-info" onClick={this.props.openRegisterModal}>Register</button>
+              <div className="btn btn-primary" onClick={this.getToken}>
+                  Login
+              </div>
+              <div className="btn btn-primary" onClick={this.props.openRegisterModal}>
+                  Register
+              </div>
         </form>
       );
   }
 }
-
-LoginModal.propTypes = {
-    openRegisterModal: PropTypes.func,
-    closeLoginModal: PropTypes.func,
-    openLoginModal: PropTypes.func
-};
 
 export default LoginModal;
