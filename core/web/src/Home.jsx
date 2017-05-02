@@ -74,10 +74,13 @@ class Home extends React.Component {
   render() {
       return this.state.logedIn === false ?
             (
-              <div className="row">
+              <div className="container-home row">
                 <div className="col col-md-6 home-right">
-                  <div className="ml-3">
-                    <button className="btn btn-outline-success" onClick={this.openLoginModal}>Login</button>
+                  <img width="150px" height="150px" src="images/Logo.png" />
+                  <h2>Simple Social Network</h2>
+                  <h4>Nothing could be simpler</h4>
+                  <div className="home-button">
+                    <button className="btn blue-btn" onClick={this.openLoginModal}>Login</button>
                     { this.state.isShowingLoginModal &&
                       <ModalContainer onClose={this.closeLoginModal}>
                         <ModalDialog onClose={this.closeLoginModal}>
@@ -88,7 +91,7 @@ class Home extends React.Component {
                         </ModalDialog>
                       </ModalContainer>
                     }
-                    <button className="btn btn-outline-info" onClick={this.openRegisterModal}>Register</button>
+                    <button className="btn blue-btn" onClick={this.openRegisterModal}>Register</button>
                     { this.state.isShowingRegisterModal &&
                       <ModalContainer onClose={this.closeRegisterModal}>
                         <ModalDialog onClose={this.closeRegisterModal}>
@@ -102,6 +105,7 @@ class Home extends React.Component {
                   </div>
                 </div>
                 <div className="col col-md-6 hidden-sm-down home-left">
+                  <img width="50%" src="images/LandingImage.png" />
                 </div>
               </div>
             )

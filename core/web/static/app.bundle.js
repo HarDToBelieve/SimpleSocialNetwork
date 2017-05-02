@@ -604,7 +604,7 @@ webpackJsonp([0],[
 	            ),
 	            this.state.postStatus ? _react2.default.createElement(
 	              'span',
-	              null,
+	              { className: 'green' },
 	              'Posted to your wall'
 	            ) : ""
 	          ),
@@ -877,16 +877,27 @@ webpackJsonp([0],[
 	    value: function render() {
 	      return this.state.logedIn === false ? _react2.default.createElement(
 	        'div',
-	        { className: 'row' },
+	        { className: 'container-home row' },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'col col-md-6 home-right' },
+	          _react2.default.createElement('img', { width: '150px', height: '150px', src: 'images/Logo.png' }),
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            'Simple Social Network'
+	          ),
+	          _react2.default.createElement(
+	            'h4',
+	            null,
+	            'Nothing could be simpler'
+	          ),
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'ml-3' },
+	            { className: 'home-button' },
 	            _react2.default.createElement(
 	              'button',
-	              { className: 'btn btn-outline-success', onClick: this.openLoginModal },
+	              { className: 'btn blue-btn', onClick: this.openLoginModal },
 	              'Login'
 	            ),
 	            this.state.isShowingLoginModal && _react2.default.createElement(
@@ -903,7 +914,7 @@ webpackJsonp([0],[
 	            ),
 	            _react2.default.createElement(
 	              'button',
-	              { className: 'btn btn-outline-info', onClick: this.openRegisterModal },
+	              { className: 'btn blue-btn', onClick: this.openRegisterModal },
 	              'Register'
 	            ),
 	            this.state.isShowingRegisterModal && _react2.default.createElement(
@@ -920,7 +931,11 @@ webpackJsonp([0],[
 	            )
 	          )
 	        ),
-	        _react2.default.createElement('div', { className: 'col col-md-6 hidden-sm-down home-left' })
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col col-md-6 hidden-sm-down home-left' },
+	          _react2.default.createElement('img', { width: '50%', src: 'images/LandingImage.png' })
+	        )
 	      ) : _react2.default.createElement(
 	        'div',
 	        null,
@@ -27180,7 +27195,7 @@ webpackJsonp([0],[
 	            null,
 	            _react2.default.createElement(
 	              'span',
-	              null,
+	              { className: 'green' },
 	              "Successfully registered. Please go back to ",
 	              _react2.default.createElement(
 	                'div',
