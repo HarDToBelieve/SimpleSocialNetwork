@@ -1,13 +1,12 @@
 import React,{PropTypes} from 'react';
 import axios from 'axios';
-import {Link} from 'react-router-dom';
 import Helper from './Helper.jsx'
 
 const SingleComment = (props) => (
-      <div className="post-box col-md-7">
-        <div className="inline-block">
-          <div className="post-owner">{props.comment.owner}</div>
-          <div>{props.comment.content}</div>
+      <div className="comment-box col-md-7">
+        <div className="oneline">
+          <div className="post-owner"><strong>{props.comment.owner}</strong></div>
+          <div className="comment-content">{props.comment.content}</div>
         </div>
       </div>
 )

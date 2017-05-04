@@ -1,6 +1,5 @@
 import React,{PropTypes} from 'react';
-import axios from 'axios';
-import {Link} from 'react-router-dom';
+
 import Helper from './Helper.jsx'
 
 class LoginModal extends React.Component {

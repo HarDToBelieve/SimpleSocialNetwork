@@ -18,7 +18,7 @@ const Header = (props) => (
               <form className="form-inline pull-right">
                 <div className="top-search">
                   <input className="form-control mr-sm-2" type="text" placeholder="Search" />
-                  <button className="btn btn-outline-success my-2 my-sm-0 button-search" type="submit">Search</button>
+                  <div className="btn btn-outline-success my-2 my-sm-0 button-search">Search</button>
                 </div>
                 <a className="btn-logout">Logout</a>
               </form>

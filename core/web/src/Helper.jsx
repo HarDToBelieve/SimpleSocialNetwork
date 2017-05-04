@@ -7,11 +7,15 @@ let Helper = {
   commentPostUrl: 'http://161.202.20.61:5000/post/cmt',
   commentDataUrl: 'http://161.202.20.61:5000/post/cmt?postID=',
   getUserUrl: 'http://161.202.20.61:5000/user?name=',
+  getUserPostUrl: 'http://161.202.20.61:5000/post?name=',
+  followUserUrl: 'http://161.202.20.61:5000/user/flw',
   access_token: '',
   logedIn: false,
   errorLogin: false,
   username: '',
+  userInfo: {},
   posts: [],
+  wallPosts: [],
   comments: [],
   postStatus: false,
   commentStatus: false,
@@ -40,8 +44,14 @@ let Helper = {
   setUsername(username){
     this.username = username;
   },
+  setUserInfo(userInfo){
+    this.userInfo = userInfo;
+  },
   setPosts(posts){
     this.posts = posts;
+  },
+  setWallPosts(posts){
+    this.wallPosts = posts;
   },
   setComments(comments){
     this.comments = comments;

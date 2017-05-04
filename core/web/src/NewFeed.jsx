@@ -5,90 +5,7 @@ import Header from './Header.jsx';
 import Helper from './Helper.jsx';
 import ProfileModal from './ProfileModal.jsx';
 import CommentModal from './CommentModal.jsx';
-
-class SinglePost extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      isShowingCommentModal: false,
-    };
-    this.likePost = this.likePost.bind(this);
-    this.openCommentModal = this.openCommentModal.bind(this);
-    this.closeCommentModal = this.closeCommentModal.bind(this);
-  }
-
-  openCommentModal() {
-    this.setState({
-      isShowingCommentModal: true
-    })
-  }
-
-  closeCommentModal() {
-    this.setState({
-      isShowingCommentModal: false
-    })
-  }
-
-  likePost() {
-    fetch(Helper.likePostUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'JWT ' + Helper.access_token
-            },
-            body: JSON.stringify({
-              postID: this.props.post.postID
-            })
-        }).then(function(response) {
-            if (response.ok) {
-                return response.json()
-            } else {
-                return null
-            }
-        }).then(function(response) {
-            console.log("Liked");
-        });
-  }
-
-  render(){
-    return(
-      <div className="post-box col-md-7">
-        <div className="post-content">
-          <div className="post-owner">{this.props.post.owner}</div>
-          <div>{this.props.post.content}</div>
-        </div>
-        <div className="post-content">
-          <div className="green pull-right like-box">{this.props.post.like} Like</div>
-        </div>
-        <div className="inline-block">
-          <div className="btn post-btn" onClick={this.likePost}>Like</div>
-          <div className="btn post-btn" onClick={this.openCommentModal}>Comment</div>
-        </div>
-        { this.state.isShowingCommentModal &&
-          <div className="comment-modal">
-            <ModalContainer onClose={this.closeCommentModal}>
-              <ModalDialog onClose={this.closeCommentModal}>
-                <CommentModal
-                  post={this.props.post}
-                  likePost={this.likePost}
-                />
-              </ModalDialog>
-            </ModalContainer>
-          </div>
-        }
-      </div>
-    )
-  }
-}
-
-function PostList(props) {
-    const postList = props.posts.map(post => <SinglePost key={post.postID} post={post}/>);
-    return(
-      <div className="row">
-        {postList}
-      </div>
-    );
-}
+import PostList from './PostList.jsx';
 
 class NewFeed extends React.Component {
 
@@ -146,7 +63,7 @@ class NewFeed extends React.Component {
             body: JSON.stringify({
               content: this.state.newpost,
               owner: Helper.username,
-              date: new Date(),
+              date: Date.now(),
               like: 0
             })
         }).then(function(response) {
@@ -163,18 +80,16 @@ class NewFeed extends React.Component {
 
   setPosts() {
     this.loadData();
-    if(Helper.postStatus){
-      this.setState({
-        postStatus: Helper.postStatus
-      });
-    }
+    this.setState({
+      postStatus: Helper.postStatus
+    });
     if(Helper.posts.length != 0){
       this.setState({
         posts: Helper.posts
       });
     }
     Helper.setPostStatus(false);
-  }
+ }
 
   loadData() {
     fetch(Helper.newfeedDataUrl + Helper.username, {
@@ -212,7 +127,9 @@ class NewFeed extends React.Component {
               { this.state.isShowingProfileModal &&
                 <ModalContainer onClose={this.closeProfileModal}>
                   <ModalDialog onClose={this.closeProfileModal}>
-                    <ProfileModal />
+                    <ProfileModal
+                     username = {Helper.username}
+                    />
                   </ModalDialog>
                 </ModalContainer>
               }

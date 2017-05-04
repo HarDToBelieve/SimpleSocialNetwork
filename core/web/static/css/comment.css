@@ -11,3 +11,11 @@
   z-index: 9999999;
   top: 100;
 }
+
+.oneline{
+ display: -webkit-box;
+}
+
+.comment-content{
+ margin-top: .5px;
+}
