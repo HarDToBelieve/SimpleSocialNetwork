@@ -1,12 +1,32 @@
 import React from 'react';
+import {ModalContainer, ModalDialog} from 'react-modal-dialog';
 
 import Header from './Header.jsx';
 import Helper from './Helper.jsx';
+import ProfileModal from './ProfileModal.jsx';
+import CommentModal from './CommentModal.jsx';
 
 class SinglePost extends React.Component {
   constructor() {
     super();
+    this.state = {
+      isShowingCommentModal: false,
+    };
     this.likePost = this.likePost.bind(this);
+    this.openCommentModal = this.openCommentModal.bind(this);
+    this.closeCommentModal = this.closeCommentModal.bind(this);
+  }
+
+  openCommentModal() {
+    this.setState({
+      isShowingCommentModal: true
+    })
+  }
+
+  closeCommentModal() {
+    this.setState({
+      isShowingCommentModal: false
+    })
   }
 
   likePost() {
@@ -37,10 +57,25 @@ class SinglePost extends React.Component {
           <div className="post-owner">{this.props.post.owner}</div>
           <div>{this.props.post.content}</div>
         </div>
+        <div className="post-content">
+          <div className="green pull-right like-box">{this.props.post.like} Like</div>
+        </div>
         <div className="inline-block">
           <div className="btn post-btn" onClick={this.likePost}>Like</div>
-          <div className="btn post-btn">Comment</div>
+          <div className="btn post-btn" onClick={this.openCommentModal}>Comment</div>
         </div>
+        { this.state.isShowingCommentModal &&
+          <div className="comment-modal">
+            <ModalContainer onClose={this.closeCommentModal}>
+              <ModalDialog onClose={this.closeCommentModal}>
+                <CommentModal
+                  post={this.props.post}
+                  likePost={this.likePost}
+                />
+              </ModalDialog>
+            </ModalContainer>
+          </div>
+        }
       </div>
     )
   }
@@ -62,11 +97,14 @@ class NewFeed extends React.Component {
     this.state = {
       posts: [],
       newpost: "",
-      postStatus: false
+      postStatus: false,
+      isShowingProfileModal: false
     };
     this.setPosts = this.setPosts.bind(this);
     this.postData = this.postData.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.openProfileModal = this.openProfileModal.bind(this);
+    this.closeProfileModal = this.closeProfileModal.bind(this);
   }
 
   componentDidMount() {
@@ -77,6 +115,18 @@ class NewFeed extends React.Component {
   componentWillUnmount() {
 		clearInterval(this.interval);
 	}
+
+  openProfileModal() {
+    this.setState({
+      isShowingProfileModal: true
+    })
+  }
+
+  closeProfileModal() {
+    this.setState({
+      isShowingProfileModal: false
+    })
+  }
 
   handleInputChange(event) {
     const value = event.target.value;
@@ -147,7 +197,9 @@ class NewFeed extends React.Component {
   render() {
       return (
         <div>
-          <Header />
+          <Header
+            openProfileModal = {this.openProfileModal}
+          />
           <div className="container post-list">
             <div className="post-form">
               <textarea className="form-control post-input" type="text" name="newpost" placeholder="What are you thinking?" onChange={this.handleInputChange}/>
@@ -156,6 +208,13 @@ class NewFeed extends React.Component {
                 <span className="green">Posted to your wall</span>
                 :
                 ""
+              }
+              { this.state.isShowingProfileModal &&
+                <ModalContainer onClose={this.closeProfileModal}>
+                  <ModalDialog onClose={this.closeProfileModal}>
+                    <ProfileModal />
+                  </ModalDialog>
+                </ModalContainer>
               }
             </div>
             <PostList posts = {this.state.posts}/>

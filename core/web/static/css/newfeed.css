@@ -52,11 +52,23 @@
   color: green;
 }
 
+.like-box{
+  padding: 10px;
+  background-color: rgba(0,0,0, 0.1);
+}
+
+.comment-modal{
+  width: 50%;
+}
+
 @media only screen and (max-width : 767px) {
   .post-box{
     width: 90%;
   }
   .post-input{
     width: 90%;
+  }
+  .comment-modal{
+    width: 80%;
   }
 }

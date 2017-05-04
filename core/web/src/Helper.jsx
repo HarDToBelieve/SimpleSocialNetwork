@@ -4,15 +4,23 @@ let Helper = {
   newfeedDataUrl: 'http://161.202.20.61:5000/user?name=',
   postDataUrl: 'http://161.202.20.61:5000/post',
   likePostUrl: 'http://161.202.20.61:5000/post/like',
+  commentPostUrl: 'http://161.202.20.61:5000/post/cmt',
+  commentDataUrl: 'http://161.202.20.61:5000/post/cmt?postID=',
+  getUserUrl: 'http://161.202.20.61:5000/user?name=',
   access_token: '',
   logedIn: false,
   errorLogin: false,
   username: '',
   posts: [],
+  comments: [],
   postStatus: false,
+  commentStatus: false,
   registered: false,
   errorRegister: false,
   setPostStatus(bool) {
+    this.postStatus = bool;
+  },
+  setCommentStatus(bool) {
     this.postStatus = bool;
   },
   setErrorLogin() {
@@ -34,6 +42,9 @@ let Helper = {
   },
   setPosts(posts){
     this.posts = posts;
+  },
+  setComments(comments){
+    this.comments = comments;
   }
 }
 

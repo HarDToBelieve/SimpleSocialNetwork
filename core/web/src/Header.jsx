@@ -10,7 +10,9 @@ const Header = (props) => (
                     Simple Social Network
                   </li>
                   <li className="btn btn-nav">
-                    Profile
+                    <div onClick={props.openProfileModal}>
+                      Profile
+                    </div>
                   </li>
               </ul>
               <form className="form-inline pull-right">
