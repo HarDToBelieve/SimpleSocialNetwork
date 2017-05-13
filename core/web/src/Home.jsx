@@ -49,6 +49,10 @@ class Home extends React.Component {
         this.setState({
           logedIn: true
         });
+      } else {
+        this.setState({
+          logedIn: false
+        });
       }
   }
 

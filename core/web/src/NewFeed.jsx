@@ -53,6 +53,10 @@ class NewFeed extends React.Component {
     });
   }
 
+  resetAccessToken(){
+    Helper.setAccessToken("");
+  }
+
   postData() {
     fetch(Helper.postDataUrl, {
             method: 'POST',
@@ -114,6 +118,7 @@ class NewFeed extends React.Component {
         <div>
           <Header
             openProfileModal = {this.openProfileModal}
+            resetAccessToken = {this.resetAccessToken}
           />
           <div className="container post-list">
             <div className="post-form">

@@ -39,7 +39,9 @@ let Helper = {
   },
   setAccessToken(token) {
     this.access_token = token;
-    this.errorLogin = false;
+    if(token != ""){
+      this.errorLogin = false;
+    }
   },
   setUsername(username){
     this.username = username;

@@ -378,6 +378,10 @@ webpackJsonp([0],[
 	        this.setState({
 	          logedIn: true
 	        });
+	      } else {
+	        this.setState({
+	          logedIn: false
+	        });
 	      }
 	    }
 	  }, {
@@ -23092,7 +23096,9 @@ webpackJsonp([0],[
 	  },
 	  setAccessToken: function setAccessToken(token) {
 	    this.access_token = token;
-	    this.errorLogin = false;
+	    if (token != "") {
+	      this.errorLogin = false;
+	    }
 	  },
 	  setUsername: function setUsername(username) {
 	    this.username = username;
@@ -23220,10 +23226,9 @@ webpackJsonp([0],[
 	        method: 'POST',
 	        headers: { 'Content-Type': 'application/json' },
 	        body: JSON.stringify({
-	          userName: this.state.username,
+	          username: this.state.username,
 	          password: this.state.password,
-	          birthday: this.state.birthday,
-	          image: "YWJj"
+	          birthday: this.state.birthday
 	        })
 	      }).then(function (response) {
 	        if (response.ok) {
@@ -23400,6 +23405,11 @@ webpackJsonp([0],[
 	      this.setState(_defineProperty({}, name, value));
 	    }
 	  }, {
+	    key: 'resetAccessToken',
+	    value: function resetAccessToken() {
+	      _Helper2.default.setAccessToken("");
+	    }
+	  }, {
 	    key: 'postData',
 	    value: function postData() {
 	      fetch(_Helper2.default.postDataUrl, {
@@ -23465,7 +23475,8 @@ webpackJsonp([0],[
 	        'div',
 	        null,
 	        _react2.default.createElement(_Header2.default, {
-	          openProfileModal: this.openProfileModal
+	          openProfileModal: this.openProfileModal,
+	          resetAccessToken: this.resetAccessToken
 	        }),
 	        _react2.default.createElement(
 	          'div',
@@ -23511,70 +23522,142 @@ webpackJsonp([0],[
 /* 282 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(3);
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactModalDialog = __webpack_require__(223);
+
+	var _ProfileModal = __webpack_require__(283);
+
+	var _ProfileModal2 = _interopRequireDefault(_ProfileModal);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var Header = function Header(props) {
-	  return _react2.default.createElement(
-	    "nav",
-	    { className: "navbar navbar-fixed-top", role: "navigation" },
-	    _react2.default.createElement(
-	      "div",
-	      { className: "container" },
-	      _react2.default.createElement(
-	        "div",
-	        { className: "row navbar-collapse" },
-	        _react2.default.createElement("img", { className: "top-logo margin-left-logo", width: "60px", height: "60px", src: "images/logo.png" }),
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Header = function (_React$Component) {
+	  _inherits(Header, _React$Component);
+
+	  function Header() {
+	    _classCallCheck(this, Header);
+
+	    var _this = _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this));
+
+	    _this.state = {
+	      username: '',
+	      isShowingProfileModal: false
+	    };
+	    _this.handleInputChange = _this.handleInputChange.bind(_this);
+	    _this.openProfileModal = _this.openProfileModal.bind(_this);
+	    _this.closeProfileModal = _this.closeProfileModal.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(Header, [{
+	    key: 'handleInputChange',
+	    value: function handleInputChange(event) {
+	      var value = event.target.value;
+	      var name = event.target.name;
+	      this.setState(_defineProperty({}, name, value));
+	    }
+	  }, {
+	    key: 'openProfileModal',
+	    value: function openProfileModal() {
+	      this.setState({
+	        isShowingProfileModal: true
+	      });
+	    }
+	  }, {
+	    key: 'closeProfileModal',
+	    value: function closeProfileModal() {
+	      this.setState({
+	        isShowingProfileModal: false
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'nav',
+	        { className: 'navbar navbar-fixed-top', role: 'navigation' },
 	        _react2.default.createElement(
-	          "ul",
-	          { className: "nav navbar-nav col-md-6" },
+	          'div',
+	          { className: 'container' },
 	          _react2.default.createElement(
-	            "li",
-	            { className: "d-inline-block navbar-brand" },
-	            "Simple Social Network"
-	          ),
-	          _react2.default.createElement(
-	            "li",
-	            { className: "btn btn-nav" },
+	            'div',
+	            { className: 'row navbar-collapse' },
+	            _react2.default.createElement('img', { className: 'top-logo margin-left-logo', width: '60px', height: '60px', src: 'images/logo.png' }),
 	            _react2.default.createElement(
-	              "div",
-	              { onClick: props.openProfileModal },
-	              "Profile"
-	            )
-	          )
-	        ),
-	        _react2.default.createElement(
-	          "form",
-	          { className: "form-inline pull-right" },
-	          _react2.default.createElement(
-	            "div",
-	            { className: "top-search" },
-	            _react2.default.createElement("input", { className: "form-control mr-sm-2", type: "text", placeholder: "Search" }),
+	              'ul',
+	              { className: 'nav navbar-nav col-md-6' },
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'd-inline-block navbar-brand' },
+	                'Simple Social Network'
+	              ),
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'btn btn-nav' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { onClick: this.props.openProfileModal },
+	                  'Profile'
+	                )
+	              )
+	            ),
 	            _react2.default.createElement(
-	              "button",
-	              { className: "btn btn-outline-success my-2 my-sm-0 button-search", type: "submit" },
-	              "Search"
+	              'form',
+	              { className: 'form-inline pull-right' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'top-search' },
+	                _react2.default.createElement('input', { className: 'form-control mr-sm-2', type: 'text', name: 'username', placeholder: 'Search', onChange: this.handleInputChange }),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'btn btn-outline-success my-2 my-sm-0 button-search', onClick: this.openProfileModal },
+	                  'Search'
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'btn-logout', onClick: this.props.resetAccessToken },
+	                'Logout'
+	              )
+	            ),
+	            this.state.isShowingProfileModal && _react2.default.createElement(
+	              _reactModalDialog.ModalContainer,
+	              { onClose: this.closeProfileModal },
+	              _react2.default.createElement(
+	                _reactModalDialog.ModalDialog,
+	                { onClose: this.closeProfileModal },
+	                _react2.default.createElement(_ProfileModal2.default, {
+	                  username: this.state.username
+	                })
+	              )
 	            )
-	          ),
-	          _react2.default.createElement(
-	            "a",
-	            { className: "btn-logout" },
-	            "Logout"
 	          )
 	        )
-	      )
-	    )
-	  );
-	};
+	      );
+	    }
+	  }]);
+
+	  return Header;
+	}(_react2.default.Component);
 
 	exports.default = Header;
 

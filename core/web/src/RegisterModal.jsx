@@ -70,10 +70,9 @@ class RegisterModal extends React.Component {
               method: 'POST',
               headers: {'Content-Type': 'application/json'},
               body: JSON.stringify({
-                userName: this.state.username,
+                username: this.state.username,
                 password: this.state.password,
-                birthday: this.state.birthday,
-                image: "YWJj"
+                birthday: this.state.birthday
               })
           }).then(function(response) {
               if (response.ok) {
