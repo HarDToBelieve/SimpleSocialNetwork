@@ -1236,9 +1236,17 @@ webpackJsonp([0],[
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var w = ["Webkit"];
+	var m = ["Moz"];
+	var ms = ["ms"];
+	var wm = ["Webkit", "Moz"];
+	var wms = ["Webkit", "ms"];
+	var wmms = ["Webkit", "Moz", "ms"];
+
 	exports.default = {
 	  plugins: [],
-	  prefixMap: { "appearance": ["Webkit", "Moz"], "userSelect": ["Webkit", "Moz", "ms"], "textEmphasisPosition": ["Webkit"], "textEmphasis": ["Webkit"], "textEmphasisStyle": ["Webkit"], "textEmphasisColor": ["Webkit"], "boxDecorationBreak": ["Webkit"], "clipPath": ["Webkit"], "maskImage": ["Webkit"], "maskMode": ["Webkit"], "maskRepeat": ["Webkit"], "maskPosition": ["Webkit"], "maskClip": ["Webkit"], "maskOrigin": ["Webkit"], "maskSize": ["Webkit"], "maskComposite": ["Webkit"], "mask": ["Webkit"], "maskBorderSource": ["Webkit"], "maskBorderMode": ["Webkit"], "maskBorderSlice": ["Webkit"], "maskBorderWidth": ["Webkit"], "maskBorderOutset": ["Webkit"], "maskBorderRepeat": ["Webkit"], "maskBorder": ["Webkit"], "maskType": ["Webkit"], "textDecorationStyle": ["Webkit"], "textDecorationSkip": ["Webkit"], "textDecorationLine": ["Webkit"], "textDecorationColor": ["Webkit"], "filter": ["Webkit"], "fontFeatureSettings": ["Webkit"], "breakAfter": ["Webkit", "Moz", "ms"], "breakBefore": ["Webkit", "Moz", "ms"], "breakInside": ["Webkit", "Moz", "ms"], "columnCount": ["Webkit", "Moz"], "columnFill": ["Webkit", "Moz"], "columnGap": ["Webkit", "Moz"], "columnRule": ["Webkit", "Moz"], "columnRuleColor": ["Webkit", "Moz"], "columnRuleStyle": ["Webkit", "Moz"], "columnRuleWidth": ["Webkit", "Moz"], "columns": ["Webkit", "Moz"], "columnSpan": ["Webkit", "Moz"], "columnWidth": ["Webkit", "Moz"], "flex": ["Webkit"], "flexBasis": ["Webkit"], "flexDirection": ["Webkit"], "flexGrow": ["Webkit"], "flexFlow": ["Webkit"], "flexShrink": ["Webkit"], "flexWrap": ["Webkit"], "alignContent": ["Webkit"], "alignItems": ["Webkit"], "alignSelf": ["Webkit"], "justifyContent": ["Webkit"], "order": ["Webkit"], "transform": ["Webkit"], "transformOrigin": ["Webkit"], "transformOriginX": ["Webkit"], "transformOriginY": ["Webkit"], "backfaceVisibility": ["Webkit"], "perspective": ["Webkit"], "perspectiveOrigin": ["Webkit"], "transformStyle": ["Webkit"], "transformOriginZ": ["Webkit"], "animation": ["Webkit"], "animationDelay": ["Webkit"], "animationDirection": ["Webkit"], "animationFillMode": ["Webkit"], "animationDuration": ["Webkit"], "animationIterationCount": ["Webkit"], "animationName": ["Webkit"], "animationPlayState": ["Webkit"], "animationTimingFunction": ["Webkit"], "backdropFilter": ["Webkit"], "fontKerning": ["Webkit"], "scrollSnapType": ["Webkit", "ms"], "scrollSnapPointsX": ["Webkit", "ms"], "scrollSnapPointsY": ["Webkit", "ms"], "scrollSnapDestination": ["Webkit", "ms"], "scrollSnapCoordinate": ["Webkit", "ms"], "shapeImageThreshold": ["Webkit"], "shapeImageMargin": ["Webkit"], "shapeImageOutside": ["Webkit"], "hyphens": ["Webkit", "Moz", "ms"], "flowInto": ["Webkit", "ms"], "flowFrom": ["Webkit", "ms"], "regionFragment": ["Webkit", "ms"], "textAlignLast": ["Moz"], "tabSize": ["Moz"], "wrapFlow": ["ms"], "wrapThrough": ["ms"], "wrapMargin": ["ms"], "gridTemplateColumns": ["ms"], "gridTemplateRows": ["ms"], "gridTemplateAreas": ["ms"], "gridTemplate": ["ms"], "gridAutoColumns": ["ms"], "gridAutoRows": ["ms"], "gridAutoFlow": ["ms"], "grid": ["ms"], "gridRowStart": ["ms"], "gridColumnStart": ["ms"], "gridRowEnd": ["ms"], "gridRow": ["ms"], "gridColumn": ["ms"], "gridColumnEnd": ["ms"], "gridColumnGap": ["ms"], "gridRowGap": ["ms"], "gridArea": ["ms"], "gridGap": ["ms"], "textSizeAdjust": ["Webkit", "ms"], "transitionDelay": ["Webkit"], "transitionDuration": ["Webkit"], "transitionProperty": ["Webkit"], "transitionTimingFunction": ["Webkit"] }
+	  prefixMap: { "appearance": wm, "userSelect": wmms, "textEmphasisPosition": w, "textEmphasis": w, "textEmphasisStyle": w, "textEmphasisColor": w, "boxDecorationBreak": w, "clipPath": w, "maskImage": w, "maskMode": w, "maskRepeat": w, "maskPosition": w, "maskClip": w, "maskOrigin": w, "maskSize": w, "maskComposite": w, "mask": w, "maskBorderSource": w, "maskBorderMode": w, "maskBorderSlice": w, "maskBorderWidth": w, "maskBorderOutset": w, "maskBorderRepeat": w, "maskBorder": w, "maskType": w, "textDecorationStyle": w, "textDecorationSkip": w, "textDecorationLine": w, "textDecorationColor": w, "filter": w, "fontFeatureSettings": w, "breakAfter": wmms, "breakBefore": wmms, "breakInside": wmms, "columnCount": wm, "columnFill": wm, "columnGap": wm, "columnRule": wm, "columnRuleColor": wm, "columnRuleStyle": wm, "columnRuleWidth": wm, "columns": wm, "columnSpan": wm, "columnWidth": wm, "flex": w, "flexBasis": w, "flexDirection": w, "flexGrow": w, "flexFlow": w, "flexShrink": w, "flexWrap": w, "alignContent": w, "alignItems": w, "alignSelf": w, "justifyContent": w, "order": w, "transform": w, "transformOrigin": w, "transformOriginX": w, "transformOriginY": w, "backfaceVisibility": w, "perspective": w, "perspectiveOrigin": w, "transformStyle": w, "transformOriginZ": w, "animation": w, "animationDelay": w, "animationDirection": w, "animationFillMode": w, "animationDuration": w, "animationIterationCount": w, "animationName": w, "animationPlayState": w, "animationTimingFunction": w, "backdropFilter": w, "fontKerning": w, "scrollSnapType": wms, "scrollSnapPointsX": wms, "scrollSnapPointsY": wms, "scrollSnapDestination": wms, "scrollSnapCoordinate": wms, "shapeImageThreshold": w, "shapeImageMargin": w, "shapeImageOutside": w, "hyphens": wmms, "flowInto": wms, "flowFrom": wms, "regionFragment": wms, "textAlignLast": m, "tabSize": m, "wrapFlow": ms, "wrapThrough": ms, "wrapMargin": ms, "gridTemplateColumns": ms, "gridTemplateRows": ms, "gridTemplateAreas": ms, "gridTemplate": ms, "gridAutoColumns": ms, "gridAutoRows": ms, "gridAutoFlow": ms, "grid": ms, "gridRowStart": ms, "gridColumnStart": ms, "gridRowEnd": ms, "gridRow": ms, "gridColumn": ms, "gridColumnEnd": ms, "gridColumnGap": ms, "gridRowGap": ms, "gridArea": ms, "gridGap": ms, "textSizeAdjust": wms, "transitionDelay": w, "transitionDuration": w, "transitionProperty": w, "transitionTimingFunction": w }
 	};
 	module.exports = exports["default"];
 
@@ -22143,7 +22151,7 @@ webpackJsonp([0],[
 	        position: 'absolute',
 	        marginBottom: margin,
 	        width: width,
-	        top: Math.max(topOffset, margin),
+	        top: '100px',
 	        left: leftOffset
 	      }, style);
 
@@ -22188,7 +22196,7 @@ webpackJsonp([0],[
 	    key: 'defaultProps',
 	    value: {
 	      width: 'auto',
-	      margin: 100,
+	      margin: 20,
 	      dismissOnBackgroundClick: true
 	    },
 	    enumerable: true
@@ -23057,15 +23065,16 @@ webpackJsonp([0],[
 	});
 	var Helper = {
 	  authorizationUrl: 'http://161.202.20.61:5000/auth',
-	  registerUrl: 'http://161.202.20.61:5000/user/reg',
-	  newfeedDataUrl: 'http://161.202.20.61:5000/user?name=',
+	  registerUrl: 'http://161.202.20.61:5000/reguser',
+	  newfeedDataUrl: 'http://161.202.20.61:5000/postnewfeed?name=',
 	  postDataUrl: 'http://161.202.20.61:5000/post',
-	  likePostUrl: 'http://161.202.20.61:5000/post/like',
-	  commentPostUrl: 'http://161.202.20.61:5000/post/cmt',
-	  commentDataUrl: 'http://161.202.20.61:5000/post/cmt?postID=',
+	  likePostUrl: 'http://161.202.20.61:5000/likepost',
+	  commentPostUrl: 'http://161.202.20.61:5000/postcmt',
+	  commentDataUrl: 'http://161.202.20.61:5000/postcmt?postID=',
 	  getUserUrl: 'http://161.202.20.61:5000/user?name=',
 	  getUserPostUrl: 'http://161.202.20.61:5000/post?name=',
-	  followUserUrl: 'http://161.202.20.61:5000/user/flw',
+	  followUserUrl: 'http://161.202.20.61:5000/flwuser',
+	  unfollowUserUrl: 'http://161.202.20.61:5000/unflwuser',
 	  access_token: '',
 	  logedIn: false,
 	  errorLogin: false,
@@ -23320,7 +23329,11 @@ webpackJsonp([0],[
 
 	var _reactModalDialog = __webpack_require__(223);
 
-	var _Header = __webpack_require__(282);
+	var _formData = __webpack_require__(282);
+
+	var _formData2 = _interopRequireDefault(_formData);
+
+	var _Header = __webpack_require__(283);
 
 	var _Header2 = _interopRequireDefault(_Header);
 
@@ -23328,15 +23341,15 @@ webpackJsonp([0],[
 
 	var _Helper2 = _interopRequireDefault(_Helper);
 
-	var _ProfileModal = __webpack_require__(283);
+	var _ProfileModal = __webpack_require__(284);
 
 	var _ProfileModal2 = _interopRequireDefault(_ProfileModal);
 
-	var _CommentModal = __webpack_require__(285);
+	var _CommentModal = __webpack_require__(286);
 
 	var _CommentModal2 = _interopRequireDefault(_CommentModal);
 
-	var _PostList = __webpack_require__(284);
+	var _PostList = __webpack_require__(285);
 
 	var _PostList2 = _interopRequireDefault(_PostList);
 
@@ -23362,7 +23375,9 @@ webpackJsonp([0],[
 	      posts: [],
 	      newpost: "",
 	      postStatus: false,
-	      isShowingProfileModal: false
+	      isShowingProfileModal: false,
+	      file: '',
+	      imagePreviewUrl: ''
 	    };
 	    _this.setPosts = _this.setPosts.bind(_this);
 	    _this.postData = _this.postData.bind(_this);
@@ -23381,7 +23396,7 @@ webpackJsonp([0],[
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
-	      clearInterval(this.interval);
+	      clear(this.interval);
 	    }
 	  }, {
 	    key: 'openProfileModal',
@@ -23412,18 +23427,17 @@ webpackJsonp([0],[
 	  }, {
 	    key: 'postData',
 	    value: function postData() {
+	      var formData = new _formData2.default();
+	      formData.append('content', this.state.newpost);
+	      formData.append('owner', _Helper2.default.username);
+	      formData.append('date', Date.now());
+	      formData.append('file', this.state.file);
 	      fetch(_Helper2.default.postDataUrl, {
 	        method: 'POST',
 	        headers: {
-	          'Content-Type': 'application/json',
 	          'Authorization': 'JWT ' + _Helper2.default.access_token
 	        },
-	        body: JSON.stringify({
-	          content: this.state.newpost,
-	          owner: _Helper2.default.username,
-	          date: Date.now(),
-	          like: 0
-	        })
+	        body: formData
 	      }).then(function (response) {
 	        if (response.ok) {
 	          return response.json();
@@ -23450,12 +23464,37 @@ webpackJsonp([0],[
 	      _Helper2.default.setPostStatus(false);
 	    }
 	  }, {
+	    key: '_handleSubmit',
+	    value: function _handleSubmit(e) {
+	      e.preventDefault();
+	      // TODO: do something with -> this.state.file
+	      console.log('handle uploading-', this.state.file);
+	    }
+	  }, {
+	    key: '_handleImageChange',
+	    value: function _handleImageChange(e) {
+	      var _this2 = this;
+
+	      e.preventDefault();
+
+	      var reader = new FileReader();
+	      var file = e.target.files[0];
+
+	      reader.onloadend = function () {
+	        _this2.setState({
+	          file: file,
+	          imagePreviewUrl: reader.result
+	        });
+	      };
+
+	      reader.readAsDataURL(file);
+	    }
+	  }, {
 	    key: 'loadData',
 	    value: function loadData() {
-	      fetch(_Helper2.default.newfeedDataUrl + _Helper2.default.username, {
+	      fetch(_Helper2.default.newfeedDataUrl + _Helper2.default.username + "&postID=0", {
 	        method: 'GET',
 	        headers: {
-	          'Content-Type': 'application/json',
 	          'Authorization': 'JWT ' + _Helper2.default.access_token
 	        }
 	      }).then(function (response) {
@@ -23471,6 +23510,8 @@ webpackJsonp([0],[
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this3 = this;
+
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -23485,6 +23526,26 @@ webpackJsonp([0],[
 	            'div',
 	            { className: 'post-form' },
 	            _react2.default.createElement('textarea', { className: 'form-control post-input', type: 'text', name: 'newpost', placeholder: 'What are you thinking?', onChange: this.handleInputChange }),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'previewComponent' },
+	              _react2.default.createElement(
+	                'form',
+	                { onSubmit: function onSubmit(e) {
+	                    return _this3._handleSubmit(e);
+	                  } },
+	                _react2.default.createElement('input', { className: 'fileInput',
+	                  type: 'file',
+	                  onChange: function onChange(e) {
+	                    return _this3._handleImageChange(e);
+	                  } })
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'imgPreview' },
+	                this.state.imagePreviewUrl != "" ? _react2.default.createElement('img', { src: this.state.imagePreviewUrl, width: '300px' }) : ""
+	              )
+	            ),
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'btn blue-btn', onClick: this.postData },
@@ -23520,6 +23581,14 @@ webpackJsonp([0],[
 
 /***/ }),
 /* 282 */
+/***/ (function(module, exports) {
+
+	/* eslint-env browser */
+	module.exports = typeof self == 'object' ? self.FormData : window.FormData;
+
+
+/***/ }),
+/* 283 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23536,7 +23605,7 @@ webpackJsonp([0],[
 
 	var _reactModalDialog = __webpack_require__(223);
 
-	var _ProfileModal = __webpack_require__(283);
+	var _ProfileModal = __webpack_require__(284);
 
 	var _ProfileModal2 = _interopRequireDefault(_ProfileModal);
 
@@ -23594,7 +23663,7 @@ webpackJsonp([0],[
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'nav',
-	        { className: 'navbar navbar-fixed-top', role: 'navigation' },
+	        { className: 'navbar', role: 'navigation' },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'container' },
@@ -23662,7 +23731,7 @@ webpackJsonp([0],[
 	exports.default = Header;
 
 /***/ }),
-/* 283 */
+/* 284 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23681,7 +23750,7 @@ webpackJsonp([0],[
 
 	var _Helper2 = _interopRequireDefault(_Helper);
 
-	var _PostList = __webpack_require__(284);
+	var _PostList = __webpack_require__(285);
 
 	var _PostList2 = _interopRequireDefault(_PostList);
 
@@ -23745,7 +23814,7 @@ webpackJsonp([0],[
 	          'Authorization': 'JWT ' + _Helper2.default.access_token
 	        },
 	        body: JSON.stringify({
-	          follower: this.props.username
+	          following: this.props.username
 	        })
 	      }).then(function (response) {
 	        if (response.ok) {
@@ -23790,10 +23859,9 @@ webpackJsonp([0],[
 	  }, {
 	    key: 'getUserInfo',
 	    value: function getUserInfo() {
-	      fetch(_Helper2.default.getUserUrl + this.props.username, {
+	      fetch(_Helper2.default.getUserUrl + this.props.username + '&action=getInfo', {
 	        method: "GET",
 	        headers: {
-	          'Content-Type': 'application/json',
 	          'Authorization': 'JWT ' + _Helper2.default.access_token
 	        }
 	      }).then(function (response) {
@@ -23810,7 +23878,7 @@ webpackJsonp([0],[
 	  }, {
 	    key: 'getUserPost',
 	    value: function getUserPost() {
-	      fetch(_Helper2.default.getUserPostUrl + this.props.username, {
+	      fetch(_Helper2.default.getUserPostUrl + this.props.username + '&postID=0', {
 	        method: "GET",
 	        headers: {
 	          'Content-Type': 'application/json',
@@ -23876,8 +23944,14 @@ webpackJsonp([0],[
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'green pull-right like-box' },
+	            'Follower ',
+	            this.state.userInfo.followings_name ? this.state.userInfo.followings_name.length - 1 : "?"
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'green pull-right like-box' },
 	            'Following ',
-	            this.state.userInfo.following_name ? this.state.userInfo.following_name.length : "?"
+	            this.state.userInfo.followers_name ? this.state.userInfo.followers_name.length - 1 : "?"
 	          )
 	        ),
 	        _react2.default.createElement(
@@ -23911,7 +23985,7 @@ webpackJsonp([0],[
 	exports.default = ProfileModal;
 
 /***/ }),
-/* 284 */
+/* 285 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23932,11 +24006,11 @@ webpackJsonp([0],[
 
 	var _Helper2 = _interopRequireDefault(_Helper);
 
-	var _CommentModal = __webpack_require__(285);
+	var _CommentModal = __webpack_require__(286);
 
 	var _CommentModal2 = _interopRequireDefault(_CommentModal);
 
-	var _ProfileModal = __webpack_require__(283);
+	var _ProfileModal = __webpack_require__(284);
 
 	var _ProfileModal2 = _interopRequireDefault(_ProfileModal);
 
@@ -23958,9 +24032,11 @@ webpackJsonp([0],[
 
 	    _this.state = {
 	      isShowingCommentModal: false,
-	      isShowingProfileModal: false
+	      isShowingProfileModal: false,
+	      liked: false
 	    };
 	    _this.likePost = _this.likePost.bind(_this);
+	    _this.checkLiked = _this.checkLiked.bind(_this);
 	    _this.openCommentModal = _this.openCommentModal.bind(_this);
 	    _this.closeCommentModal = _this.closeCommentModal.bind(_this);
 	    _this.openProfileModal = _this.openProfileModal.bind(_this);
@@ -23969,6 +24045,11 @@ webpackJsonp([0],[
 	  }
 
 	  _createClass(SinglePost, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.checkLiked();
+	    }
+	  }, {
 	    key: 'openCommentModal',
 	    value: function openCommentModal() {
 	      this.setState({
@@ -24008,7 +24089,49 @@ webpackJsonp([0],[
 	          'Authorization': 'JWT ' + _Helper2.default.access_token
 	        },
 	        body: JSON.stringify({
-	          postID: this.props.post.postID
+	          postID: this.props.post.postID,
+	          action: "like"
+	        })
+	      }).then(function (response) {
+	        if (response.ok) {
+	          return response.json();
+	        } else {
+	          return null;
+	        }
+	      }).then(function (response) {
+	        console.log("Liked");
+	      });
+	    }
+	  }, {
+	    key: 'checkLiked',
+	    value: function checkLiked() {
+	      fetch(_Helper2.default.likePostUrl + "?postID=" + this.props.post.postID, {
+	        method: 'GET',
+	        headers: {
+	          'Authorization': 'JWT ' + _Helper2.default.access_token
+	        }
+	      }).then(function (response) {
+	        if (response.ok) {
+	          return response.json();
+	        } else {
+	          return null;
+	        }
+	      }).then(function (response) {
+	        console.log(response.Likes);
+	      });
+	    }
+	  }, {
+	    key: 'unlikePost',
+	    value: function unlikePost() {
+	      fetch(_Helper2.default.likePostUrl, {
+	        method: 'POST',
+	        headers: {
+	          'Content-Type': 'application/json',
+	          'Authorization': 'JWT ' + _Helper2.default.access_token
+	        },
+	        body: JSON.stringify({
+	          postID: this.props.post.postID,
+	          action: "unlike"
 	        })
 	      }).then(function (response) {
 	        if (response.ok) {
@@ -24046,7 +24169,8 @@ webpackJsonp([0],[
 	            'div',
 	            null,
 	            this.props.post.content
-	          )
+	          ),
+	          _react2.default.createElement('img', { src: this.props.post.url, width: '100%' })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -24120,7 +24244,7 @@ webpackJsonp([0],[
 	exports.default = PostList;
 
 /***/ }),
-/* 285 */
+/* 286 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24135,7 +24259,7 @@ webpackJsonp([0],[
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _axios = __webpack_require__(286);
+	var _axios = __webpack_require__(287);
 
 	var _axios2 = _interopRequireDefault(_axios);
 
@@ -24313,7 +24437,8 @@ webpackJsonp([0],[
 	            'div',
 	            null,
 	            this.props.post.content
-	          )
+	          ),
+	          _react2.default.createElement('img', { src: this.props.post.url, width: '100%' })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -24358,21 +24483,21 @@ webpackJsonp([0],[
 	exports.default = CommentModal;
 
 /***/ }),
-/* 286 */
+/* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(287);
+	module.exports = __webpack_require__(288);
 
 /***/ }),
-/* 287 */
+/* 288 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(288);
-	var bind = __webpack_require__(293);
-	var Axios = __webpack_require__(294);
-	var defaults = __webpack_require__(295);
+	var utils = __webpack_require__(289);
+	var bind = __webpack_require__(294);
+	var Axios = __webpack_require__(295);
+	var defaults = __webpack_require__(296);
 
 	/**
 	 * Create an instance of Axios
@@ -24405,15 +24530,15 @@ webpackJsonp([0],[
 	};
 
 	// Expose Cancel & CancelToken
-	axios.Cancel = __webpack_require__(312);
-	axios.CancelToken = __webpack_require__(313);
-	axios.isCancel = __webpack_require__(309);
+	axios.Cancel = __webpack_require__(313);
+	axios.CancelToken = __webpack_require__(314);
+	axios.isCancel = __webpack_require__(310);
 
 	// Expose all/spread
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(314);
+	axios.spread = __webpack_require__(315);
 
 	module.exports = axios;
 
@@ -24422,12 +24547,12 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 288 */
+/* 289 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
 
-	var bind = __webpack_require__(293);
+	var bind = __webpack_require__(294);
 
 	/*global toString:true*/
 
@@ -24738,10 +24863,10 @@ webpackJsonp([0],[
 	  trim: trim
 	};
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(289).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(290).Buffer))
 
 /***/ }),
-/* 289 */
+/* 290 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -24754,9 +24879,9 @@ webpackJsonp([0],[
 
 	'use strict'
 
-	var base64 = __webpack_require__(290)
-	var ieee754 = __webpack_require__(291)
-	var isArray = __webpack_require__(292)
+	var base64 = __webpack_require__(291)
+	var ieee754 = __webpack_require__(292)
+	var isArray = __webpack_require__(293)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -26537,7 +26662,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ }),
-/* 290 */
+/* 291 */
 /***/ (function(module, exports) {
 
 	'use strict'
@@ -26657,7 +26782,7 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 291 */
+/* 292 */
 /***/ (function(module, exports) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -26747,7 +26872,7 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 292 */
+/* 293 */
 /***/ (function(module, exports) {
 
 	var toString = {}.toString;
@@ -26758,7 +26883,7 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 293 */
+/* 294 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -26775,17 +26900,17 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 294 */
+/* 295 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var defaults = __webpack_require__(295);
-	var utils = __webpack_require__(288);
-	var InterceptorManager = __webpack_require__(306);
-	var dispatchRequest = __webpack_require__(307);
-	var isAbsoluteURL = __webpack_require__(310);
-	var combineURLs = __webpack_require__(311);
+	var defaults = __webpack_require__(296);
+	var utils = __webpack_require__(289);
+	var InterceptorManager = __webpack_require__(307);
+	var dispatchRequest = __webpack_require__(308);
+	var isAbsoluteURL = __webpack_require__(311);
+	var combineURLs = __webpack_require__(312);
 
 	/**
 	 * Create a new instance of Axios
@@ -26866,13 +26991,13 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 295 */
+/* 296 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(288);
-	var normalizeHeaderName = __webpack_require__(296);
+	var utils = __webpack_require__(289);
+	var normalizeHeaderName = __webpack_require__(297);
 
 	var DEFAULT_CONTENT_TYPE = {
 	  'Content-Type': 'application/x-www-form-urlencoded'
@@ -26888,10 +27013,10 @@ webpackJsonp([0],[
 	  var adapter;
 	  if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(297);
+	    adapter = __webpack_require__(298);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(297);
+	    adapter = __webpack_require__(298);
 	  }
 	  return adapter;
 	}
@@ -26965,12 +27090,12 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 296 */
+/* 297 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(288);
+	var utils = __webpack_require__(289);
 
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -26983,18 +27108,18 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 297 */
+/* 298 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(288);
-	var settle = __webpack_require__(298);
-	var buildURL = __webpack_require__(301);
-	var parseHeaders = __webpack_require__(302);
-	var isURLSameOrigin = __webpack_require__(303);
-	var createError = __webpack_require__(299);
-	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(304);
+	var utils = __webpack_require__(289);
+	var settle = __webpack_require__(299);
+	var buildURL = __webpack_require__(302);
+	var parseHeaders = __webpack_require__(303);
+	var isURLSameOrigin = __webpack_require__(304);
+	var createError = __webpack_require__(300);
+	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(305);
 
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -27090,7 +27215,7 @@ webpackJsonp([0],[
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(305);
+	      var cookies = __webpack_require__(306);
 
 	      // Add xsrf header
 	      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -27169,12 +27294,12 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 298 */
+/* 299 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var createError = __webpack_require__(299);
+	var createError = __webpack_require__(300);
 
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -27200,12 +27325,12 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 299 */
+/* 300 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var enhanceError = __webpack_require__(300);
+	var enhanceError = __webpack_require__(301);
 
 	/**
 	 * Create an Error with the specified message, config, error code, and response.
@@ -27223,7 +27348,7 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 300 */
+/* 301 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -27248,12 +27373,12 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 301 */
+/* 302 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(288);
+	var utils = __webpack_require__(289);
 
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -27322,12 +27447,12 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 302 */
+/* 303 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(288);
+	var utils = __webpack_require__(289);
 
 	/**
 	 * Parse headers into an object
@@ -27365,12 +27490,12 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 303 */
+/* 304 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(288);
+	var utils = __webpack_require__(289);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -27439,7 +27564,7 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 304 */
+/* 305 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -27481,12 +27606,12 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 305 */
+/* 306 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(288);
+	var utils = __webpack_require__(289);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -27540,12 +27665,12 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 306 */
+/* 307 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(288);
+	var utils = __webpack_require__(289);
 
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -27598,15 +27723,15 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 307 */
+/* 308 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(288);
-	var transformData = __webpack_require__(308);
-	var isCancel = __webpack_require__(309);
-	var defaults = __webpack_require__(295);
+	var utils = __webpack_require__(289);
+	var transformData = __webpack_require__(309);
+	var isCancel = __webpack_require__(310);
+	var defaults = __webpack_require__(296);
 
 	/**
 	 * Throws a `Cancel` if cancellation has been requested.
@@ -27683,12 +27808,12 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 308 */
+/* 309 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(288);
+	var utils = __webpack_require__(289);
 
 	/**
 	 * Transform the data for a request or a response
@@ -27709,7 +27834,7 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 309 */
+/* 310 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -27720,7 +27845,7 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 310 */
+/* 311 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -27740,7 +27865,7 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 311 */
+/* 312 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -27760,7 +27885,7 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 312 */
+/* 313 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -27785,12 +27910,12 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 313 */
+/* 314 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Cancel = __webpack_require__(312);
+	var Cancel = __webpack_require__(313);
 
 	/**
 	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -27848,7 +27973,7 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 314 */
+/* 315 */
 /***/ (function(module, exports) {
 
 	'use strict';

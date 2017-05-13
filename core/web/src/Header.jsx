@@ -37,7 +37,7 @@ class Header extends React.Component{
 
   render() {
     return (
-      <nav className="navbar navbar-fixed-top" role="navigation">
+      <nav className="navbar" role="navigation">
           <div className="container">
               <div className="row navbar-collapse">
                   <img className="top-logo margin-left-logo" width="60px" height="60px" src="images/logo.png"/>

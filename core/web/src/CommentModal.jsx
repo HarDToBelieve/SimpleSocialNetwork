@@ -123,6 +123,7 @@ class CommentModal extends React.Component {
           <div className="post-content">
             <div className="post-owner">{this.props.post.owner}</div>
             <div>{this.props.post.content}</div>
+            <img src={this.props.post.url} width="100%"/>
           </div>
           <div className="post-content">
             <div className="green pull-right like-box">{this.props.post.like} Like</div>

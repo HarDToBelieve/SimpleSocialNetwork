@@ -22,7 +22,7 @@ class ProfileModal extends React.Component {
   }
 
   componentDidMount() {
-   this.interval = setInterval(this.setProfileInfo, 1000);
+    this.interval = setInterval(this.setProfileInfo, 1000);
   }
 
   componentWillUnmount() {
@@ -45,7 +45,7 @@ class ProfileModal extends React.Component {
               'Authorization': 'JWT ' + Helper.access_token
             },
             body: JSON.stringify({
-              follower: this.props.username
+              following: this.props.username
             })
         }).then(function(response) {
             if (response.ok) {
@@ -88,10 +88,9 @@ class ProfileModal extends React.Component {
   }
 
   getUserInfo() {
-        fetch(Helper.getUserUrl + this.props.username, {
+        fetch(Helper.getUserUrl + this.props.username + '&action=getInfo', {
             method: "GET",
             headers: {
-              'Content-Type': 'application/json',
               'Authorization': 'JWT ' + Helper.access_token
             }
         }).then(function(response) {
@@ -107,7 +106,7 @@ class ProfileModal extends React.Component {
   }
 
   getUserPost() {
-       fetch(Helper.getUserPostUrl + this.props.username, {
+       fetch(Helper.getUserPostUrl + this.props.username + '&postID=0', {
             method: "GET",
             headers: {
               'Content-Type': 'application/json',
@@ -155,7 +154,8 @@ class ProfileModal extends React.Component {
            <div>{this.state.userInfo.birthday}</div>
          </div>
          <div className="post-content">
-           <div className="green pull-right like-box">Following {this.state.userInfo.following_name ? this.state.userInfo.following_name.length : "?"}</div>
+           <div className="green pull-right like-box">Follower {this.state.userInfo.followings_name ? this.state.userInfo.followings_name.length - 1 : "?"}</div>
+           <div className="green pull-right like-box">Following {this.state.userInfo.followers_name ? this.state.userInfo.followers_name.length - 1 : "?"}</div>
          </div>
          <div className="btn blue-btn" onClick={this.followUser}>Follow</div>
          <div className="comment-form">

@@ -10,13 +10,19 @@ class SinglePost extends React.Component {
     super();
     this.state = {
       isShowingCommentModal: false,
-      isShowingProfileModal: false
+      isShowingProfileModal: false,
+      liked: false
     };
     this.likePost = this.likePost.bind(this);
+    this.checkLiked = this.checkLiked.bind(this);
     this.openCommentModal = this.openCommentModal.bind(this);
     this.closeCommentModal = this.closeCommentModal.bind(this);
     this.openProfileModal = this.openProfileModal.bind(this);
     this.closeProfileModal = this.closeProfileModal.bind(this);
+  }
+
+  componentDidMount(){
+    this.checkLiked();
   }
 
   openCommentModal() {
@@ -53,7 +59,47 @@ class SinglePost extends React.Component {
               'Authorization': 'JWT ' + Helper.access_token
             },
             body: JSON.stringify({
-              postID: this.props.post.postID
+              postID: this.props.post.postID,
+              action: "like"
+            })
+        }).then(function(response) {
+            if (response.ok) {
+                return response.json()
+            } else {
+                return null
+            }
+        }).then(function(response) {
+            console.log("Liked");
+        });
+  }
+
+  checkLiked() {
+    fetch(Helper.likePostUrl + "?postID=" + this.props.post.postID, {
+            method: 'GET',
+            headers: {
+              'Authorization': 'JWT ' + Helper.access_token
+            }
+        }).then(function(response) {
+            if (response.ok) {
+                return response.json()
+            } else {
+                return null
+            }
+        }).then(function(response) {
+            console.log(response.Likes);
+        });
+  }
+
+  unlikePost() {
+    fetch(Helper.likePostUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'JWT ' + Helper.access_token
+            },
+            body: JSON.stringify({
+              postID: this.props.post.postID,
+              action: "unlike"
             })
         }).then(function(response) {
             if (response.ok) {
@@ -76,6 +122,7 @@ class SinglePost extends React.Component {
         <div className="post-content">
           <div className="post-owner" onClick={this.openProfileModal}><strong>{this.props.post.owner}</strong></div>
           <div>{this.props.post.content}</div>
+          <img src={this.props.post.url} width="100%"/>
         </div>
         <div className="post-content">
           <div className="green pull-right like-box">{this.props.post.like} Like</div>

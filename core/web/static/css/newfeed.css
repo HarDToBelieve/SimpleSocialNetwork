@@ -5,21 +5,20 @@
   background-color: #3498db;
 }
 
-.post-list{
-  margin-top: 105px;
-}
-
 .post-box{
   padding: 10px 25px;
-  background-color: rgba(0,0,0,0.1);
+  background-color: white;
+  border: solid 1px #ddd;
   border-radius: 3px;
-  width: 70%;
+  width: 50%;
   margin: 5px 10px;
+  margin-left: 25%;
 }
 
 .profile-post-box{
   padding: 10px 25px;
-  background-color: #ddd;
+  background-color: white;
+  border: solid 1px #ddd;
   border-radius: 3px;
   width: 95%;
   margin: 10px 10px 5px;
@@ -27,7 +26,8 @@
 
 .comment-box{
   padding: 10px 25px;
-  background-color: #ddd;
+  background-color: white;
+  border: solid 1px #ddd;
   border-radius: 3px;
   width: 95%;
   margin: 10px 10px 5px;
@@ -58,11 +58,13 @@
 }
 
 .post-form{
+  width: 50%;
   margin-bottom: 15px;
+  margin-left: 25%;
 }
 
 .post-input{
-  width: 70%;
+  width: 100%;
 }
 
 .green{
@@ -70,8 +72,11 @@
 }
 
 .like-box{
-  padding: 10px;
-  background-color: rgba(0,0,0, 0.1);
+  padding: 5px 10px;
+  background-color: white;
+  border-radius: 3px;
+  border: solid 1px #ddd;
+  margin-top: 3px;
 }
 
 .comment-modal{
@@ -81,9 +86,11 @@
 @media only screen and (max-width : 767px) {
   .post-box{
     width: 90%;
+    margin-left: 5%;
   }
   .post-input{
     width: 90%;
+    margin-left: 5%;
   }
   .comment-modal{
     width: 80%;
