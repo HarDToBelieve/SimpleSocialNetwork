@@ -7,6 +7,7 @@ import Helper from './Helper.jsx';
 import ProfileModal from './ProfileModal.jsx';
 import CommentModal from './CommentModal.jsx';
 import PostList from './PostList.jsx';
+import AllActions from './AllActions.jsx';
 
 class NewFeed extends React.Component {
 
@@ -58,6 +59,7 @@ class NewFeed extends React.Component {
 
   resetAccessToken(){
     Helper.setAccessToken("");
+    AllActions.logout();
   }
 
   postData() {
@@ -120,6 +122,7 @@ class NewFeed extends React.Component {
    }
 
   loadData() {
+    console.log(Helper.access_token);
     fetch(Helper.newfeedDataUrl + Helper.username + "&postID=0", {
             method: 'GET',
             headers: {

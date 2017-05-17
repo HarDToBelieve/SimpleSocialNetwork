@@ -6,7 +6,7 @@
 }
 
 .post-box{
-  padding: 10px 25px;
+  padding: 10px 0px;
   background-color: white;
   border: solid 1px #ddd;
   border-radius: 3px;
@@ -34,15 +34,24 @@
 }
 
 .post-content{
-  padding-left: 18px;
+  padding-left: 0px;
   padding-top: 3px;
 }
 
+.content {
+  padding: 0px 25px 15px;
+}
+
 .post-owner{
-  padding-bottom: 5px;
+  padding: 5px 25px;
   color: #3498db;
   font-size: 15px;
   margin-right: 10px;
+}
+
+.post-btn{
+  border: solid 1px darkseagreen;
+  color: green;
 }
 
 .post-owner:hover{
@@ -76,7 +85,7 @@
   background-color: white;
   border-radius: 3px;
   border: solid 1px #ddd;
-  margin-top: 3px;
+  margin: 10px 17px 3px;
 }
 
 .comment-modal{

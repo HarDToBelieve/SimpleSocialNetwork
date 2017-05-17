@@ -5,6 +5,7 @@ import LoginModal from './LoginModal.jsx'
 import RegisterModal from './RegisterModal.jsx'
 import NewFeed from './NewFeed.jsx'
 import Helper from './Helper.jsx'
+import AllActions from './AllActions.jsx'
 
 class Home extends React.Component {
 
@@ -25,6 +26,7 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.interval = setInterval(this.checkAuth, 1000);
+    AllActions.loadAccessToken();
   }
 
   componentWillUnmount() {
@@ -109,13 +111,13 @@ class Home extends React.Component {
                   </div>
                 </div>
                 <div className="col col-md-6 hidden-sm-down home-left">
-                  <img width="50%" src="images/LandingImage.png" />
+                  <img width="100%" src="images/LandingImage.png" />
                 </div>
               </div>
             )
           :
             (
-              <div>
+              <div className="grey-background">
                 <NewFeed />
               </div>
             )

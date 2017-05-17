@@ -1,6 +1,7 @@
 import React,{PropTypes} from 'react';
 
 import Helper from './Helper.jsx'
+import AllActions from './AllActions.jsx'
 
 class LoginModal extends React.Component {
 
@@ -30,6 +31,9 @@ class LoginModal extends React.Component {
       this.setState({
         error: true
       });
+    }
+    if(Helper.access_token != ""){
+      AllActions.creatUserInfoFile(this.state.username, this.state.password, Helper.access_token);
     }
   }
 

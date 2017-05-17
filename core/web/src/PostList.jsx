@@ -86,7 +86,7 @@ class SinglePost extends React.Component {
                 return null
             }
         }).then(function(response) {
-            console.log(response.Likes);
+            return true
         });
   }
 
@@ -121,7 +121,7 @@ class SinglePost extends React.Component {
       <div className={boxClass + " col-md-7"}>
         <div className="post-content">
           <div className="post-owner" onClick={this.openProfileModal}><strong>{this.props.post.owner}</strong></div>
-          <div>{this.props.post.content}</div>
+          <div className="content">{this.props.post.content}</div>
           <img src={this.props.post.url} width="100%"/>
         </div>
         <div className="post-content">

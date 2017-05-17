@@ -37,27 +37,21 @@ class Header extends React.Component{
 
   render() {
     return (
-      <nav className="navbar" role="navigation">
-          <div className="container">
-              <div className="row navbar-collapse">
-                  <img className="top-logo margin-left-logo" width="60px" height="60px" src="images/logo.png"/>
-                  <ul className="nav navbar-nav col-md-6">
-                      <li className="d-inline-block navbar-brand">
-                        Simple Social Network
-                      </li>
-                      <li className="btn btn-nav">
-                        <div onClick={this.props.openProfileModal}>
-                          Profile
+      <nav className="navbar">
+              <div className="row container">
+                      <div className="col-xs-5 logo-header">
+                        <img className="logo" width="38px" height="38px" src="images/logo.png"/>
+                        <img className="logo-name" height="30px" src="images/name-logo-2x.png"/>
+                      </div>
+                      <div className="col-xs-5 search-form">
+                        <input className="form-control mr-sm-2" type="text" name="username" placeholder="Search for username" onChange={this.handleInputChange}/>
+                        <div className="btn button-search" onClick={this.openProfileModal}>
+                            <img width="20px" src="images/magnifying-glass-icon.png" />
                         </div>
-                      </li>
-                  </ul>
-                  <form className="form-inline pull-right">
-                    <div className="top-search">
-                      <input className="form-control mr-sm-2" type="text" name="username" placeholder="Search" onChange={this.handleInputChange}/>
-                      <div className="btn btn-outline-success my-2 my-sm-0 button-search" onClick={this.openProfileModal}>Search</div>
-                    </div>
-                    <div className="btn-logout" onClick={this.props.resetAccessToken}>Logout</div>
-                  </form>
+                      </div>
+                      <div className="col-xs-2">
+                        <div className="btn-logout" onClick={this.props.resetAccessToken}>Logout</div>
+                      </div>
                   { this.state.isShowingProfileModal &&
                     <ModalContainer onClose={this.closeProfileModal}>
                       <ModalDialog onClose={this.closeProfileModal}>
@@ -68,7 +62,6 @@ class Header extends React.Component{
                     </ModalContainer>
                   }
               </div>
-          </div>
       </nav>
     );
   }
