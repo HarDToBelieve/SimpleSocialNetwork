@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NewPostViewController">
             <connections>
+                <outlet property="imageView" destination="jid-EN-HVg" id="tVj-EJ-Dr8"/>
                 <outlet property="postTextView" destination="Ru9-rq-ptS" id="lVy-Ns-vfa"/>
                 <outlet property="profileImageView" destination="HKx-aL-Ba1" id="hff-6B-xD8"/>
                 <outlet property="userNameLabel" destination="qKJ-xQ-mkp" id="4ku-pV-3gQ"/>
@@ -97,22 +98,42 @@
                         <outlet property="delegate" destination="-1" id="7cV-qt-Bhz"/>
                     </connections>
                 </textView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jid-EN-HVg">
+                    <rect key="frame" x="0.0" y="397" width="375" height="200"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="200" id="IPC-QZ-Kdn"/>
+                    </constraints>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jml-8Y-b26">
+                    <rect key="frame" x="140" y="617" width="94" height="30"/>
+                    <state key="normal" title="Add an image">
+                        <color key="titleColor" red="0.20392156859999999" green="0.59607843140000005" blue="0.85882352939999995" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="addImageButtonPressed:" destination="-1" eventType="touchUpInside" id="qjA-j3-kpJ"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="Ru9-rq-ptS" secondAttribute="trailing" constant="16" id="4zx-ct-KFh"/>
                 <constraint firstItem="0jU-OJ-WTM" firstAttribute="top" secondItem="Moh-x0-OM5" secondAttribute="bottom" id="9J0-qC-3s0"/>
                 <constraint firstAttribute="trailing" secondItem="D1W-vu-EdU" secondAttribute="trailing" id="CBe-As-wvx"/>
+                <constraint firstItem="Jml-8Y-b26" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Gsq-1y-TFu"/>
                 <constraint firstItem="qKJ-xQ-mkp" firstAttribute="top" secondItem="0jU-OJ-WTM" secondAttribute="bottom" constant="25" id="HkE-u6-h40"/>
+                <constraint firstItem="Jml-8Y-b26" firstAttribute="top" secondItem="jid-EN-HVg" secondAttribute="bottom" constant="20" id="I27-PN-40M"/>
                 <constraint firstItem="D1W-vu-EdU" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="IyN-0n-eLH"/>
+                <constraint firstItem="jid-EN-HVg" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="JUv-uH-xDn"/>
                 <constraint firstItem="HKx-aL-Ba1" firstAttribute="top" secondItem="0jU-OJ-WTM" secondAttribute="bottom" constant="10" id="Jq3-Zl-JfT"/>
                 <constraint firstItem="Ru9-rq-ptS" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="16" id="Opr-mv-bLZ"/>
+                <constraint firstAttribute="trailing" secondItem="jid-EN-HVg" secondAttribute="trailing" id="RXC-F6-u39"/>
                 <constraint firstItem="0jU-OJ-WTM" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="X41-Bt-5OW"/>
                 <constraint firstItem="qKJ-xQ-mkp" firstAttribute="leading" secondItem="HKx-aL-Ba1" secondAttribute="trailing" constant="10" id="X98-Fn-dlp"/>
                 <constraint firstItem="HKx-aL-Ba1" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="16" id="YoC-GM-GUz"/>
                 <constraint firstItem="Moh-x0-OM5" firstAttribute="top" secondItem="D1W-vu-EdU" secondAttribute="bottom" id="bPA-Ef-BKf"/>
                 <constraint firstItem="Moh-x0-OM5" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="cNk-kB-vJH"/>
                 <constraint firstItem="D1W-vu-EdU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="dhk-to-ocB"/>
+                <constraint firstAttribute="bottom" secondItem="Jml-8Y-b26" secondAttribute="bottom" constant="20" id="iAt-6u-mXi"/>
                 <constraint firstItem="Ru9-rq-ptS" firstAttribute="top" secondItem="HKx-aL-Ba1" secondAttribute="bottom" constant="20" id="kTh-t8-m0Z"/>
                 <constraint firstAttribute="trailing" secondItem="0jU-OJ-WTM" secondAttribute="trailing" id="onl-6I-a5D"/>
                 <constraint firstAttribute="trailing" secondItem="Moh-x0-OM5" secondAttribute="trailing" id="phY-hE-r3i"/>

@@ -11,6 +11,7 @@
 		8E08ED331E84CE6600A2BC5E /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E08ED311E84CE6600A2BC5E /* CommentTableViewCell.m */; };
 		8E08ED341E84CE6600A2BC5E /* CommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E08ED321E84CE6600A2BC5E /* CommentTableViewCell.xib */; };
 		8E08ED371E84D0DC00A2BC5E /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E08ED361E84D0DC00A2BC5E /* Comment.m */; };
+		8E0D3A061EC71853004F6E1F /* Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E0D3A051EC71853004F6E1F /* Image.m */; };
 		8E16BDBF1E83CE4000CF6203 /* PostCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E16BDBD1E83CE4000CF6203 /* PostCollectionViewCell.m */; };
 		8E16BDC01E83CE4000CF6203 /* PostCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E16BDBE1E83CE4000CF6203 /* PostCollectionViewCell.xib */; };
 		8E16BDC31E841D9800CF6203 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E16BDC21E841D9800CF6203 /* Post.m */; };
@@ -64,6 +65,8 @@
 		8E08ED321E84CE6600A2BC5E /* CommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentTableViewCell.xib; sourceTree = "<group>"; };
 		8E08ED351E84D0DC00A2BC5E /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
 		8E08ED361E84D0DC00A2BC5E /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
+		8E0D3A041EC71853004F6E1F /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Image.h; sourceTree = "<group>"; };
+		8E0D3A051EC71853004F6E1F /* Image.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Image.m; sourceTree = "<group>"; };
 		8E16BDBC1E83CE4000CF6203 /* PostCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostCollectionViewCell.h; sourceTree = "<group>"; };
 		8E16BDBD1E83CE4000CF6203 /* PostCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostCollectionViewCell.m; sourceTree = "<group>"; };
 		8E16BDBE1E83CE4000CF6203 /* PostCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PostCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -277,6 +280,8 @@
 				8E16BDC21E841D9800CF6203 /* Post.m */,
 				8E08ED351E84D0DC00A2BC5E /* Comment.h */,
 				8E08ED361E84D0DC00A2BC5E /* Comment.m */,
+				8E0D3A041EC71853004F6E1F /* Image.h */,
+				8E0D3A051EC71853004F6E1F /* Image.m */,
 			);
 			name = Object;
 			sourceTree = "<group>";
@@ -476,7 +481,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -497,6 +502,7 @@
 				8EB706831E80215C001CE173 /* SignUpViewController.m in Sources */,
 				8E08ED331E84CE6600A2BC5E /* CommentTableViewCell.m in Sources */,
 				8E08ED371E84D0DC00A2BC5E /* Comment.m in Sources */,
+				8E0D3A061EC71853004F6E1F /* Image.m in Sources */,
 				8E5E2A8E1E802557008EB564 /* Utility.m in Sources */,
 				8E16BDCC1E8433BC00CF6203 /* CommentViewController.m in Sources */,
 				8E31129F1E83667600A854E3 /* HomeViewController.m in Sources */,

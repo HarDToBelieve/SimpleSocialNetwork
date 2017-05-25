@@ -15,6 +15,7 @@
 @property int like;
 @property NSString *owner;
 @property int postID;
+@property NSString *url;
 
 + (Post *) shareInstance;
 
