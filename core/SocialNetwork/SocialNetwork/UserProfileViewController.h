@@ -12,12 +12,17 @@
 #import "InfoCollectionViewCell.h"
 #import "PostCollectionViewCell.h"
 
+#import "UIScrollView+SVPullToRefresh.h"
+#import "UIScrollView+SVInfiniteScrolling.h"
+
 @interface UserProfileViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource> {
     User *currentUser;
     User *inspectedUser;
     Post *currentPost;
     
     NSMutableArray *userPostArray;
+    NSCache *imageCache;
+    int profilePostOffset;
 }
 
 @property (weak, nonatomic) IBOutlet UILabel *userNameLabel;

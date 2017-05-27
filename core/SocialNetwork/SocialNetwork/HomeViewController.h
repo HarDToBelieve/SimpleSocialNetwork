@@ -31,7 +31,8 @@
     User *currentUser;
     Post *currentPost;
     int temp;
-    int postOffset;
+    int newFeedPostOffset;
+    int profilePostOffset;
     NSCache *imageCache;
 }
 

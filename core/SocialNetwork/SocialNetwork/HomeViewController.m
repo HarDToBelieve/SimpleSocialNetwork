@@ -34,27 +34,42 @@
     
 
     [self getNewFeed];
+    [self requestSelfInfo];
+    [self requestCurrentUserPost];
     
     [_homeCollectionView registerNib:[UINib nibWithNibName:@"PostCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"PostCollectionViewCell"];
     [_profileCollectionView registerNib:[UINib nibWithNibName:@"PostCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"PostCollectionViewCell"];
     [_profileCollectionView registerNib:[UINib nibWithNibName:@"InfoCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"InfoCollectionViewCell"];
     
     [_homeCollectionView addPullToRefreshWithActionHandler:^{
-        postOffset = 0;
+        newFeedPostOffset = 0;
         [self getNewFeed];
     }];
     
     [_homeCollectionView addInfiniteScrollingWithActionHandler:^{
         [self getNewFeed];
     }];
+    
+    [_profileCollectionView addPullToRefreshWithActionHandler:^{
+        profilePostOffset = 0;
+        [self requestCurrentUserPost];
+    }];
+    
+    [_profileCollectionView addInfiniteScrollingWithActionHandler:^{
+        [self requestCurrentUserPost];
+    }];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    postOffset = 0;
+    newFeedPostOffset = 0;
+    profilePostOffset = 0;
     [self getNewFeed];
     [_homeCollectionView setContentOffset:
      CGPointMake(0, -_homeCollectionView.contentInset.top) animated:YES];
+    [self requestCurrentUserPost];
+    [_profileCollectionView setContentOffset:
+     CGPointMake(0, -_profileCollectionView.contentInset.top) animated:YES];
 }
 
 
@@ -110,7 +125,8 @@
             if ([post.url  isEqual: @""]) {
                 return CGSizeMake(SCREEN_WIDTH, 180);
             }
-            else return CGSizeMake(SCREEN_WIDTH, 400);        }
+            else return CGSizeMake(SCREEN_WIDTH, 400);
+        }
     }
     else {
         Post *post = [newFeedArray objectAtIndex:indexPath.row];
@@ -135,7 +151,7 @@
             
             cell.userNameLabel.text = currentUser.name;
             cell.birthdayLabel.text = currentUser.birthday;
-            
+               
             return cell;
             
         } else {
@@ -198,9 +214,6 @@
         cell.commentButton.tag = post.postID;
         cell.likeButton.tag = post.postID;
         cell.likeLabel.text = [NSString stringWithFormat:@"%d likes", post.like];
-        
-//        Image *image = [self searchInNewFeedImageArray:post.postID];
-//        cell.imageView.image = image.image;
         
         if ([post.url isEqualToString:@""]) {
             cell.imageView.image = nil;
@@ -277,9 +290,8 @@
 
 - (void) likeButtonPressed: (UIButton *)sender {
     
-    [self handleLikePost];
-    NSString *url = @"http://161.202.20.61:5000/post/like";
-    NSDictionary *parameters = @{@"postID": @(sender.tag)};
+    NSString *url = @"http://161.202.20.61:5000/likepost";
+    NSDictionary *parameters = @{@"postID": @(sender.tag), @"action": @"like"};
     NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:parameters error:nil];
     [request setValue:[NSString stringWithFormat:@"JWT %@", currentUser.getToken] forHTTPHeaderField:@"Authorization"];
     
@@ -289,10 +301,10 @@
         if (!error) {
             NSLog(@"Success");
             [self getNewFeed];
-            [self requestCurrentUserPost];
         } else {
-            NSLog(@"Failed");
+            NSLog(@"%@", response);
             NSLog(@"%d", currentPost.postID);
+            NSLog(@"%d", sender.tag);
         }
     }] resume];
 }
@@ -328,10 +340,10 @@
     _profileImageView.image = [UIImage imageNamed:@"Profile.png"];
 }
 
+
 - (void) getNewFeed {
     
-    
-    NSString *url = [NSString stringWithFormat:@"http://161.202.20.61:5000/postnewfeed?name=%@&postID=%d", currentUser.name, postOffset];
+    NSString *url = [NSString stringWithFormat:@"http://161.202.20.61:5000/postnewfeed?name=%@&postID=%d", currentUser.name, newFeedPostOffset];
     
     NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"GET" URLString:url parameters:nil error:nil];
     
@@ -347,25 +359,15 @@
 
             NSLog(@"%@", responseObject);
             
-            
             NSDictionary *jsonObject = (NSDictionary *)responseObject;
             NSDictionary *arrTemp = [jsonObject objectForKey:@"posts"];
             
-            if (postOffset == 0) newFeedArray = [[NSMutableArray alloc] init];
-            postOffset += 10;
+            if (newFeedPostOffset == 0) newFeedArray = [[NSMutableArray alloc] init];
+            newFeedPostOffset += 10;
             for (NSDictionary *row in arrTemp) {
                 Post *post = [[Post alloc] initWithDictionary:row error:nil];
                 [newFeedArray addObject:post];
             }
-            
-//            for (Post *post in newFeedArray) {
-//                if (![post.url  isEqual: @""]) {
-//                    Image *image = [[Image alloc] init];
-//                    image.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:post.url]]];
-//                    image.index = post.postID;
-//                    [newFeedImageArray addObject:image];
-//                }
-//            }
             
             [_homeCollectionView reloadData];
             [_homeCollectionView.pullToRefreshView stopAnimating];
@@ -376,10 +378,10 @@
     }] resume ];
 }
 
-- (void) requestCurrentUserPost {
-    NSString *url = [NSString stringWithFormat:@"http://161.202.20.61:5000/post?name=%@&postID=0", currentUser.name];
+- (void) requestSelfInfo {
+    NSString *url = [NSString stringWithFormat:@"http://161.202.20.61:5000/user?name=%@&action=getInfo", currentUser.name];
     NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"GET" URLString:url parameters:nil error:nil];
-
+    
     [request setValue:[NSString stringWithFormat:@"JWT %@", currentUser.getToken] forHTTPHeaderField:@"Authorization"];
     
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
@@ -389,17 +391,43 @@
             NSLog(@"%@", responseObject);
             
             NSDictionary *jsonObject = (NSDictionary *)responseObject;
+            currentUser.profilePicture = NULL;
+            currentUser.name = [jsonObject objectForKey:@"name"];
+            currentUser.birthday = [jsonObject objectForKey:@"birthday"];
+            
+            [_profileCollectionView reloadData];
+        } else {
+            NSLog(@"Failed");
+        }
+    }] resume];
+}
+
+- (void) requestCurrentUserPost {
+    NSString *url = [NSString stringWithFormat:@"http://161.202.20.61:5000/post?name=%@&postID=%d", currentUser.name, profilePostOffset];
+    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"GET" URLString:url parameters:nil error:nil];
+
+    [request setValue:[NSString stringWithFormat:@"JWT %@", currentUser.getToken] forHTTPHeaderField:@"Authorization"];
+    
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    
+    [[manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        
+        if (!error) {
+            NSLog(@"%@", responseObject);
+            NSLog(@"Success");
+            NSDictionary *jsonObject = (NSDictionary *)responseObject;
             NSDictionary *arrTemp = [jsonObject objectForKey:@"posts"];
             
-            currentUserPostArray = [[NSMutableArray alloc] init];
-            
+            if (profilePostOffset == 0) currentUserPostArray = [[NSMutableArray alloc] init];
+            profilePostOffset += 10;
             for (NSDictionary *row in arrTemp) {
                 Post *post = [[Post alloc] initWithDictionary:row error:nil];
                 [currentUserPostArray addObject:post];
             }
-            
 
             [_profileCollectionView reloadData];
+            [_profileCollectionView.pullToRefreshView stopAnimating];
+            [_profileCollectionView.infiniteScrollingView stopAnimating];
         } else {
             NSLog(@"Failed");
         }
@@ -437,9 +465,6 @@
     }] resume];
 }
 
-- (void) handleLikePost {
-    
-}
 
 - (IBAction)logOutButtonPressed:(UIButton *)sender {
     [self alertLogoutController:@"Do you want to sign out?" message:nil];
@@ -456,22 +481,6 @@
     
     [self presentViewController:alertController animated:true completion:nil];
 }
-
-- (UIImage *)decodeBase64ToImage:(NSString *)strEncodeData {
-    NSData *data = [[NSData alloc]initWithBase64EncodedString:strEncodeData options:NSDataBase64DecodingIgnoreUnknownCharacters];
-    return [UIImage imageWithData:data];
-}
-
-- (Image *) searchInNewFeedImageArray: (int) index {
-    for (Image *image in newFeedImageArray) {
-        if (image.index == index) {
-            return image;
-        }
-    }
-    return NULL;
-}
-
-
 
 
 @end
