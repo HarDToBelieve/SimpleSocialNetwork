@@ -25,16 +25,51 @@
     
     currentUser = [User shareCurrentUser];
     currentPost = [Post shareInstance];
-    [self getCurrentUser];
+    
+    
+    newFeedArray = [[NSMutableArray alloc] init];
+    
+    newFeedImageArray = [[NSMutableArray alloc] init];
+    imageCache = [[NSCache alloc]init];
+    
+
+    [self getNewFeed];
+    [self requestSelfInfo];
+    [self requestCurrentUserPost];
     
     [_homeCollectionView registerNib:[UINib nibWithNibName:@"PostCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"PostCollectionViewCell"];
     [_profileCollectionView registerNib:[UINib nibWithNibName:@"PostCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"PostCollectionViewCell"];
     [_profileCollectionView registerNib:[UINib nibWithNibName:@"InfoCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"InfoCollectionViewCell"];
+    
+    [_homeCollectionView addPullToRefreshWithActionHandler:^{
+        newFeedPostOffset = 0;
+        [self getNewFeed];
+    }];
+    
+    [_homeCollectionView addInfiniteScrollingWithActionHandler:^{
+        [self getNewFeed];
+    }];
+    
+    [_profileCollectionView addPullToRefreshWithActionHandler:^{
+        profilePostOffset = 0;
+        [self requestCurrentUserPost];
+    }];
+    
+    [_profileCollectionView addInfiniteScrollingWithActionHandler:^{
+        [self requestCurrentUserPost];
+    }];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    newFeedPostOffset = 0;
+    profilePostOffset = 0;
+    [self getNewFeed];
+    [_homeCollectionView setContentOffset:
+     CGPointMake(0, -_homeCollectionView.contentInset.top) animated:YES];
     [self requestCurrentUserPost];
+    [_profileCollectionView setContentOffset:
+     CGPointMake(0, -_profileCollectionView.contentInset.top) animated:YES];
 }
 
 
@@ -83,8 +118,23 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0) return CGSizeMake(SCREEN_WIDTH, 180);
-    else return CGSizeMake(SCREEN_WIDTH, 180);
+    if (collectionView == _profileCollectionView) {
+        if (indexPath.row == 0) return CGSizeMake(SCREEN_WIDTH, 180);
+        else {
+            Post *post = [currentUserPostArray objectAtIndex:indexPath.row - 1];
+            if ([post.url  isEqual: @""]) {
+                return CGSizeMake(SCREEN_WIDTH, 180);
+            }
+            else return CGSizeMake(SCREEN_WIDTH, 400);
+        }
+    }
+    else {
+        Post *post = [newFeedArray objectAtIndex:indexPath.row];
+        if ([post.url  isEqual: @""]) {
+            return CGSizeMake(SCREEN_WIDTH, 180);
+        }
+        else return CGSizeMake(SCREEN_WIDTH, 400);
+    }
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -101,7 +151,7 @@
             
             cell.userNameLabel.text = currentUser.name;
             cell.birthdayLabel.text = currentUser.birthday;
-            
+               
             return cell;
             
         } else {
@@ -115,9 +165,41 @@
             cell.commentButton.tag = post.postID;
             cell.likeButton.tag = post.postID;
             cell.likeLabel.text = [NSString stringWithFormat:@"%d likes", post.like];
+            
+            if ([post.url isEqualToString:@""]) {
+                cell.imageView.image = nil;
+            }
+            else {
+                NSString *imageName = imageName = post.url;
+                UIImage *image = [imageCache objectForKey:imageName];
+            
+                if(image){
+                    cell.imageView.image = image;
+                }
+            
+                else{
+                    cell.imageView.image = nil;
+                    
+                    dispatch_queue_t downloadQueue = dispatch_queue_create("image downloader", NULL);
+                    dispatch_async(downloadQueue, ^{
+                        
+                        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:post.url]]];
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            
+                            cell.imageView.image = image;
+                            
+                        });
+                        
+                        [imageCache setObject:image forKey:imageName];
+                    });
+                }
+            }
+
             [cell.commentButton addTarget:self action:@selector(commentButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             [cell.likeButton addTarget:self action:@selector(likeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             [cell.userNameButton addTarget:self action:@selector(userNameButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            
             return cell;
         }
     } else {
@@ -125,15 +207,48 @@
         if (!cell) {
             cell = [[[NSBundle mainBundle] loadNibNamed:@"PostCollectionViewCell" owner:nil options:nil] objectAtIndex:0];
         }
+        
         Post *post = [newFeedArray objectAtIndex:indexPath.row];
         [cell.userNameButton setTitle:post.owner forState:UIControlStateNormal];
         cell.postLabel.text = post.content;
         cell.commentButton.tag = post.postID;
         cell.likeButton.tag = post.postID;
         cell.likeLabel.text = [NSString stringWithFormat:@"%d likes", post.like];
+        
+        if ([post.url isEqualToString:@""]) {
+            cell.imageView.image = nil;
+        }
+        else {
+            NSString *imageName = imageName = post.url;
+            UIImage *image = [imageCache objectForKey:imageName];
+            
+            if(image){
+                cell.imageView.image = image;
+            }
+            
+            else{
+                cell.imageView.image = nil;
+                
+                dispatch_queue_t downloadQueue = dispatch_queue_create("image downloader", NULL);
+                dispatch_async(downloadQueue, ^{
+                    
+                    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:post.url]]];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        cell.imageView.image = image;
+                        
+                    });
+                    
+                    [imageCache setObject:image forKey:imageName];
+                });
+            }
+        }
+       
         [cell.commentButton addTarget:self action:@selector(commentButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [cell.likeButton addTarget:self action:@selector(likeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [cell.userNameButton addTarget:self action:@selector(userNameButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        
         return cell;
     }
 }
@@ -175,8 +290,8 @@
 
 - (void) likeButtonPressed: (UIButton *)sender {
     
-    NSString *url = @"http://161.202.20.61:5000/post/like";
-    NSDictionary *parameters = @{@"postID": @(sender.tag)};
+    NSString *url = @"http://161.202.20.61:5000/likepost";
+    NSDictionary *parameters = @{@"postID": @(sender.tag), @"action": @"like"};
     NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:parameters error:nil];
     [request setValue:[NSString stringWithFormat:@"JWT %@", currentUser.getToken] forHTTPHeaderField:@"Authorization"];
     
@@ -185,11 +300,11 @@
         
         if (!error) {
             NSLog(@"Success");
-            [self getCurrentUser];
-            [self requestCurrentUserPost];
+            [self getNewFeed];
         } else {
-            NSLog(@"Failed");
+            NSLog(@"%@", response);
             NSLog(@"%d", currentPost.postID);
+            NSLog(@"%d", sender.tag);
         }
     }] resume];
 }
@@ -225,8 +340,10 @@
     _profileImageView.image = [UIImage imageNamed:@"Profile.png"];
 }
 
-- (void) getCurrentUser {
-    NSString *url = [NSString stringWithFormat:@"http://161.202.20.61:5000/user?name=%@", currentUser.name];
+
+- (void) getNewFeed {
+    
+    NSString *url = [NSString stringWithFormat:@"http://161.202.20.61:5000/postnewfeed?name=%@&postID=%d", currentUser.name, newFeedPostOffset];
     
     NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"GET" URLString:url parameters:nil error:nil];
     
@@ -234,38 +351,37 @@
     [request setValue:[NSString stringWithFormat:@"JWT %@", currentUser.getToken] forHTTPHeaderField:@"Authorization"];
     
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    
+    
     [[manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         
         if (!error) {
-            NSString *imageString = [responseObject objectForKey:@"image"];
-            NSString *birthdayString = [responseObject objectForKey:@"birthday"];
-            currentUser.profilePicture = [self decodeBase64ToImage:imageString];
-            currentUser.birthday = birthdayString;
-            
+
             NSLog(@"%@", responseObject);
             
             NSDictionary *jsonObject = (NSDictionary *)responseObject;
             NSDictionary *arrTemp = [jsonObject objectForKey:@"posts"];
             
-            newFeedArray = [[NSMutableArray alloc] init];
-            
+            if (newFeedPostOffset == 0) newFeedArray = [[NSMutableArray alloc] init];
+            newFeedPostOffset += 10;
             for (NSDictionary *row in arrTemp) {
                 Post *post = [[Post alloc] initWithDictionary:row error:nil];
                 [newFeedArray addObject:post];
             }
             
             [_homeCollectionView reloadData];
-            [_profileCollectionView reloadData];
+            [_homeCollectionView.pullToRefreshView stopAnimating];
+            [_homeCollectionView.infiniteScrollingView stopAnimating];
         } else {
             NSLog(@"%@ %@", error, response);
         }
     }] resume ];
 }
 
-- (void) requestCurrentUserPost {
-    NSString *url = [NSString stringWithFormat:@"http://161.202.20.61:5000/post?name=%@", currentUser.name];
+- (void) requestSelfInfo {
+    NSString *url = [NSString stringWithFormat:@"http://161.202.20.61:5000/user?name=%@&action=getInfo", currentUser.name];
     NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"GET" URLString:url parameters:nil error:nil];
-    NSLog(@"%@", currentUser.getToken);
+    
     [request setValue:[NSString stringWithFormat:@"JWT %@", currentUser.getToken] forHTTPHeaderField:@"Authorization"];
     
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
@@ -275,15 +391,10 @@
             NSLog(@"%@", responseObject);
             
             NSDictionary *jsonObject = (NSDictionary *)responseObject;
-            NSDictionary *arrTemp = [jsonObject objectForKey:@"posts"];
+            currentUser.profilePicture = NULL;
+            currentUser.name = [jsonObject objectForKey:@"name"];
+            currentUser.birthday = [jsonObject objectForKey:@"birthday"];
             
-            currentUserPostArray = [[NSMutableArray alloc] init];
-            
-            for (NSDictionary *row in arrTemp) {
-                Post *post = [[Post alloc] initWithDictionary:row error:nil];
-                [currentUserPostArray addObject:post];
-            }
-
             [_profileCollectionView reloadData];
         } else {
             NSLog(@"Failed");
@@ -291,8 +402,40 @@
     }] resume];
 }
 
+- (void) requestCurrentUserPost {
+    NSString *url = [NSString stringWithFormat:@"http://161.202.20.61:5000/post?name=%@&postID=%d", currentUser.name, profilePostOffset];
+    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"GET" URLString:url parameters:nil error:nil];
+
+    [request setValue:[NSString stringWithFormat:@"JWT %@", currentUser.getToken] forHTTPHeaderField:@"Authorization"];
+    
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    
+    [[manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        
+        if (!error) {
+            NSLog(@"%@", responseObject);
+            NSLog(@"Success");
+            NSDictionary *jsonObject = (NSDictionary *)responseObject;
+            NSDictionary *arrTemp = [jsonObject objectForKey:@"posts"];
+            
+            if (profilePostOffset == 0) currentUserPostArray = [[NSMutableArray alloc] init];
+            profilePostOffset += 10;
+            for (NSDictionary *row in arrTemp) {
+                Post *post = [[Post alloc] initWithDictionary:row error:nil];
+                [currentUserPostArray addObject:post];
+            }
+
+            [_profileCollectionView reloadData];
+            [_profileCollectionView.pullToRefreshView stopAnimating];
+            [_profileCollectionView.infiniteScrollingView stopAnimating];
+        } else {
+            NSLog(@"Failed");
+        }
+    }] resume];
+}
+
 - (void) requestUserList {
-    NSString *url = @"http://161.202.20.61:5000/user/list";
+    NSString *url = @"http://161.202.20.61:5000/user?action=getListUser";
     NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"GET" URLString:url parameters:nil error:nil];
     [request setValue:[NSString stringWithFormat:@"JWT %@", currentUser.getToken] forHTTPHeaderField:@"Authorization"];
     
@@ -300,7 +443,7 @@
     [[manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         
         if (!error) {
-            
+            NSLog(@"%@", responseObject);
             NSDictionary *jsonObject = (NSDictionary *)responseObject;
             
             userListArray = [[NSMutableArray alloc] init];
@@ -339,9 +482,5 @@
     [self presentViewController:alertController animated:true completion:nil];
 }
 
-- (UIImage *)decodeBase64ToImage:(NSString *)strEncodeData {
-    NSData *data = [[NSData alloc]initWithBase64EncodedString:strEncodeData options:NSDataBase64DecodingIgnoreUnknownCharacters];
-    return [UIImage imageWithData:data];
-}
 
 @end

@@ -13,11 +13,13 @@
 @interface NewPostViewController : UIViewController <UITextViewDelegate> {
     bool isFirstBeginEditting;
     User *currentUser;
+    UIImagePickerController *picker;
 }
 
 @property (weak, nonatomic) IBOutlet UITextView *postTextView;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
 
 @end

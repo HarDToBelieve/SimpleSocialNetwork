@@ -18,15 +18,22 @@
 
 #import "User.h"
 #import "Post.h"
+#import "Image.h"
+#import "UIScrollView+SVPullToRefresh.h"
+#import "UIScrollView+SVInfiniteScrolling.h"
 
 
 @interface HomeViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource> {
     NSMutableArray *currentUserPostArray;
     NSMutableArray *newFeedArray;
     NSMutableArray *userListArray;
+    NSMutableArray *newFeedImageArray;
     User *currentUser;
     Post *currentPost;
     int temp;
+    int newFeedPostOffset;
+    int profilePostOffset;
+    NSCache *imageCache;
 }
 
 @property (weak, nonatomic) IBOutlet UIImageView *homeImageView;

@@ -68,7 +68,7 @@
 #pragma mark - NetworkCall
 
 - (void) getAllComments {
-    NSString *url = [NSString stringWithFormat:@"http://161.202.20.61:5000/post/cmt?postID=%d", currentPost.postID];
+    NSString *url = [NSString stringWithFormat:@"http://161.202.20.61:5000/postcmt?postID=%d", currentPost.postID];
     
     NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"GET" URLString:url parameters:nil error:nil];
     [request setValue:[NSString stringWithFormat:@"JWT %@", currentUser.getToken] forHTTPHeaderField:@"Authorization"];
@@ -96,7 +96,7 @@
 }
 
 - (void) postNewComment {
-    NSString *url = @"http://161.202.20.61:5000/post/cmt";
+    NSString *url = @"http://161.202.20.61:5000/postcmt";
     
     NSDictionary *parameters = @{@"content": _commentTextView.text, @"owner": currentUser.name, @"date": @"1-2-2012", @"postID": @(currentPost.postID)};
     
