@@ -53952,6 +53952,7 @@
 
 	    _this.state = {
 	      posts: [],
+	      currentLastPostId: 0,
 	      newpost: "",
 	      postStatus: false,
 	      isShowingProfileModal: false,
@@ -54059,7 +54060,7 @@
 	    value: function loadData() {
 	      var _this4 = this;
 
-	      fetch(_Helper2.default.newfeedDataUrl + _AllActions2.default.getCookie("username") + "&postID=0", {
+	      fetch(_Helper2.default.newfeedDataUrl + _AllActions2.default.getCookie("username") + "&postID=" + this.state.currentLastPostId, {
 	        method: 'GET',
 	        headers: {
 	          'Authorization': 'JWT ' + _AllActions2.default.getCookie("access_token")
@@ -54071,8 +54072,9 @@
 	          return null;
 	        }
 	      }).then(function (response) {
+	        var posts = _this4.state.posts.concat(response.posts);
 	        _this4.setState({
-	          posts: response.posts
+	          posts: posts
 	        });
 	      });
 	    }
@@ -54081,6 +54083,15 @@
 	    value: function render() {
 	      var _this5 = this;
 
+	      window.addEventListener("scroll", function (evt) {
+	        if (_this5.state.posts.length - _this5.state.currentLastPostId == 10 && document.body.scrollTop !== 0 && document.body.scrollHeight - document.body.scrollTop == window.innerHeight) {
+	          var currentLastPostId = _this5.state.currentLastPostId + 10;
+	          _this5.setState({
+	            currentLastPostId: currentLastPostId
+	          });
+	          _this5.loadData();
+	        }
+	      });
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -54137,7 +54148,7 @@
 	              )
 	            )
 	          ),
-	          _react2.default.createElement(_PostList2.default, { posts: this.state.posts })
+	          this.state.posts.length ? _react2.default.createElement(_PostList2.default, { posts: this.state.posts }) : ""
 	        )
 	      );
 	    }
@@ -54331,6 +54342,7 @@
 	    _this.state = {
 	      userInfo: {},
 	      posts: [],
+	      currentLastPostId: 0,
 	      newpost: '',
 	      postStatus: false
 	    };
@@ -54339,6 +54351,7 @@
 	    _this.handleInputChange = _this.handleInputChange.bind(_this);
 	    _this.postData = _this.postData.bind(_this);
 	    _this.followUser = _this.followUser.bind(_this);
+	    _this.loadMore = _this.loadMore.bind(_this);
 	    return _this;
 	  }
 
@@ -54444,7 +54457,7 @@
 	    value: function getUserPost() {
 	      var _this5 = this;
 
-	      fetch(_Helper2.default.getUserPostUrl + this.props.username + '&postID=0', {
+	      fetch(_Helper2.default.getUserPostUrl + this.props.username + '&postID=' + this.state.currentLastPostId, {
 	        method: "GET",
 	        headers: {
 	          'Content-Type': 'application/json',
@@ -54457,12 +54470,20 @@
 	          return null;
 	        }
 	      }).then(function (response) {
+	        var posts = _this5.state.posts.concat(response.posts);
+	        var currentLastPostId = _this5.state.currentLastPostId + 10;
 	        if (response.posts && response.posts.length) {
 	          _this5.setState({
-	            posts: response.posts
+	            posts: posts,
+	            currentLastPostId: currentLastPostId
 	          });
 	        }
 	      });
+	    }
+	  }, {
+	    key: 'loadMore',
+	    value: function loadMore() {
+	      this.getUserPost();
 	    }
 	  }, {
 	    key: 'render',
@@ -54491,7 +54512,7 @@
 	            'div',
 	            { className: 'green pull-right like-box' },
 	            'Follower ',
-	            this.state.userInfo.followings_name ? this.state.userInfo.followings_name.length - 1 : "..."
+	            this.state.userInfo.followings_name ? this.state.userInfo.followings_name.length : "..."
 	          ),
 	          _react2.default.createElement(
 	            'div',
@@ -54520,7 +54541,12 @@
 	            'Posted to your wall.'
 	          ) : ""
 	        ) : "",
-	        _react2.default.createElement(_PostList2.default, { posts: this.state.posts, profile: true })
+	        _react2.default.createElement(_PostList2.default, { posts: this.state.posts, profile: true }),
+	        this.state.posts.length === this.state.currentLastPostId ? _react2.default.createElement(
+	          'div',
+	          { className: 'btn blue-btn', onClick: this.loadMore },
+	          'Load more'
+	        ) : ""
 	      );
 	    }
 	  }]);
@@ -54669,9 +54695,7 @@
 	        } else {
 	          return null;
 	        }
-	      }).then(function (response) {
-	        console.log(response);
-	      });
+	      }).then(function (response) {});
 	    }
 	  }, {
 	    key: 'unlikePost',

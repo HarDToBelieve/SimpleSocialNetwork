@@ -88,7 +88,7 @@ class SinglePost extends React.Component {
                 return null
             }
         }).then((response) => {
-            console.log(response);
+            
         });
   }
 

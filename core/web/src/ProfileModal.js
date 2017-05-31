@@ -11,6 +11,7 @@ class ProfileModal extends React.Component {
     this.state = {
       userInfo: {},
       posts: [],
+      currentLastPostId: 0,
       newpost: '',
       postStatus: false
     };
@@ -19,6 +20,7 @@ class ProfileModal extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.postData = this.postData.bind(this);
     this.followUser = this.followUser.bind(this);
+    this.loadMore = this.loadMore.bind(this);
   }
 
   componentDidMount(){
@@ -110,7 +112,7 @@ class ProfileModal extends React.Component {
   }
 
   getUserPost() {
-       fetch(Helper.getUserPostUrl + this.props.username + '&postID=0', {
+       fetch(Helper.getUserPostUrl + this.props.username + '&postID=' + this.state.currentLastPostId, {
             method: "GET",
             headers: {
               'Content-Type': 'application/json',
@@ -123,12 +125,19 @@ class ProfileModal extends React.Component {
                 return null
             }
         }).then((response) => {
+            let posts = this.state.posts.concat(response.posts);
+            let currentLastPostId = this.state.currentLastPostId + 10;
             if (response.posts && response.posts.length) {
               this.setState({
-                posts: response.posts
+                posts,
+                currentLastPostId
               });
             }
         })
+  }
+
+  loadMore() {
+    this.getUserPost();
   }
 
   render() {
@@ -139,7 +148,7 @@ class ProfileModal extends React.Component {
            <div>{this.state.userInfo ? this.state.userInfo.birthday : "DD_MM_YYYY"}</div>
          </div>
          <div className="post-content">
-           <div className="green pull-right like-box">Follower {this.state.userInfo.followings_name ? this.state.userInfo.followings_name.length - 1 : "..."}</div>
+           <div className="green pull-right like-box">Follower {this.state.userInfo.followings_name ? this.state.userInfo.followings_name.length : "..."}</div>
            <div className="green pull-right like-box">Following {this.state.userInfo.followers_name ? this.state.userInfo.followers_name.length - 1 : "..."}</div>
          </div>
          <div className="btn blue-btn" onClick={this.followUser}>Follow</div>
@@ -157,6 +166,11 @@ class ProfileModal extends React.Component {
            ""
          }
          <PostList posts = {this.state.posts} profile = {true}/>
+         {this.state.posts.length === this.state.currentLastPostId?
+           <div className="btn blue-border-btn" onClick={this.loadMore}>Load more</div>
+           :
+           ""
+         }
        </div>
       );
   }

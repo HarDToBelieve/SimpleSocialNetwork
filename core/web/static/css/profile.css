@@ -1,3 +1,12 @@
 .top-important{
   top: 100px !important;
 }
+
+.blue-border-btn{
+  width: auto;
+  padding: 5px;
+  color: #3498db;
+  background-color: white;
+  border: solid 1px #3498db;
+  border-radius: 3px;
+}

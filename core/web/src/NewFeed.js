@@ -15,6 +15,7 @@ class NewFeed extends React.Component {
     super();
     this.state = {
       posts: [],
+      currentLastPostId: 0,
       newpost: "",
       postStatus: false,
       isShowingProfileModal: false,
@@ -28,7 +29,7 @@ class NewFeed extends React.Component {
     this.closeProfileModal = this.closeProfileModal.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.loadData();
   }
 
@@ -52,7 +53,7 @@ class NewFeed extends React.Component {
     });
   }
 
-  resetAccessToken(){
+  resetAccessToken() {
     document.cookie = "";
     window.location.hash = "";
   }
@@ -107,7 +108,7 @@ class NewFeed extends React.Component {
    }
 
   loadData() {
-    fetch(Helper.newfeedDataUrl + AllActions.getCookie("username") + "&postID=0", {
+    fetch(Helper.newfeedDataUrl + AllActions.getCookie("username") + "&postID=" +  this.state.currentLastPostId, {
             method: 'GET',
             headers: {
               'Authorization': 'JWT ' + AllActions.getCookie("access_token")
@@ -119,13 +120,23 @@ class NewFeed extends React.Component {
                 return null
             }
         }).then((response) => {
+          let posts = this.state.posts.concat(response.posts);
           this.setState({
-            posts: response.posts
+            posts
           });
         });
   }
 
   render() {
+      window.addEventListener("scroll", (evt) => {
+        if(this.state.posts.length - this.state.currentLastPostId == 10 && document.body.scrollTop !== 0 && document.body.scrollHeight - document.body.scrollTop == window.innerHeight){
+          let currentLastPostId = this.state.currentLastPostId + 10;
+                this.setState({
+                  currentLastPostId
+                })
+          this.loadData();
+        }
+      });
       return (
         <div>
           <Header
@@ -167,7 +178,11 @@ class NewFeed extends React.Component {
                 </ModalContainer>
               }
             </div>
-            <PostList posts = {this.state.posts}/>
+            {this.state.posts.length ?
+              <PostList posts = {this.state.posts}/>
+              :
+              ""
+            }
           </div>
         </div>
       );
