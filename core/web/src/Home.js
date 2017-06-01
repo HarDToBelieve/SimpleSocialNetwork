@@ -60,10 +60,10 @@ class Home extends React.Component {
               <div className="container-home row">
                 <div className="col col-md-6 home-right">
                   <img width="150px" height="150px" src="images/Logo.png" />
-                  <h2>Social Channel</h2>
-                  <h4>Nothing could be simpler</h4>
+                  <img className="home-logo-name" height="40px" src="images/name-logo-2x.png"/>
+                  <h4 className="slogan">Nothing could be simpler</h4>
                   <div className="home-button">
-                    <button className="btn blue-btn" onClick={this.openLoginModal}>Login</button>
+                    <button className="login-register" onClick={this.openLoginModal}>Login</button>
                     { this.state.isShowingLoginModal &&
                       <ModalContainer onClose={this.closeLoginModal}>
                         <ModalDialog onClose={this.closeLoginModal}>
@@ -74,7 +74,7 @@ class Home extends React.Component {
                         </ModalDialog>
                       </ModalContainer>
                     }
-                    <button className="btn blue-btn" onClick={this.openRegisterModal}>Register</button>
+                    <button className="login-register" onClick={this.openRegisterModal}>Register</button>
                     { this.state.isShowingRegisterModal &&
                       <ModalContainer onClose={this.closeRegisterModal}>
                         <ModalDialog onClose={this.closeRegisterModal}>

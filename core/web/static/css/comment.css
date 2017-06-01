@@ -26,3 +26,14 @@
   font-size: 20px;
   margin-right: 10px;
 }
+
+@media only screen and (max-width : 500px) {
+  .comment-modal {
+      padding: 20px 30px;
+      background-color: white;
+      border-radius: 10px;
+      width: 360px;
+      margin: 0px 10px;
+      z-index: 99999;
+  }
+}

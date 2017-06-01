@@ -26,6 +26,7 @@ class ProfileModal extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.postData = this.postData.bind(this);
     this.followUser = this.followUser.bind(this);
+    this.unfollowUser = this.unfollowUser.bind(this);
     this.loadMore = this.loadMore.bind(this);
     this.openAvatarUpload = this.openAvatarUpload.bind(this);
     this.closeAvatarUpload = this.closeAvatarUpload.bind(this);
@@ -248,10 +249,10 @@ class ProfileModal extends React.Component {
          <div className="profile-info">
           {AllActions.getCookie("username") == this.state.userInfo.name ?
             <div onClick={this.openAvatarUpload}>
-              <img className="avatar" src={this.state.userInfo.avatar} width="85px" height="85%" />
+              <img className="avatar" src={this.state.userInfo.avatar} width="85px" height="80px" />
             </div>
             :
-           <img className="avatar" src={this.state.userInfo.avatar} width="85px" height="85%" />
+           <img className="avatar" src={this.state.userInfo.avatar} width="85px" height="80px" />
           }
            <div className="profile-name">{this.state.userInfo ? this.state.userInfo.name : "Loading..."}</div>
            <div className="profile-birthday">{this.state.userInfo ? this.state.userInfo.birthday : "DD_MM_YYYY"}</div>

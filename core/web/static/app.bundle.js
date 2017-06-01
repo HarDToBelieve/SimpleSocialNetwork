@@ -27271,14 +27271,10 @@
 	          'div',
 	          { className: 'col col-md-6 home-right' },
 	          _react2.default.createElement('img', { width: '150px', height: '150px', src: 'images/Logo.png' }),
-	          _react2.default.createElement(
-	            'h2',
-	            null,
-	            'Social Channel'
-	          ),
+	          _react2.default.createElement('img', { className: 'home-logo-name', height: '40px', src: 'images/name-logo-2x.png' }),
 	          _react2.default.createElement(
 	            'h4',
-	            null,
+	            { className: 'slogan' },
 	            'Nothing could be simpler'
 	          ),
 	          _react2.default.createElement(
@@ -27286,7 +27282,7 @@
 	            { className: 'home-button' },
 	            _react2.default.createElement(
 	              'button',
-	              { className: 'btn blue-btn', onClick: this.openLoginModal },
+	              { className: 'login-register', onClick: this.openLoginModal },
 	              'Login'
 	            ),
 	            this.state.isShowingLoginModal && _react2.default.createElement(
@@ -27303,7 +27299,7 @@
 	            ),
 	            _react2.default.createElement(
 	              'button',
-	              { className: 'btn blue-btn', onClick: this.openRegisterModal },
+	              { className: 'login-register', onClick: this.openRegisterModal },
 	              'Register'
 	            ),
 	            this.state.isShowingRegisterModal && _react2.default.createElement(
@@ -54231,6 +54227,10 @@
 
 	var _ProfileModal2 = _interopRequireDefault(_ProfileModal);
 
+	var _AllActions = __webpack_require__(293);
+
+	var _AllActions2 = _interopRequireDefault(_AllActions);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -54256,6 +54256,7 @@
 	    _this.handleInputChange = _this.handleInputChange.bind(_this);
 	    _this.openProfileModal = _this.openProfileModal.bind(_this);
 	    _this.closeProfileModal = _this.closeProfileModal.bind(_this);
+	    _this.openRealProfile = _this.openRealProfile.bind(_this);
 	    return _this;
 	  }
 
@@ -54271,6 +54272,14 @@
 	    value: function openProfileModal() {
 	      this.setState({
 	        isShowingProfileModal: true
+	      });
+	    }
+	  }, {
+	    key: 'openRealProfile',
+	    value: function openRealProfile() {
+	      this.setState({
+	        isShowingProfileModal: true,
+	        username: _AllActions2.default.getCookie('username')
 	      });
 	    }
 	  }, {
@@ -54297,12 +54306,21 @@
 	          ),
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'col-xs-5 search-form' },
+	            { className: 'col-xs-4 search-form' },
 	            _react2.default.createElement('input', { className: 'form-control mr-sm-2', type: 'text', name: 'username', placeholder: 'Search for username', onChange: this.handleInputChange }),
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'btn button-search', onClick: this.openProfileModal },
 	              _react2.default.createElement('img', { width: '20px', src: 'images/magnifying-glass-icon.png' })
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-xs-1' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'btn-logout', onClick: this.openRealProfile },
+	              _react2.default.createElement('img', { width: '30px', src: 'images/ProfileSelected.png' })
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -54400,6 +54418,7 @@
 	    _this.handleInputChange = _this.handleInputChange.bind(_this);
 	    _this.postData = _this.postData.bind(_this);
 	    _this.followUser = _this.followUser.bind(_this);
+	    _this.unfollowUser = _this.unfollowUser.bind(_this);
 	    _this.loadMore = _this.loadMore.bind(_this);
 	    _this.openAvatarUpload = _this.openAvatarUpload.bind(_this);
 	    _this.closeAvatarUpload = _this.closeAvatarUpload.bind(_this);
@@ -54656,8 +54675,8 @@
 	          _AllActions2.default.getCookie("username") == this.state.userInfo.name ? _react2.default.createElement(
 	            'div',
 	            { onClick: this.openAvatarUpload },
-	            _react2.default.createElement('img', { className: 'avatar', src: this.state.userInfo.avatar, width: '85px', height: '85%' })
-	          ) : _react2.default.createElement('img', { className: 'avatar', src: this.state.userInfo.avatar, width: '85px', height: '85%' }),
+	            _react2.default.createElement('img', { className: 'avatar', src: this.state.userInfo.avatar, width: '85px', height: '80px' })
+	          ) : _react2.default.createElement('img', { className: 'avatar', src: this.state.userInfo.avatar, width: '85px', height: '80px' }),
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'profile-name' },

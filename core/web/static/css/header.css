@@ -21,14 +21,12 @@
 .btn-logout{
   color: #3498db;
   width: 70px;
-  padding: 4px 12px 5px;
+  padding: 4px 12px;
   margin-top: 4%;
   margin-left: 10%;
 }
 
 .btn-logout:hover{
-  background-color: #3498db;
-  border-radius: 3px;
   color: white;
 }
 
