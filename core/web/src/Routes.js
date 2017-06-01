@@ -11,7 +11,7 @@ import AllActions from './AllActions.js'
 class AppRoute extends React.Component {
 
   componentDidMount(){
-      if(AllActions.getCookie("access_token")){
+      if(AllActions.getCookie("access_token") && AllActions.getCookie("access_token") !== '""'){
         window.location.hash = "newfeed";
       } else window.location.hash = "";
   }

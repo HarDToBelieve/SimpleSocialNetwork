@@ -1,10 +1,10 @@
-.comment-modal{
-  padding: 10px 25px;
-  background-color: #eee;
-  border-radius: 3px;
-  width: 500px;
-  margin: 0px;
-  z-index: 99999;
+.comment-modal {
+    padding: 20px 30px;
+    background-color: white;
+    border-radius: 10px;
+    width: 500px;
+    margin: 0px;
+    z-index: 99999;
 }
 
 .comment{
@@ -17,5 +17,12 @@
 }
 
 .comment-content{
- margin-top: .5px;
+ margin-top: 9px;
+}
+
+.comment-owner{
+  padding: 5px 0px 5px 0px;
+  color: #3498db;
+  font-size: 20px;
+  margin-right: 10px;
 }

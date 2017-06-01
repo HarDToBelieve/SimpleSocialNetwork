@@ -16,6 +16,7 @@ class NewFeed extends React.Component {
     this.state = {
       posts: [],
       currentLastPostId: 0,
+      endOfPostList: false,
       newpost: "",
       postStatus: false,
       isShowingProfileModal: false,
@@ -30,7 +31,23 @@ class NewFeed extends React.Component {
   }
 
   componentDidMount() {
-    this.loadData();
+    if(AllActions.getCookie("access_token") && AllActions.getCookie("access_token") !== '""'){
+      this.loadData();
+    } else window.location.hash = "";
+  }
+
+  componentWillUnMount() {
+    this.cleanup = () => {
+      window.addEventListener("scroll", (evt) => {
+        if(this.state.posts.length - this.state.currentLastPostId == 10 && document.body.scrollTop !== 0 && document.body.scrollHeight - document.body.scrollTop == window.innerHeight){
+          let currentLastPostId = this.state.currentLastPostId + 10;
+          this.setState({
+            currentLastPostId
+          });
+          setTimeout(this.loadData(), 1500);
+        }
+      });
+    }
   }
 
   openProfileModal() {
@@ -54,11 +71,16 @@ class NewFeed extends React.Component {
   }
 
   resetAccessToken() {
-    document.cookie = "";
+    document.cookie = 'username="";';
+    document.cookie = 'password="";';
+    document.cookie = 'access_token="";';
     window.location.hash = "";
   }
 
   postData() {
+    this.setState({
+      posting: true
+    })
     let formData = new FormData();
     formData.append('content', this.state.newpost);
     formData.append('owner', AllActions.getCookie("username"));
@@ -80,10 +102,11 @@ class NewFeed extends React.Component {
             this.setState({
               postStatus: true,
               file: '',
-              imagePreviewUrl: ''
+              imagePreviewUrl: '',
+              posting: false
             });
             console.log("Post Successfully");
-            this.loadData();
+            location.reload();
         });
   }
 
@@ -108,6 +131,7 @@ class NewFeed extends React.Component {
    }
 
   loadData() {
+    console.log("Loading data...")
     fetch(Helper.newfeedDataUrl + AllActions.getCookie("username") + "&postID=" +  this.state.currentLastPostId, {
             method: 'GET',
             headers: {
@@ -120,10 +144,17 @@ class NewFeed extends React.Component {
                 return null
             }
         }).then((response) => {
-          let posts = this.state.posts.concat(response.posts);
-          this.setState({
-            posts
-          });
+          if(response.posts && response.posts.length){
+            let posts = this.state.posts.concat(response.posts);
+            this.setState({
+              posts
+            });
+          } else {
+            this.setState({
+              endOfPostList: true,
+            });
+            console.log(this.state.endOfPostList);
+          }
         });
   }
 
@@ -131,10 +162,10 @@ class NewFeed extends React.Component {
       window.addEventListener("scroll", (evt) => {
         if(this.state.posts.length - this.state.currentLastPostId == 10 && document.body.scrollTop !== 0 && document.body.scrollHeight - document.body.scrollTop == window.innerHeight){
           let currentLastPostId = this.state.currentLastPostId + 10;
-                this.setState({
-                  currentLastPostId
-                })
-          this.loadData();
+          this.setState({
+            currentLastPostId
+          });
+          setTimeout(this.loadData(), 1500);
         }
       });
       return (
@@ -182,6 +213,16 @@ class NewFeed extends React.Component {
               <PostList posts = {this.state.posts}/>
               :
               ""
+            }
+            {this.state.endOfPostList || (this.state.posts.length - this.state.currentLastPostId !== 10 && this.state.posts.length !== 0)?
+              null
+              :
+              <div className="ld ld-hourglass ld-spin-fast text-center" style={{fontSize: "64px", color: "#3498db", marginLeft: "5%"}}></div>
+            }
+            {this.state.posting ?
+              <div className="ld ld-hourglass ld-spin-fast text-center" style={{fontSize: "64px", color: "#3498db", marginLeft: "5%"}}></div>
+              :
+              null
             }
           </div>
         </div>

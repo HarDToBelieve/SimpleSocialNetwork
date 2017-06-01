@@ -10,7 +10,8 @@ class LoginModal extends React.Component {
     this.state = {
       username: this.props.username,
       password: '',
-      error: false
+      error: false,
+      loading: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.getToken = this.getToken.bind(this);
@@ -28,6 +29,9 @@ class LoginModal extends React.Component {
   }
 
   getToken() {
+    this.setState({
+      loading: true
+    })
     fetch(Helper.authorizationUrl, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -79,6 +83,11 @@ class LoginModal extends React.Component {
               <div className="btn btn-primary" onClick={this.props.openRegisterModal}>
                   Register
               </div>
+              {this.state.loading ?
+                <div className="ld ld-hourglass ld-spin-fast text-center" style={{fontSize: "32px", color: "#3498db"}}></div>
+                :
+                ""
+              }
         </form>
       );
   }

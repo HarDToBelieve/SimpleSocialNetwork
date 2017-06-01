@@ -13,6 +13,7 @@ let Helper = {
   getUserPostUrl: BASE_URL + 'post?name=',
   followUserUrl: BASE_URL + 'flwuser',
   unfollowUserUrl: BASE_URL + 'unflwuser',
+  avatarUploadUrl: BASE_URL + 'userimg',
   localURL: LOCAL_URL,
 }
 

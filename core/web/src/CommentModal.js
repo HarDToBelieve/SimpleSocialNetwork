@@ -6,7 +6,7 @@ import AllActions from './AllActions.js'
 const SingleComment = (props) => (
       <div className="comment-box col-md-7">
         <div className="oneline">
-          <div className="post-owner"><strong>{props.comment.owner}</strong></div>
+          <div className="comment-owner">{props.comment.owner}</div>
           <div className="comment-content">{props.comment.content}</div>
         </div>
       </div>
@@ -82,7 +82,7 @@ class CommentModal extends React.Component {
             },
             body: JSON.stringify({
               content: this.state.newcomment,
-              owner: Helper.username,
+              owner: AllActions.getCookie('username'),
               date: new Date,
               postID: this.props.post.postID
             })
@@ -106,13 +106,21 @@ class CommentModal extends React.Component {
         <div className="comment-modal col-md-7">
           <div className="post-content">
             <div className="post-owner">{this.props.post.owner}</div>
-            <div>{this.props.post.content}</div>
-            <img src={this.props.post.url} width="100%"/>
+            <div className="post-body-modal">{this.props.post.content}</div>
+            {this.props.post.url !== "" ?
+              <img src={this.props.post.url} width="100%"/>
+              :
+              null
+            }
           </div>
           <div className="post-content">
-            <div className="green pull-right like-box">{this.props.post.like} Like</div>
+            <div className="green pull-right like-box">{this.props.likes} Like</div>
           </div>
-          <div className="btn post-btn" onClick={this.props.likePost}>Like</div>
+          {this.props.liked ?
+            <div className="btn post-btn" onClick={this.props.unlikePost}>Unlike</div>
+            :
+            <div className="btn post-btn" onClick={this.props.likePost}>Like</div>
+          }
           <div className="comment-form">
             <textarea className="form-control post-input" type="text" name="newcomment" placeholder="What do you think about this?" onChange={this.handleInputChange}/>
             <div className="btn blue-btn" onClick={this.commentPost}>Post</div>

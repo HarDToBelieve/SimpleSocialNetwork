@@ -60,7 +60,7 @@ class Home extends React.Component {
               <div className="container-home row">
                 <div className="col col-md-6 home-right">
                   <img width="150px" height="150px" src="images/Logo.png" />
-                  <h2>Simple Social Network</h2>
+                  <h2>Social Channel</h2>
                   <h4>Nothing could be simpler</h4>
                   <div className="home-button">
                     <button className="btn blue-btn" onClick={this.openLoginModal}>Login</button>

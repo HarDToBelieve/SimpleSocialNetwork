@@ -94,7 +94,7 @@
 	  _createClass(AppRoute, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      if (_AllActions2.default.getCookie("access_token")) {
+	      if (_AllActions2.default.getCookie("access_token") && _AllActions2.default.getCookie("access_token") !== '""') {
 	        window.location.hash = "newfeed";
 	      } else window.location.hash = "";
 	    }
@@ -27274,7 +27274,7 @@
 	          _react2.default.createElement(
 	            'h2',
 	            null,
-	            'Simple Social Network'
+	            'Social Channel'
 	          ),
 	          _react2.default.createElement(
 	            'h4',
@@ -50007,7 +50007,8 @@
 	    _this.state = {
 	      username: _this.props.username,
 	      password: '',
-	      error: false
+	      error: false,
+	      loading: false
 	    };
 	    _this.handleInputChange = _this.handleInputChange.bind(_this);
 	    _this.getToken = _this.getToken.bind(_this);
@@ -50029,6 +50030,9 @@
 	    value: function getToken() {
 	      var _this2 = this;
 
+	      this.setState({
+	        loading: true
+	      });
 	      fetch(_Helper2.default.authorizationUrl, {
 	        method: 'POST',
 	        headers: { 'Content-Type': 'application/json' },
@@ -50087,7 +50091,8 @@
 	          'div',
 	          { className: 'btn btn-primary', onClick: this.props.openRegisterModal },
 	          'Register'
-	        )
+	        ),
+	        this.state.loading ? _react2.default.createElement('div', { className: 'ld ld-hourglass ld-spin-fast text-center', style: { fontSize: "32px", color: "#3498db" } }) : ""
 	      );
 	    }
 	  }]);
@@ -50121,6 +50126,7 @@
 	  getUserPostUrl: BASE_URL + 'post?name=',
 	  followUserUrl: BASE_URL + 'flwuser',
 	  unfollowUserUrl: BASE_URL + 'unflwuser',
+	  avatarUploadUrl: BASE_URL + 'userimg',
 	  localURL: LOCAL_URL
 	};
 
@@ -53953,6 +53959,7 @@
 	    _this.state = {
 	      posts: [],
 	      currentLastPostId: 0,
+	      endOfPostList: false,
 	      newpost: "",
 	      postStatus: false,
 	      isShowingProfileModal: false,
@@ -53970,7 +53977,26 @@
 	  _createClass(NewFeed, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      this.loadData();
+	      if (_AllActions2.default.getCookie("access_token") && _AllActions2.default.getCookie("access_token") !== '""') {
+	        this.loadData();
+	      } else window.location.hash = "";
+	    }
+	  }, {
+	    key: 'componentWillUnMount',
+	    value: function componentWillUnMount() {
+	      var _this2 = this;
+
+	      this.cleanup = function () {
+	        window.addEventListener("scroll", function (evt) {
+	          if (_this2.state.posts.length - _this2.state.currentLastPostId == 10 && document.body.scrollTop !== 0 && document.body.scrollHeight - document.body.scrollTop == window.innerHeight) {
+	            var currentLastPostId = _this2.state.currentLastPostId + 10;
+	            _this2.setState({
+	              currentLastPostId: currentLastPostId
+	            });
+	            setTimeout(_this2.loadData(), 1500);
+	          }
+	        });
+	      };
 	    }
 	  }, {
 	    key: 'openProfileModal',
@@ -53996,14 +54022,19 @@
 	  }, {
 	    key: 'resetAccessToken',
 	    value: function resetAccessToken() {
-	      document.cookie = "";
+	      document.cookie = 'username="";';
+	      document.cookie = 'password="";';
+	      document.cookie = 'access_token="";';
 	      window.location.hash = "";
 	    }
 	  }, {
 	    key: 'postData',
 	    value: function postData() {
-	      var _this2 = this;
+	      var _this3 = this;
 
+	      this.setState({
+	        posting: true
+	      });
 	      var formData = new _formData2.default();
 	      formData.append('content', this.state.newpost);
 	      formData.append('owner', _AllActions2.default.getCookie("username"));
@@ -54022,13 +54053,14 @@
 	          return null;
 	        }
 	      }).then(function (response) {
-	        _this2.setState({
+	        _this3.setState({
 	          postStatus: true,
 	          file: '',
-	          imagePreviewUrl: ''
+	          imagePreviewUrl: '',
+	          posting: false
 	        });
 	        console.log("Post Successfully");
-	        _this2.loadData();
+	        location.reload();
 	      });
 	    }
 	  }, {
@@ -54041,14 +54073,14 @@
 	  }, {
 	    key: '_handleImageChange',
 	    value: function _handleImageChange(e) {
-	      var _this3 = this;
+	      var _this4 = this;
 
 	      e.preventDefault();
 	      var reader = new FileReader();
 	      var file = e.target.files[0];
 
 	      reader.onloadend = function () {
-	        _this3.setState({
+	        _this4.setState({
 	          file: file,
 	          imagePreviewUrl: reader.result
 	        });
@@ -54058,8 +54090,9 @@
 	  }, {
 	    key: 'loadData',
 	    value: function loadData() {
-	      var _this4 = this;
+	      var _this5 = this;
 
+	      console.log("Loading data...");
 	      fetch(_Helper2.default.newfeedDataUrl + _AllActions2.default.getCookie("username") + "&postID=" + this.state.currentLastPostId, {
 	        method: 'GET',
 	        headers: {
@@ -54072,24 +54105,31 @@
 	          return null;
 	        }
 	      }).then(function (response) {
-	        var posts = _this4.state.posts.concat(response.posts);
-	        _this4.setState({
-	          posts: posts
-	        });
+	        if (response.posts && response.posts.length) {
+	          var posts = _this5.state.posts.concat(response.posts);
+	          _this5.setState({
+	            posts: posts
+	          });
+	        } else {
+	          _this5.setState({
+	            endOfPostList: true
+	          });
+	          console.log(_this5.state.endOfPostList);
+	        }
 	      });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this5 = this;
+	      var _this6 = this;
 
 	      window.addEventListener("scroll", function (evt) {
-	        if (_this5.state.posts.length - _this5.state.currentLastPostId == 10 && document.body.scrollTop !== 0 && document.body.scrollHeight - document.body.scrollTop == window.innerHeight) {
-	          var currentLastPostId = _this5.state.currentLastPostId + 10;
-	          _this5.setState({
+	        if (_this6.state.posts.length - _this6.state.currentLastPostId == 10 && document.body.scrollTop !== 0 && document.body.scrollHeight - document.body.scrollTop == window.innerHeight) {
+	          var currentLastPostId = _this6.state.currentLastPostId + 10;
+	          _this6.setState({
 	            currentLastPostId: currentLastPostId
 	          });
-	          _this5.loadData();
+	          setTimeout(_this6.loadData(), 1500);
 	        }
 	      });
 	      return _react2.default.createElement(
@@ -54112,12 +54152,12 @@
 	              _react2.default.createElement(
 	                'form',
 	                { onSubmit: function onSubmit(e) {
-	                    return _this5._handleSubmit(e);
+	                    return _this6._handleSubmit(e);
 	                  } },
 	                _react2.default.createElement('input', { className: 'fileInput',
 	                  type: 'file',
 	                  onChange: function onChange(e) {
-	                    return _this5._handleImageChange(e);
+	                    return _this6._handleImageChange(e);
 	                  } })
 	              ),
 	              _react2.default.createElement(
@@ -54148,7 +54188,9 @@
 	              )
 	            )
 	          ),
-	          this.state.posts.length ? _react2.default.createElement(_PostList2.default, { posts: this.state.posts }) : ""
+	          this.state.posts.length ? _react2.default.createElement(_PostList2.default, { posts: this.state.posts }) : "",
+	          this.state.endOfPostList || this.state.posts.length - this.state.currentLastPostId !== 10 && this.state.posts.length !== 0 ? null : _react2.default.createElement('div', { className: 'ld ld-hourglass ld-spin-fast text-center', style: { fontSize: "64px", color: "#3498db", marginLeft: "5%" } }),
+	          this.state.posting ? _react2.default.createElement('div', { className: 'ld ld-hourglass ld-spin-fast text-center', style: { fontSize: "64px", color: "#3498db", marginLeft: "5%" } }) : null
 	        )
 	      );
 	    }
@@ -54309,6 +54351,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactModalDialog = __webpack_require__(236);
+
 	var _Helper = __webpack_require__(292);
 
 	var _Helper2 = _interopRequireDefault(_Helper);
@@ -54341,10 +54385,15 @@
 
 	    _this.state = {
 	      userInfo: {},
+	      followed: false,
 	      posts: [],
 	      currentLastPostId: 0,
 	      newpost: '',
-	      postStatus: false
+	      postStatus: false,
+	      isShowingAvatarUpload: false,
+	      file: '',
+	      imagePreviewUrl: '',
+	      posting: false
 	    };
 	    _this.getUserInfo = _this.getUserInfo.bind(_this);
 	    _this.getUserPost = _this.getUserPost.bind(_this);
@@ -54352,6 +54401,9 @@
 	    _this.postData = _this.postData.bind(_this);
 	    _this.followUser = _this.followUser.bind(_this);
 	    _this.loadMore = _this.loadMore.bind(_this);
+	    _this.openAvatarUpload = _this.openAvatarUpload.bind(_this);
+	    _this.closeAvatarUpload = _this.closeAvatarUpload.bind(_this);
+	    _this.uploadAvatar = _this.uploadAvatar.bind(_this);
 	    return _this;
 	  }
 
@@ -54360,6 +54412,20 @@
 	    value: function componentDidMount() {
 	      this.getUserInfo();
 	      this.getUserPost();
+	    }
+	  }, {
+	    key: 'openAvatarUpload',
+	    value: function openAvatarUpload() {
+	      this.setState({
+	        isShowingAvatarUpload: true
+	      });
+	    }
+	  }, {
+	    key: 'closeAvatarUpload',
+	    value: function closeAvatarUpload() {
+	      this.setState({
+	        isShowingAvatarUpload: false
+	      });
 	    }
 	  }, {
 	    key: 'handleInputChange',
@@ -54399,10 +54465,43 @@
 	      });
 	    }
 	  }, {
-	    key: 'postData',
-	    value: function postData() {
+	    key: 'unfollowUser',
+	    value: function unfollowUser() {
 	      var _this3 = this;
 
+	      fetch(_Helper2.default.unfollowUserUrl, {
+	        method: 'POST',
+	        headers: {
+	          'Content-Type': 'application/json',
+	          'Authorization': 'JWT ' + _AllActions2.default.getCookie("access_token")
+	        },
+	        body: JSON.stringify({
+	          following: this.props.username
+	        })
+	      }).then(function (response) {
+	        if (response.ok) {
+	          return response.json();
+	        } else {
+	          return null;
+	        }
+	      }).then(function (response) {
+	        if (response.message) {
+	          console.log(response.message);
+	        } else {
+	          console.log('Unfollowing ' + _this3.props.username);
+	          _this3.getUserInfo();
+	          _this3.getUserPost();
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'postData',
+	    value: function postData() {
+	      var _this4 = this;
+
+	      this.setState({
+	        posting: true
+	      });
 	      fetch(_Helper2.default.postDataUrl, {
 	        method: 'POST',
 	        headers: {
@@ -54422,17 +54521,18 @@
 	          return null;
 	        }
 	      }).then(function (response) {
-	        _this3.setState({
-	          postStatus: true
+	        _this4.setState({
+	          postStatus: true,
+	          posting: false
 	        });
 	        console.log("Post Successfully");
-	        _this3.getUserPost();
+	        _this4.getUserPost();
 	      });
 	    }
 	  }, {
 	    key: 'getUserInfo',
 	    value: function getUserInfo() {
-	      var _this4 = this;
+	      var _this5 = this;
 
 	      fetch(_Helper2.default.getUserUrl + this.props.username + '&action=getInfo', {
 	        method: "GET",
@@ -54446,8 +54546,15 @@
 	          return null;
 	        }
 	      }).then(function (response) {
-	        _this4.setState({
-	          userInfo: response
+	        var followed = false;
+	        for (var i = 0; i < response.followings_name.length; i++) {
+	          if (_AllActions2.default.getCookie('username') == response.followings_name[i]) {
+	            followed = true;
+	          }
+	        }
+	        _this5.setState({
+	          userInfo: response,
+	          followed: followed
 	        });
 	        console.log(response);
 	      });
@@ -54455,7 +54562,7 @@
 	  }, {
 	    key: 'getUserPost',
 	    value: function getUserPost() {
-	      var _this5 = this;
+	      var _this6 = this;
 
 	      fetch(_Helper2.default.getUserPostUrl + this.props.username + '&postID=' + this.state.currentLastPostId, {
 	        method: "GET",
@@ -54470,10 +54577,10 @@
 	          return null;
 	        }
 	      }).then(function (response) {
-	        var posts = _this5.state.posts.concat(response.posts);
-	        var currentLastPostId = _this5.state.currentLastPostId + 10;
+	        var posts = _this6.state.posts.concat(response.posts);
+	        var currentLastPostId = _this6.state.currentLastPostId + 10;
 	        if (response.posts && response.posts.length) {
-	          _this5.setState({
+	          _this6.setState({
 	            posts: posts,
 	            currentLastPostId: currentLastPostId
 	          });
@@ -54486,45 +54593,106 @@
 	      this.getUserPost();
 	    }
 	  }, {
+	    key: '_handleSubmit',
+	    value: function _handleSubmit(e) {
+	      e.preventDefault();
+	      // TODO: do something with -> this.state.file
+	      console.log('handle uploading-', this.state.file);
+	    }
+	  }, {
+	    key: '_handleImageChange',
+	    value: function _handleImageChange(e) {
+	      var _this7 = this;
+
+	      e.preventDefault();
+	      var reader = new FileReader();
+	      var file = e.target.files[0];
+
+	      reader.onloadend = function () {
+	        _this7.setState({
+	          file: file,
+	          imagePreviewUrl: reader.result
+	        });
+	      };
+	      reader.readAsDataURL(file);
+	    }
+	  }, {
+	    key: 'uploadAvatar',
+	    value: function uploadAvatar() {
+	      var _this8 = this;
+
+	      var formData = new FormData();
+	      formData.append('file', this.state.file);
+	      console.log(this.state.file);
+	      fetch(_Helper2.default.avatarUploadUrl, {
+	        method: 'POST',
+	        headers: {
+	          'Authorization': 'JWT ' + _AllActions2.default.getCookie("access_token")
+	        },
+	        body: formData
+	      }).then(function (response) {
+	        if (response.ok) {
+	          return response.json();
+	        } else {
+	          return null;
+	        }
+	      }).then(function (response) {
+	        _this8.closeAvatarUpload();
+	        console.log("Upload Successfully");
+	        _this8.getUserInfo();
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this9 = this;
+
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'comment-modal col-md-7' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'post-content' },
+	          { className: 'profile-info' },
+	          _AllActions2.default.getCookie("username") == this.state.userInfo.name ? _react2.default.createElement(
+	            'div',
+	            { onClick: this.openAvatarUpload },
+	            _react2.default.createElement('img', { className: 'avatar', src: this.state.userInfo.avatar, width: '85px', height: '85%' })
+	          ) : _react2.default.createElement('img', { className: 'avatar', src: this.state.userInfo.avatar, width: '85px', height: '85%' }),
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'post-owner' },
+	            { className: 'profile-name' },
 	            this.state.userInfo ? this.state.userInfo.name : "Loading..."
 	          ),
 	          _react2.default.createElement(
 	            'div',
-	            null,
+	            { className: 'profile-birthday' },
 	            this.state.userInfo ? this.state.userInfo.birthday : "DD_MM_YYYY"
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'post-content' },
-	          _react2.default.createElement(
+	          ),
+	          _AllActions2.default.getCookie("username") == this.state.userInfo.name ? null : this.state.followed ? _react2.default.createElement(
 	            'div',
-	            { className: 'green pull-right like-box' },
-	            'Follower ',
-	            this.state.userInfo.followings_name ? this.state.userInfo.followings_name.length : "..."
+	            { className: 'btn blue-btn follow-btn', onClick: this.unfollowUser },
+	            'Unfollow'
+	          ) : _react2.default.createElement(
+	            'div',
+	            { className: 'btn blue-btn follow-btn', onClick: this.followUser },
+	            'Follow'
 	          ),
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'green pull-right like-box' },
-	            'Following ',
-	            this.state.userInfo.followers_name ? this.state.userInfo.followers_name.length - 1 : "..."
+	            { className: 'follow-info' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'green follow-box' },
+	              'Follower ',
+	              this.state.userInfo.followings_name ? this.state.userInfo.followings_name.length - 1 : "..."
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'green follow-box' },
+	              'Following ',
+	              this.state.userInfo.followers_name ? this.state.userInfo.followers_name.length - 1 : "..."
+	            )
 	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'btn blue-btn', onClick: this.followUser },
-	          'Follow'
 	        ),
 	        this.props.username == _AllActions2.default.getCookie("username") ? _react2.default.createElement(
 	          'div',
@@ -54544,9 +54712,43 @@
 	        _react2.default.createElement(_PostList2.default, { posts: this.state.posts, profile: true }),
 	        this.state.posts.length === this.state.currentLastPostId ? _react2.default.createElement(
 	          'div',
-	          { className: 'btn blue-btn', onClick: this.loadMore },
+	          { className: 'btn blue-border-btn', onClick: this.loadMore },
 	          'Load more'
-	        ) : ""
+	        ) : "",
+	        this.state.isShowingAvatarUpload && _react2.default.createElement(
+	          _reactModalDialog.ModalContainer,
+	          { onClose: this.closeAvatarUpload },
+	          _react2.default.createElement(
+	            _reactModalDialog.ModalDialog,
+	            { onClose: this.closeAvatarUpload },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'previewComponent' },
+	              _react2.default.createElement(
+	                'form',
+	                { onSubmit: function onSubmit(e) {
+	                    return _this9._handleSubmit(e);
+	                  } },
+	                _react2.default.createElement('input', { className: 'fileInput',
+	                  type: 'file',
+	                  onChange: function onChange(e) {
+	                    return _this9._handleImageChange(e);
+	                  } })
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'imgPreview' },
+	                this.state.imagePreviewUrl != "" ? _react2.default.createElement('img', { src: this.state.imagePreviewUrl, width: '300px' }) : ""
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'btn blue-btn', onClick: this.uploadAvatar },
+	                'Upload'
+	              )
+	            )
+	          )
+	        ),
+	        this.state.posting ? _react2.default.createElement('div', { className: 'ld ld-hourglass ld-spin-fast text-center', style: { fontSize: "32px", color: "#3498db" } }) : null
 	      );
 	    }
 	  }]);
@@ -54609,9 +54811,11 @@
 	    _this.state = {
 	      isShowingCommentModal: false,
 	      isShowingProfileModal: false,
-	      liked: false
+	      liked: false,
+	      likes: '...'
 	    };
 	    _this.likePost = _this.likePost.bind(_this);
+	    _this.unlikePost = _this.unlikePost.bind(_this);
 	    _this.checkLiked = _this.checkLiked.bind(_this);
 	    _this.openCommentModal = _this.openCommentModal.bind(_this);
 	    _this.closeCommentModal = _this.closeCommentModal.bind(_this);
@@ -54677,13 +54881,14 @@
 	          return null;
 	        }
 	      }).then(function (response) {
-	        console.log("Liked");
 	        _this2.checkLiked();
 	      });
 	    }
 	  }, {
 	    key: 'checkLiked',
 	    value: function checkLiked() {
+	      var _this3 = this;
+
 	      fetch(_Helper2.default.likePostUrl + "?postID=" + this.props.post.postID, {
 	        method: 'GET',
 	        headers: {
@@ -54695,11 +54900,27 @@
 	        } else {
 	          return null;
 	        }
-	      }).then(function (response) {});
+	      }).then(function (response) {
+	        var liked = false;
+	        if (response.Likes && response.Likes.length) {
+	          for (var i = 0; i < response.Likes.length; i++) {
+	            if (_AllActions2.default.getCookie("username") == response.Likes[i]) {
+	              liked = true;
+	            }
+	          }
+	        }
+	        var likes = response.Likes.length;
+	        _this3.setState({
+	          liked: liked,
+	          likes: likes
+	        });
+	      });
 	    }
 	  }, {
 	    key: 'unlikePost',
 	    value: function unlikePost() {
+	      var _this4 = this;
+
 	      fetch(_Helper2.default.likePostUrl, {
 	        method: 'POST',
 	        headers: {
@@ -54717,21 +54938,22 @@
 	          return null;
 	        }
 	      }).then(function (response) {
-	        console.log("Unliked");
-	        this.checkLiked();
+	        _this4.checkLiked();
 	      });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var boxClass = "post-box";
+	      var postBodyClass = "post-body";
 	      if (this.props.profile) {
 	        boxClass = "profile-post-box";
+	        postBodyClass = "post-body-modal";
 	      }
 	      return _react2.default.createElement(
 	        'div',
 	        { className: boxClass + " col-md-7" },
-	        _react2.default.createElement(
+	        this.props.post.url !== "" ? _react2.default.createElement(
 	          'div',
 	          { className: 'post-content' },
 	          _react2.default.createElement(
@@ -54745,10 +54967,31 @@
 	          ),
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'content' },
+	            { className: postBodyClass },
 	            this.props.post.content
 	          ),
-	          _react2.default.createElement('img', { src: this.props.post.url, width: '100%' })
+	          _react2.default.createElement(
+	            'div',
+	            { onClick: this.openCommentModal },
+	            _react2.default.createElement('img', { src: this.props.post.url, width: '100%' })
+	          )
+	        ) : _react2.default.createElement(
+	          'div',
+	          { className: 'post-content' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'post-owner', onClick: this.openProfileModal },
+	            _react2.default.createElement(
+	              'strong',
+	              null,
+	              this.props.post.owner
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'post-body-noimage' },
+	            this.props.post.content
+	          )
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -54756,14 +54999,18 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'green pull-right like-box' },
-	            this.props.post.like,
+	            this.state.likes,
 	            ' Like'
 	          )
 	        ),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'inline-block' },
-	          _react2.default.createElement(
+	          this.state.liked ? _react2.default.createElement(
+	            'div',
+	            { className: 'btn post-btn', onClick: this.unlikePost },
+	            'Unlike'
+	          ) : _react2.default.createElement(
 	            'div',
 	            { className: 'btn post-btn', onClick: this.likePost },
 	            'Like'
@@ -54785,7 +55032,10 @@
 	              { onClose: this.closeCommentModal },
 	              _react2.default.createElement(_CommentModal2.default, {
 	                post: this.props.post,
-	                likePost: this.likePost
+	                likePost: this.likePost,
+	                unlikePost: this.unlikePost,
+	                likes: this.state.likes,
+	                liked: this.state.liked
 	              })
 	            )
 	          )
@@ -54868,12 +55118,8 @@
 	      { className: 'oneline' },
 	      _react2.default.createElement(
 	        'div',
-	        { className: 'post-owner' },
-	        _react2.default.createElement(
-	          'strong',
-	          null,
-	          props.comment.owner
-	        )
+	        { className: 'comment-owner' },
+	        props.comment.owner
 	      ),
 	      _react2.default.createElement(
 	        'div',
@@ -54968,7 +55214,7 @@
 	        },
 	        body: JSON.stringify({
 	          content: this.state.newcomment,
-	          owner: _Helper2.default.username,
+	          owner: _AllActions2.default.getCookie('username'),
 	          date: new Date(),
 	          postID: this.props.post.postID
 	        })
@@ -55002,10 +55248,10 @@
 	          ),
 	          _react2.default.createElement(
 	            'div',
-	            null,
+	            { className: 'post-body-modal' },
 	            this.props.post.content
 	          ),
-	          _react2.default.createElement('img', { src: this.props.post.url, width: '100%' })
+	          this.props.post.url !== "" ? _react2.default.createElement('img', { src: this.props.post.url, width: '100%' }) : null
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -55013,11 +55259,15 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'green pull-right like-box' },
-	            this.props.post.like,
+	            this.props.likes,
 	            ' Like'
 	          )
 	        ),
-	        _react2.default.createElement(
+	        this.props.liked ? _react2.default.createElement(
+	          'div',
+	          { className: 'btn post-btn', onClick: this.props.unlikePost },
+	          'Unlike'
+	        ) : _react2.default.createElement(
 	          'div',
 	          { className: 'btn post-btn', onClick: this.props.likePost },
 	          'Like'

@@ -12,9 +12,11 @@ class SinglePost extends React.Component {
     this.state = {
       isShowingCommentModal: false,
       isShowingProfileModal: false,
-      liked: false
+      liked: false,
+      likes: '...'
     };
     this.likePost = this.likePost.bind(this);
+    this.unlikePost = this.unlikePost.bind(this);
     this.checkLiked = this.checkLiked.bind(this);
     this.openCommentModal = this.openCommentModal.bind(this);
     this.closeCommentModal = this.closeCommentModal.bind(this);
@@ -70,7 +72,6 @@ class SinglePost extends React.Component {
                 return null
             }
         }).then((response) => {
-            console.log("Liked");
             this.checkLiked();
         });
   }
@@ -88,7 +89,19 @@ class SinglePost extends React.Component {
                 return null
             }
         }).then((response) => {
-            
+            let liked = false;
+            if(response.Likes && response.Likes.length){
+              for(let i = 0; i < response.Likes.length; i++){
+                if(AllActions.getCookie("username") == response.Likes[i]){
+                  liked = true;
+                }
+              }
+            }
+            let likes = response.Likes.length;
+            this.setState({
+              liked,
+              likes
+            })
         });
   }
 
@@ -103,35 +116,49 @@ class SinglePost extends React.Component {
               postID: this.props.post.postID,
               action: "unlike"
             })
-        }).then(function(response) {
+        }).then((response) => {
             if (response.ok) {
                 return response.json()
             } else {
                 return null
             }
-        }).then(function(response) {
-            console.log("Unliked");
+        }).then((response) => {
             this.checkLiked();
         });
   }
 
   render(){
     let boxClass = "post-box";
+    let postBodyClass = "post-body";
     if(this.props.profile){
      boxClass = "profile-post-box";
+     postBodyClass = "post-body-modal";
     }
     return(
       <div className={boxClass + " col-md-7"}>
+          {this.props.post.url !== "" ?
+            <div className="post-content">
+              <div className="post-owner" onClick={this.openProfileModal}><strong>{this.props.post.owner}</strong></div>
+              <div className={postBodyClass}>{this.props.post.content}</div>
+              <div onClick={this.openCommentModal}>
+                <img src={this.props.post.url} width="100%"/>
+              </div>
+            </div>
+            :
+            <div className="post-content">
+              <div className="post-owner" onClick={this.openProfileModal}><strong>{this.props.post.owner}</strong></div>
+              <div className="post-body-noimage">{this.props.post.content}</div>
+            </div>
+          }
         <div className="post-content">
-          <div className="post-owner" onClick={this.openProfileModal}><strong>{this.props.post.owner}</strong></div>
-          <div className="content">{this.props.post.content}</div>
-          <img src={this.props.post.url} width="100%"/>
-        </div>
-        <div className="post-content">
-          <div className="green pull-right like-box">{this.props.post.like} Like</div>
+          <div className="green pull-right like-box">{this.state.likes} Like</div>
         </div>
         <div className="inline-block">
+        {this.state.liked ?
+          <div className="btn post-btn" onClick={this.unlikePost}>Unlike</div>
+          :
           <div className="btn post-btn" onClick={this.likePost}>Like</div>
+        }
           <div className="btn post-btn" onClick={this.openCommentModal}>Comment</div>
         </div>
         { this.state.isShowingCommentModal &&
@@ -141,6 +168,9 @@ class SinglePost extends React.Component {
                 <CommentModal
                   post={this.props.post}
                   likePost={this.likePost}
+                  unlikePost={this.unlikePost}
+                  likes={this.state.likes}
+                  liked={this.state.liked}
                 />
               </ModalDialog>
             </ModalContainer>
