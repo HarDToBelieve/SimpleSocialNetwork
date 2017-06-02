@@ -50045,7 +50045,8 @@
 	      }).then(function (response) {
 	        if (!response) {
 	          _this2.setState({
-	            error: true
+	            error: true,
+	            loading: false
 	          });
 	        } else {
 	          console.log(response.access_token);
@@ -54144,6 +54145,11 @@
 	            _react2.default.createElement('textarea', { className: 'form-control post-input', type: 'text', name: 'newpost', placeholder: 'What are you thinking?', onChange: this.handleInputChange }),
 	            _react2.default.createElement(
 	              'div',
+	              { className: 'upload-btn' },
+	              'Add a photo'
+	            ),
+	            _react2.default.createElement(
+	              'div',
 	              { className: 'previewComponent' },
 	              _react2.default.createElement(
 	                'form',
@@ -54316,16 +54322,16 @@
 	          ),
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'col-xs-1' },
+	            { className: 'col-xs-1 profile-btn' },
 	            _react2.default.createElement(
 	              'div',
-	              { className: 'btn-logout', onClick: this.openRealProfile },
+	              { onClick: this.openRealProfile },
 	              _react2.default.createElement('img', { width: '30px', src: 'images/ProfileSelected.png' })
 	            )
 	          ),
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'col-xs-2' },
+	            { className: 'col-xs-1' },
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'btn-logout', onClick: this.props.resetAccessToken },
@@ -54479,7 +54485,8 @@
 	        } else {
 	          console.log('Following ' + _this2.props.username);
 	          _this2.getUserInfo();
-	          _this2.getUserPost();
+	          _this2.props.closeProfileModal();
+	          location.reload();
 	        }
 	      });
 	    }
@@ -54495,7 +54502,7 @@
 	          'Authorization': 'JWT ' + _AllActions2.default.getCookie("access_token")
 	        },
 	        body: JSON.stringify({
-	          following: this.props.username
+	          unfollowing: this.props.username
 	        })
 	      }).then(function (response) {
 	        if (response.ok) {
@@ -54727,9 +54734,9 @@
 	            { className: 'green' },
 	            'Posted to your wall.'
 	          ) : ""
-	        ) : "",
+	        ) : _react2.default.createElement('div', { className: 'no-comment-form' }),
 	        _react2.default.createElement(_PostList2.default, { posts: this.state.posts, profile: true }),
-	        this.state.posts.length === this.state.currentLastPostId ? _react2.default.createElement(
+	        this.state.posts.length && this.state.posts.length === this.state.currentLastPostId ? _react2.default.createElement(
 	          'div',
 	          { className: 'btn blue-border-btn', onClick: this.loadMore },
 	          'Load more'
@@ -55066,7 +55073,8 @@
 	            _reactModalDialog.ModalDialog,
 	            { onClose: this.closeProfileModal },
 	            _react2.default.createElement(_ProfileModal2.default, {
-	              username: this.props.post.owner
+	              username: this.props.post.owner,
+	              closeProfileModal: this.closeProfileModal
 	            })
 	          )
 	        )
@@ -55262,15 +55270,15 @@
 	          { className: 'post-content' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'post-owner' },
+	            { className: 'post-owner post-owner-comment' },
 	            this.props.post.owner
 	          ),
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'post-body-modal' },
+	            { className: 'post-body-modal post-body-comment' },
 	            this.props.post.content
 	          ),
-	          this.props.post.url !== "" ? _react2.default.createElement('img', { src: this.props.post.url, width: '100%' }) : null
+	          this.props.post.url !== "" ? _react2.default.createElement('img', { className: 'image-comment', src: this.props.post.url }) : null
 	        ),
 	        _react2.default.createElement(
 	          'div',

@@ -22,7 +22,7 @@
   color: #3498db;
   width: 70px;
   padding: 4px 12px;
-  margin-top: 4%;
+  margin-top: 13px;
   margin-left: 10%;
 }
 
@@ -56,6 +56,10 @@
 
 .button-search{
   margin: 7px 15px 3px 0px;
+}
+
+.profile-btn{
+  margin-top: 13px;
 }
 
 @media only screen and (max-width : 1200px) {
@@ -95,6 +99,9 @@
   .search-form{
     display: none
   }
+  .profile-btn{
+    margin-left: -20px
+  }
 }
 
 @media only screen and (max-width : 500px) {
@@ -111,5 +118,8 @@
   }
   .logo-header{
     width: 66%;
+  }
+  .profile-btn{
+    margin-left: -20px
   }
 }

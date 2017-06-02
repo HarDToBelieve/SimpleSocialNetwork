@@ -1,50 +1,44 @@
 const electron = require('electron')
-
-const fs = require('fs');
-const mkdirp = require('mkdirp');
-const jsonfile = require('jsonfile');
-
+// Module to control application life.
 const app = electron.app
+// Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 
 const path = require('path')
 const url = require('url')
 
-const INFO_FOLDER = '/SocialChannel/';
-const INFO_FILE = INFO_FOLDER + 'user.json'
-
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({width: 1920, height: 1080});
 
   // and load the index.html of the app.
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
+  mainWindow.loadURL("http://localhost:3000/");
 
+  // Open the DevTools.
+  // mainWindow.webContents.openDevTools()
+
+  // Emitted when the window is closed.
   mainWindow.on('closed', function () {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
     mainWindow = null
   })
 }
 
-mkdirp(INFO_FOLDER, (err) => {
-  if(err) {
-    console.log(INFO_FOLDER + "is existing, no need to create it again");
-});
-
-if(!fs.existsSync(INFO_FILE)){
-  jsonfile.writeFile(INFO_FILE, {}, (err) => {
-                      if (err) return console.log(err.message);
-                    });
-}
-
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
 app.on('ready', createWindow)
 
+// Quit when all windows are closed.
 app.on('window-all-closed', function () {
+  // On OS X it is common for applications and their menu bar
+  // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
     app.quit()
   }
