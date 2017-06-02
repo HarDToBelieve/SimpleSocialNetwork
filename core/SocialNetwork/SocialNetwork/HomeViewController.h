@@ -34,6 +34,8 @@
     int newFeedPostOffset;
     int profilePostOffset;
     NSCache *imageCache;
+    UIImagePickerController *picker;
+    UIImage *avatar;
 }
 
 @property (weak, nonatomic) IBOutlet UIImageView *homeImageView;

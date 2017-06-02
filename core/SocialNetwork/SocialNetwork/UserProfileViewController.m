@@ -85,7 +85,31 @@
         cell.userNameLabel.text = inspectedUser.name;
         cell.birthdayLabel.text = inspectedUser.birthday;
         
-        [cell.followButton addTarget:self action:@selector(followButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        cell.changeAvatarButton.hidden = TRUE;
+        
+        
+        isFollowed = FALSE;
+        NSLog(@"%@", currentUser.followingArray);
+        NSLog(@"%@", currentUser.followingArray);
+        for (NSString *name in currentUser.followingArray) {
+            if ([inspectedUser.name isEqualToString:name]) {
+                isFollowed = TRUE;
+            }
+        }
+        
+        if (isFollowed) {
+            [cell.followButton setTitle:@"Unfollow" forState:UIControlStateNormal];
+            [cell.followButton removeTarget:self action:@selector(followButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.followButton addTarget:self action:@selector(unfollowButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        } else {
+            [cell.followButton setTitle:@"Follow" forState:UIControlStateNormal];
+            [cell.followButton removeTarget:self action:@selector(unfollowButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.followButton addTarget:self action:@selector(followButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+//        if ([cell.followButton.titleLabel.text isEqualToString:@"Follow"]) {
+//            [cell.followButton addTarget:self action:@selector(followButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+//        }
         
         return cell;
         
@@ -181,7 +205,8 @@
         if (!error) {
     
             NSDictionary *jsonObject = (NSDictionary *)responseObject;
-            inspectedUser.profilePicture = NULL;
+            NSString *imageString = [jsonObject objectForKey:@"avatar"];
+            inspectedUser.profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageString]]];
             inspectedUser.name = [jsonObject objectForKey:@"name"];
             inspectedUser.birthday = [jsonObject objectForKey:@"birthday"];
             
@@ -237,6 +262,55 @@
         
         if (!error) {
             NSLog(@"Success");
+            [self requestSelfInfo];
+            profilePostOffset = 0;
+        } else {
+            NSLog(@"Failed");
+        }
+    }] resume];
+}
+
+- (void) unfollowButtonPressed: (UIButton *)sender {
+    
+    NSString *url = @"http://161.202.20.61:5000/unflwuser";
+    NSDictionary *parameters = @{@"unfollowing": inspectedUser.name};
+    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:parameters error:nil];
+    [request setValue:[NSString stringWithFormat:@"JWT %@", currentUser.getToken] forHTTPHeaderField:@"Authorization"];
+    
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        
+        if (!error) {
+            NSLog(@"Success");
+            [self requestSelfInfo];
+            profilePostOffset = 0;
+        } else {
+            NSLog(@"Failed");
+            NSLog(@"Error: %@, %@, %@", error, response, responseObject);
+        }
+    }] resume];
+}
+
+- (void) requestSelfInfo {
+    NSString *url = [NSString stringWithFormat:@"http://161.202.20.61:5000/user?name=%@&action=getInfo", currentUser.name];
+    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"GET" URLString:url parameters:nil error:nil];
+    
+    [request setValue:[NSString stringWithFormat:@"JWT %@", currentUser.getToken] forHTTPHeaderField:@"Authorization"];
+    
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        
+        if (!error) {
+            NSLog(@"%@", responseObject);
+            NSDictionary *jsonObject = (NSDictionary *)responseObject;
+            
+            NSString *imageString = [jsonObject objectForKey:@"avatar"];
+ 
+            currentUser.followingArray = [jsonObject objectForKey:@"followers_name"];
+            NSLog(@"%@", currentUser.followingArray);
+            NSLog(@"%@", currentUser.followingArray);
+            [self requestUserPost];
+            
         } else {
             NSLog(@"Failed");
         }

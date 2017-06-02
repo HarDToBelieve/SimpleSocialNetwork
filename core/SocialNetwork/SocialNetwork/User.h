@@ -18,6 +18,7 @@
 @property NSString *accessToken;
 @property UIImage *profilePicture;
 @property NSString *otherUserName;
+@property NSMutableArray *followingArray;
 
 + (User *) shareCurrentUser;
 - (void) setToken: (NSString *) token;

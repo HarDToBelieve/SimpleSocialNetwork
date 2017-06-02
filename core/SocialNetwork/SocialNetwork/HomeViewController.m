@@ -58,6 +58,11 @@
     [_profileCollectionView addInfiniteScrollingWithActionHandler:^{
         [self requestCurrentUserPost];
     }];
+    
+    picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -119,7 +124,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (collectionView == _profileCollectionView) {
-        if (indexPath.row == 0) return CGSizeMake(SCREEN_WIDTH, 180);
+        if (indexPath.row == 0) return CGSizeMake(SCREEN_WIDTH, 200);
         else {
             Post *post = [currentUserPostArray objectAtIndex:indexPath.row - 1];
             if ([post.url  isEqual: @""]) {
@@ -151,6 +156,9 @@
             
             cell.userNameLabel.text = currentUser.name;
             cell.birthdayLabel.text = currentUser.birthday;
+            
+            
+            [cell.changeAvatarButton addTarget:self action:@selector(changeAvatarButtonPressed) forControlEvents:UIControlEventTouchUpInside];
                
             return cell;
             
@@ -389,11 +397,16 @@
         
         if (!error) {
             NSLog(@"%@", responseObject);
-            
             NSDictionary *jsonObject = (NSDictionary *)responseObject;
-            currentUser.profilePicture = NULL;
+            
+            NSString *imageString = [jsonObject objectForKey:@"avatar"];
+            currentUser.profilePicture = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageString]]];
+
             currentUser.name = [jsonObject objectForKey:@"name"];
             currentUser.birthday = [jsonObject objectForKey:@"birthday"];
+            currentUser.followingArray = [jsonObject objectForKey:@"followers_name"];
+            
+            NSLog(@"%@", currentUser.followingArray);
             
             [_profileCollectionView reloadData];
         } else {
@@ -463,6 +476,101 @@
             NSLog(@"Failed");
         }
     }] resume];
+}
+
+- (void) postNewAvatar {
+    // Dictionary that holds post parameters. You can set your post parameters that your server accepts or programmed to accept.
+    
+    // the boundary string : a random string, that will not repeat in post data, to separate post data fields.
+    NSString *BoundaryConstant = @"----------V2ymHFg03ehbqgZCaKO6jy";
+    
+    // string constant for the post parameter 'file'. My server uses this name: `file`. Your's may differ
+    NSString* FileParamConstant = @"file";
+    
+    // the server url to which the image (or the media) is uploaded. Use your server url here
+    NSURL* requestURL = [NSURL URLWithString:@"http://161.202.20.61:5000/userimg"];
+    
+    // create request
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
+    [request setHTTPShouldHandleCookies:NO];
+    [request setTimeoutInterval:30];
+    [request setHTTPMethod:@"POST"];
+    
+    // set Content-Type in HTTP header
+    NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", BoundaryConstant];
+    [request setValue:contentType forHTTPHeaderField: @"Content-Type"];
+    
+    // post body
+    NSMutableData *body = [NSMutableData data];
+    
+    // add params (all params are strings)
+ 
+    
+    // add image data
+    NSString *imageName = [self genRandStringLength:10];
+    
+    NSData *imageData = UIImageJPEGRepresentation(avatar, 1.0);
+    if (imageData) {
+        [body appendData:[[NSString stringWithFormat:@"--%@\r\n", BoundaryConstant] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@.png\"\r\n", FileParamConstant, imageName] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithString:@"Content-Type: image/jpeg\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:imageData];
+        [body appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+    
+    [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", BoundaryConstant] dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    // setting the body of the post to the reqeust
+    [request setHTTPBody:body];
+    
+    // set the content-length
+    NSString *postLength = [NSString stringWithFormat:@"%d", [body length]];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    
+    // set URL
+    [request setURL:requestURL];
+    
+    [request setValue:[NSString stringWithFormat:@"JWT %@", currentUser.getToken] forHTTPHeaderField:@"Authorization"];
+    
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        
+        if (!error) {
+            NSLog(@"Dit me duoc roi");
+//            [self alertController:@"Succeed!" message:nil handler:TRUE];
+            
+        } else {
+            NSLog(@"Error: %@, %@, %@", error, response, responseObject);
+            [self requestSelfInfo];
+        }
+    }] resume];
+    
+}
+
+- (void) changeAvatarButtonPressed {
+    [self presentViewController:picker animated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+    avatar = [[UIImage alloc] init];
+    avatar = chosenImage;
+    [self postNewAvatar];
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    
+}
+
+#pragma mark - Helper Method
+
+- (NSString *)genRandStringLength:(int)len {
+    static NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    NSMutableString *randomString = [NSMutableString stringWithCapacity: len];
+    for (int i=0; i<len; i++) {
+        [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random() % [letters length]]];
+    }
+    return randomString;
 }
 
 

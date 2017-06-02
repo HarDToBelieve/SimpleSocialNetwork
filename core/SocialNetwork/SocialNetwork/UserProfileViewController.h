@@ -23,6 +23,7 @@
     NSMutableArray *userPostArray;
     NSCache *imageCache;
     int profilePostOffset;
+    BOOL isFollowed;
 }
 
 @property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
