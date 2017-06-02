@@ -181,6 +181,7 @@ class SinglePost extends React.Component {
             <ModalDialog onClose={this.closeProfileModal}>
               <ProfileModal
                username = {this.props.post.owner}
+               closeProfileModal = {this.closeProfileModal}
               />
             </ModalDialog>
           </ModalContainer>

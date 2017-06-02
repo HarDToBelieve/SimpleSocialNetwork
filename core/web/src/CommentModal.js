@@ -105,10 +105,10 @@ class CommentModal extends React.Component {
       return (
         <div className="comment-modal col-md-7">
           <div className="post-content">
-            <div className="post-owner">{this.props.post.owner}</div>
-            <div className="post-body-modal">{this.props.post.content}</div>
+            <div className="post-owner post-owner-comment">{this.props.post.owner}</div>
+            <div className="post-body-modal post-body-comment">{this.props.post.content}</div>
             {this.props.post.url !== "" ?
-              <img src={this.props.post.url} width="100%"/>
+              <img className="image-comment" src={this.props.post.url}/>
               :
               null
             }

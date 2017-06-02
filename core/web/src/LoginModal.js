@@ -48,7 +48,8 @@ class LoginModal extends React.Component {
         }).then((response) => {
             if (!response) {
                 this.setState({
-                  error: true
+                  error: true,
+                  loading: false
                 });
             } else{
                 console.log(response.access_token);

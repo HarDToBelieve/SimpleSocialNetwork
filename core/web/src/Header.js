@@ -58,10 +58,10 @@ class Header extends React.Component{
                             <img width="20px" src="images/magnifying-glass-icon.png" />
                         </div>
                       </div>
-                      <div className="col-xs-1">
-                        <div className="btn-logout" onClick={this.openRealProfile}><img width="30px" src="images/ProfileSelected.png"/></div>
+                      <div className="col-xs-1 profile-btn">
+                        <div onClick={this.openRealProfile}><img width="30px" src="images/ProfileSelected.png"/></div>
                       </div>
-                      <div className="col-xs-2">
+                      <div className="col-xs-1">
                         <div className="btn-logout" onClick={this.props.resetAccessToken}>Logout</div>
                       </div>
                   { this.state.isShowingProfileModal &&

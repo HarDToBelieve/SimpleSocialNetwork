@@ -80,7 +80,8 @@ class ProfileModal extends React.Component {
           } else {
             console.log(`Following ${this.props.username}`);
             this.getUserInfo();
-            this.getUserPost();
+            this.props.closeProfileModal();
+            location.reload();
           }
         });
   }
@@ -93,7 +94,7 @@ class ProfileModal extends React.Component {
               'Authorization': 'JWT ' + AllActions.getCookie("access_token")
             },
             body: JSON.stringify({
-              following: this.props.username
+              unfollowing: this.props.username
             })
         }).then((response) => {
             if (response.ok) {
@@ -281,10 +282,11 @@ class ProfileModal extends React.Component {
              }
            </div>
            :
-           ""
+           <div className="no-comment-form">
+           </div>
          }
          <PostList posts = {this.state.posts} profile = {true}/>
-         {this.state.posts.length === this.state.currentLastPostId?
+         {this.state.posts.length && this.state.posts.length === this.state.currentLastPostId?
            <div className="btn blue-border-btn" onClick={this.loadMore}>Load more</div>
            :
            ""

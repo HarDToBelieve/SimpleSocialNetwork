@@ -114,6 +114,40 @@
   width: 50%;
 }
 
+.upload-btn{
+  width: 180px;
+  height: 25px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  z-index: 100;
+}
+
+input[type="file"] {
+    display: block;
+    margin-top: -22px;
+    width: 180px;
+    z-index: -100;
+}
+
+@media only screen and (max-width : 990px) {
+  .post-box{
+    width: 80%;
+    margin-left: 10%;
+  }
+  .post-input{
+    width: 80%;
+    margin-left: 10%;
+  }
+  .comment-modal{
+    width: 80%;
+  }
+  .post-form {
+    width: 80%;
+    margin-left: 10%;
+  }
+}
+
 @media only screen and (max-width : 767px) {
   .post-box{
     width: 90%;
@@ -125,5 +159,9 @@
   }
   .comment-modal{
     width: 80%;
+  }
+  .post-form {
+    width: 90%;
+    margin-left: 5%;
   }
 }

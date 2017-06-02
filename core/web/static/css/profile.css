@@ -11,10 +11,11 @@
   border-radius: 3px;
 }
 
-div .follow-btn{
-  margin-top: -35px;
-  float: right;
-  width: 195px;
+div .follow-btn {
+    position: fixed;
+    right: 50px;
+    top: 32px;
+    width: 203px;
 }
 
 .pull-right{
@@ -63,4 +64,30 @@ div .follow-btn{
   position: fixed;
   border-radius: 50%;
   float: left;
+}
+
+.comment-form{
+  height: 200px;
+}
+
+.no-comment-form{
+  height: 100px;
+}
+
+@media only screen and (max-width : 767px) {
+  .profile-birthday{
+    color: white;
+  }
+  .follow-info {
+    margin-top: -30px;
+    margin-right: -5px;
+  }
+  div .follow-btn {
+    right: 40px;
+    top: 32px;
+    width: 150px;
+  }
+  .profile-name {
+    padding: 5px 27px;
+  }
 }
