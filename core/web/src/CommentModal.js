@@ -1,11 +1,12 @@
 import React,{PropTypes} from 'react';
 import axios from 'axios';
-import Helper from './Helper.jsx'
+import Helper from './Helper.js'
+import AllActions from './AllActions.js'
 
 const SingleComment = (props) => (
       <div className="comment-box col-md-7">
         <div className="oneline">
-          <div className="post-owner"><strong>{props.comment.owner}</strong></div>
+          <div className="comment-owner">{props.comment.owner}</div>
           <div className="comment-content">{props.comment.content}</div>
         </div>
       </div>
@@ -35,18 +36,12 @@ class CommentModal extends React.Component {
     };
     this.loadComments = this.loadComments.bind(this);
     this.commentPost = this.commentPost.bind(this);
-    this.setComments = this.setComments.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount(){
     this.loadComments();
-    this.interval = setInterval(this.setComments, 1000);
   }
-
-  componentWillUnmount() {
-    clearInterval(this.interval);
-	}
 
   handleInputChange(event) {
     const value = event.target.value;
@@ -61,34 +56,21 @@ class CommentModal extends React.Component {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': 'JWT ' + Helper.access_token
+              'Authorization': 'JWT ' + AllActions.getCookie("access_token")
             }
-        }).then(function(response) {
+        }).then((response) => {
             if (response.ok) {
                 return response.json()
             } else {
                 return null
             }
-        }).then(function(response) {
+        }).then((response) => {
           if(response.Comment){
-            Helper.setComments(response.Comment);
+            this.setState({
+              comments: response.Comment
+            });
           }
         });
-  }
-
-  setComments() {
-    this.loadComments();
-    if(Helper.commentStatus){
-      this.setState({
-        commentStatus: Helper.commentStatus
-      });
-    }
-    if(Helper.comments.length != 0){
-      this.setState({
-        comments: Helper.comments
-      });
-    }
-    Helper.setCommentStatus(false);
   }
 
   commentPost() {
@@ -96,24 +78,26 @@ class CommentModal extends React.Component {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': 'JWT ' + Helper.access_token
+              'Authorization': 'JWT ' + AllActions.getCookie("access_token")
             },
             body: JSON.stringify({
               content: this.state.newcomment,
-              owner: Helper.username,
+              owner: AllActions.getCookie('username'),
               date: new Date,
               postID: this.props.post.postID
             })
-        }).then(function(response) {
+        }).then((response) => {
             if (response.ok) {
                 return response.json()
             } else {
                 return null
             }
-        }).then(function(response) {
-
-            Helper.setCommentStatus(true);
+        }).then((response) => {
+            this.setState({
+              commentStatus: true
+            });
             console.log("Commented");
+            this.loadComments();
         });
   }
 
@@ -121,14 +105,22 @@ class CommentModal extends React.Component {
       return (
         <div className="comment-modal col-md-7">
           <div className="post-content">
-            <div className="post-owner">{this.props.post.owner}</div>
-            <div>{this.props.post.content}</div>
-            <img src={this.props.post.url} width="100%"/>
+            <div className="post-owner post-owner-comment">{this.props.post.owner}</div>
+            <div className="post-body-modal post-body-comment">{this.props.post.content}</div>
+            {this.props.post.url !== "" ?
+              <img className="image-comment" src={this.props.post.url}/>
+              :
+              null
+            }
           </div>
           <div className="post-content">
-            <div className="green pull-right like-box">{this.props.post.like} Like</div>
+            <div className="green pull-right like-box">{this.props.likes} Like</div>
           </div>
-          <div className="btn post-btn" onClick={this.props.likePost}>Like</div>
+          {this.props.liked ?
+            <div className="btn post-btn" onClick={this.props.unlikePost}>Unlike</div>
+            :
+            <div className="btn post-btn" onClick={this.props.likePost}>Like</div>
+          }
           <div className="comment-form">
             <textarea className="form-control post-input" type="text" name="newcomment" placeholder="What do you think about this?" onChange={this.handleInputChange}/>
             <div className="btn blue-btn" onClick={this.commentPost}>Post</div>

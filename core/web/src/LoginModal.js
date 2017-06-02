@@ -1,47 +1,27 @@
 import React,{PropTypes} from 'react';
 
-import Helper from './Helper.jsx'
-import AllActions from './AllActions.jsx'
+import Helper from './Helper.js'
+import AllActions from './AllActions.js'
 
 class LoginModal extends React.Component {
 
   constructor(props){
     super(props);
     this.state = {
-      username: '',
+      username: this.props.username,
       password: '',
-      path: '',
-      error: false
+      error: false,
+      loading: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.getToken = this.getToken.bind(this);
-    this.checkLogin = this.checkLogin.bind(this);
-  }
-
-  componentDidMount() {
-    this.interval = setInterval(this.checkLogin, 1000);
-  }
-
-  componentWillUnmount() {
-		clearInterval(this.interval);
-	}
-
-  checkLogin() {
-    if(Helper.errorLogin){
-      this.setState({
-        error: true
-      });
-    }
-    if(Helper.access_token != ""){
-      AllActions.creatUserInfoFile(this.state.username, this.state.password, Helper.access_token);
-    }
   }
 
   handleInputChange(event) {
     const value = event.target.value;
     const name = event.target.name;
     if(name == "username") {
-      Helper.setUsername(value);
+      AllActions.setCookie("username", value, 1);
     }
     this.setState({
       [name]: value
@@ -49,6 +29,9 @@ class LoginModal extends React.Component {
   }
 
   getToken() {
+    this.setState({
+      loading: true
+    })
     fetch(Helper.authorizationUrl, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -56,20 +39,24 @@ class LoginModal extends React.Component {
               username: this.state.username,
               password: this.state.password
             })
-        }).then(function(response) {
+        }).then((response) => {
             if (response.ok) {
                 return response.json()
             } else {
                 return null
             }
-        }).then(function(response) {
+        }).then((response) => {
             if (!response) {
-                Helper.setAccessToken('');
-                Helper.setErrorLogin();
-                console.log(response.message);
+                this.setState({
+                  error: true,
+                  loading: false
+                });
             } else{
                 console.log(response.access_token);
-                Helper.setAccessToken(response.access_token);
+                AllActions.setCookie("username", this.state.username, 1);
+                AllActions.setCookie("password", this.state.password, 1);
+                AllActions.setCookie("access_token", response.access_token, 1);
+                window.location.hash = "newfeed";
             }
         });
   }
@@ -79,7 +66,11 @@ class LoginModal extends React.Component {
         <form className="login">
           <h3>Login</h3>
           <div className="mt-2">
-            <input className="form-control" type="text" name="username" placeholder="Username" onChange={this.handleInputChange}/>
+            {this.props.username ?
+              <input className="form-control" type="text" name="username" placeholder={this.props.username} onChange={this.handleInputChange}/>
+              :
+              <input className="form-control" type="text" name="username" placeholder="Username" onChange={this.handleInputChange}/>
+            }
             <input className="form-control" type="password" name="password" placeholder="Password" onChange={this.handleInputChange}/>
             {
               this.state.error ?
@@ -93,6 +84,11 @@ class LoginModal extends React.Component {
               <div className="btn btn-primary" onClick={this.props.openRegisterModal}>
                   Register
               </div>
+              {this.state.loading ?
+                <div className="ld ld-hourglass ld-spin-fast text-center" style={{fontSize: "32px", color: "#3498db"}}></div>
+                :
+                ""
+              }
         </form>
       );
   }

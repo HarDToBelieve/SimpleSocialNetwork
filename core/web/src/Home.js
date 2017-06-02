@@ -1,11 +1,11 @@
 import React from 'react';
 import {ModalContainer, ModalDialog} from 'react-modal-dialog';
 
-import LoginModal from './LoginModal.jsx'
-import RegisterModal from './RegisterModal.jsx'
-import NewFeed from './NewFeed.jsx'
-import Helper from './Helper.jsx'
-import AllActions from './AllActions.jsx'
+import LoginModal from './LoginModal.js'
+import RegisterModal from './RegisterModal.js'
+import NewFeed from './NewFeed.js'
+import Helper from './Helper.js'
+import AllActions from './AllActions.js'
 
 class Home extends React.Component {
 
@@ -15,23 +15,13 @@ class Home extends React.Component {
       isShowingLoginModal: false,
       isShowingRegisterModal: false,
       username: "",
-      logedIn: false
     }
     this.openLoginModal = this.openLoginModal.bind(this);
     this.openRegisterModal = this.openRegisterModal.bind(this);
     this.closeLoginModal = this.closeLoginModal.bind(this);
     this.closeRegisterModal = this.closeRegisterModal.bind(this);
-    this.checkAuth = this.checkAuth.bind(this);
+    this.getRegisterInfo = this.getRegisterInfo.bind(this);
   }
-
-  componentDidMount() {
-    this.interval = setInterval(this.checkAuth, 1000);
-    AllActions.loadAccessToken();
-  }
-
-  componentWillUnmount() {
-		clearInterval(this.interval);
-	}
 
   openLoginModal() {
     this.setState({
@@ -44,18 +34,6 @@ class Home extends React.Component {
     this.setState({
       isShowingLoginModal: false
     })
-  }
-
-  checkAuth() {
-      if(Helper.access_token != ""){
-        this.setState({
-          logedIn: true
-        });
-      } else {
-        this.setState({
-          logedIn: false
-        });
-      }
   }
 
   openRegisterModal() {
@@ -78,26 +56,25 @@ class Home extends React.Component {
   }
 
   render() {
-      return this.state.logedIn === false ?
-            (
+      return(
               <div className="container-home row">
                 <div className="col col-md-6 home-right">
                   <img width="150px" height="150px" src="images/Logo.png" />
-                  <h2>Simple Social Network</h2>
-                  <h4>Nothing could be simpler</h4>
+                  <img className="home-logo-name" height="40px" src="images/name-logo-2x.png"/>
+                  <h4 className="slogan">Nothing could be simpler</h4>
                   <div className="home-button">
-                    <button className="btn blue-btn" onClick={this.openLoginModal}>Login</button>
+                    <button className="login-register" onClick={this.openLoginModal}>Login</button>
                     { this.state.isShowingLoginModal &&
                       <ModalContainer onClose={this.closeLoginModal}>
                         <ModalDialog onClose={this.closeLoginModal}>
                           <LoginModal
-                            checkAuth = {this.checkAuth}
                             openRegisterModal = {this.openRegisterModal}
+                            username = {this.state.username}
                           />
                         </ModalDialog>
                       </ModalContainer>
                     }
-                    <button className="btn blue-btn" onClick={this.openRegisterModal}>Register</button>
+                    <button className="login-register" onClick={this.openRegisterModal}>Register</button>
                     { this.state.isShowingRegisterModal &&
                       <ModalContainer onClose={this.closeRegisterModal}>
                         <ModalDialog onClose={this.closeRegisterModal}>
@@ -113,12 +90,6 @@ class Home extends React.Component {
                 <div className="col col-md-6 hidden-sm-down home-left">
                   <img width="100%" src="images/LandingImage.png" />
                 </div>
-              </div>
-            )
-          :
-            (
-              <div className="grey-background">
-                <NewFeed />
               </div>
             )
   }

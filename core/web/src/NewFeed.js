@@ -2,12 +2,12 @@ import React from 'react';
 import {ModalContainer, ModalDialog} from 'react-modal-dialog';
 import FormData from 'form-data';
 
-import Header from './Header.jsx';
-import Helper from './Helper.jsx';
-import ProfileModal from './ProfileModal.jsx';
-import CommentModal from './CommentModal.jsx';
-import PostList from './PostList.jsx';
-import AllActions from './AllActions.jsx';
+import Header from './Header.js';
+import Helper from './Helper.js';
+import ProfileModal from './ProfileModal.js';
+import CommentModal from './CommentModal.js';
+import PostList from './PostList.js';
+import AllActions from './AllActions.js';
 
 class NewFeed extends React.Component {
 
@@ -15,26 +15,39 @@ class NewFeed extends React.Component {
     super();
     this.state = {
       posts: [],
+      currentLastPostId: 0,
+      endOfPostList: false,
       newpost: "",
       postStatus: false,
       isShowingProfileModal: false,
       file: '',
       imagePreviewUrl: ''
     };
-    this.setPosts = this.setPosts.bind(this);
     this.postData = this.postData.bind(this);
+    this.loadData = this.loadData.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.openProfileModal = this.openProfileModal.bind(this);
     this.closeProfileModal = this.closeProfileModal.bind(this);
   }
 
   componentDidMount() {
-    this.loadData();
-    this.interval = setInterval(this.setPosts, 1000);
+    if(AllActions.getCookie("access_token") && AllActions.getCookie("access_token") !== '""'){
+      this.loadData();
+    } else window.location.hash = "";
   }
 
-  componentWillUnmount() {
-    clear(this.interval);
+  componentWillUnMount() {
+    this.cleanup = () => {
+      window.addEventListener("scroll", (evt) => {
+        if(this.state.posts.length - this.state.currentLastPostId == 10 && document.body.scrollTop !== 0 && document.body.scrollHeight - document.body.scrollTop == window.innerHeight){
+          let currentLastPostId = this.state.currentLastPostId + 10;
+          this.setState({
+            currentLastPostId
+          });
+          setTimeout(this.loadData(), 1500);
+        }
+      });
+    }
   }
 
   openProfileModal() {
@@ -57,47 +70,45 @@ class NewFeed extends React.Component {
     });
   }
 
-  resetAccessToken(){
-    Helper.setAccessToken("");
-    AllActions.logout();
+  resetAccessToken() {
+    document.cookie = 'username="";';
+    document.cookie = 'password="";';
+    document.cookie = 'access_token="";';
+    window.location.hash = "";
   }
 
   postData() {
+    this.setState({
+      posting: true
+    })
     let formData = new FormData();
     formData.append('content', this.state.newpost);
-    formData.append('owner', Helper.username);
+    formData.append('owner', AllActions.getCookie("username"));
     formData.append('date', Date.now());
     formData.append('file', this.state.file);
     fetch(Helper.postDataUrl, {
             method: 'POST',
             headers: {
-              'Authorization': 'JWT ' + Helper.access_token
+              'Authorization': 'JWT ' + AllActions.getCookie("access_token")
             },
             body: formData
-        }).then(function(response) {
+        }).then((response) => {
             if (response.ok) {
                 return response.json()
             } else {
                 return null
             }
-        }).then(function(response) {
-            Helper.setPostStatus(true);
+        }).then((response) => {
+            this.setState({
+              postStatus: true,
+              file: '',
+              imagePreviewUrl: '',
+              posting: false
+            });
             console.log("Post Successfully");
+            location.reload();
         });
   }
-
-  setPosts() {
-    this.loadData();
-    this.setState({
-      postStatus: Helper.postStatus
-    });
-    if(Helper.posts.length != 0){
-      this.setState({
-        posts: Helper.posts
-      });
-    }
-    Helper.setPostStatus(false);
- }
 
    _handleSubmit(e) {
      e.preventDefault();
@@ -107,7 +118,6 @@ class NewFeed extends React.Component {
 
    _handleImageChange(e) {
      e.preventDefault();
-
      let reader = new FileReader();
      let file = e.target.files[0];
 
@@ -117,29 +127,47 @@ class NewFeed extends React.Component {
          imagePreviewUrl: reader.result
        });
      }
-
      reader.readAsDataURL(file)
    }
 
   loadData() {
-    console.log(Helper.access_token);
-    fetch(Helper.newfeedDataUrl + Helper.username + "&postID=0", {
+    console.log("Loading data...")
+    fetch(Helper.newfeedDataUrl + AllActions.getCookie("username") + "&postID=" +  this.state.currentLastPostId, {
             method: 'GET',
             headers: {
-              'Authorization': 'JWT ' + Helper.access_token
+              'Authorization': 'JWT ' + AllActions.getCookie("access_token")
             }
-        }).then(function(response) {
+        }).then((response) => {
             if (response.ok) {
                 return response.json()
             } else {
                 return null
             }
-        }).then(function(response) {
-          Helper.setPosts(response.posts);
+        }).then((response) => {
+          if(response.posts && response.posts.length){
+            let posts = this.state.posts.concat(response.posts);
+            this.setState({
+              posts
+            });
+          } else {
+            this.setState({
+              endOfPostList: true,
+            });
+            console.log(this.state.endOfPostList);
+          }
         });
   }
 
   render() {
+      window.addEventListener("scroll", (evt) => {
+        if(this.state.posts.length - this.state.currentLastPostId == 10 && document.body.scrollTop !== 0 && document.body.scrollHeight - document.body.scrollTop == window.innerHeight){
+          let currentLastPostId = this.state.currentLastPostId + 10;
+          this.setState({
+            currentLastPostId
+          });
+          setTimeout(this.loadData(), 1500);
+        }
+      });
       return (
         <div>
           <Header
@@ -175,13 +203,27 @@ class NewFeed extends React.Component {
                 <ModalContainer onClose={this.closeProfileModal}>
                   <ModalDialog onClose={this.closeProfileModal}>
                     <ProfileModal
-                     username = {Helper.username}
+                     username = {AllActions.getCookie("username")}
                     />
                   </ModalDialog>
                 </ModalContainer>
               }
             </div>
-            <PostList posts = {this.state.posts}/>
+            {this.state.posts.length ?
+              <PostList posts = {this.state.posts}/>
+              :
+              ""
+            }
+            {this.state.endOfPostList || (this.state.posts.length - this.state.currentLastPostId !== 10 && this.state.posts.length !== 0)?
+              null
+              :
+              <div className="ld ld-hourglass ld-spin-fast text-center" style={{fontSize: "64px", color: "#3498db", marginLeft: "5%"}}></div>
+            }
+            {this.state.posting ?
+              <div className="ld ld-hourglass ld-spin-fast text-center" style={{fontSize: "64px", color: "#3498db", marginLeft: "5%"}}></div>
+              :
+              null
+            }
           </div>
         </div>
       );

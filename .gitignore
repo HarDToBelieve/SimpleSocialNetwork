@@ -1,2 +1,3 @@
 core/apis/*.pyc
 *node_modules/*
+*DS_Store*

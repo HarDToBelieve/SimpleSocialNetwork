@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 
-import Helper from './Helper.jsx';
+import Helper from './Helper.js';
 
 class RegisterModal extends React.Component {
 
@@ -16,32 +16,6 @@ class RegisterModal extends React.Component {
       };
       this.handleInputChange = this.handleInputChange.bind(this);
       this.postRegistration = this.postRegistration.bind(this);
-      this.checkRegister = this.checkRegister.bind(this);
-  }
-
-  componentDidMount() {
-    this.interval = setInterval(this.checkRegister, 1000);
-  }
-
-  componentWillUnmount() {
-		clearInterval(this.interval);
-	}
-
-  checkRegister() {
-    if(Helper.registered){
-      this.setState({
-        registered: true
-      });
-    }
-    if(Helper.errorRegister){
-      this.setState({
-        error: true
-      });
-    } else {
-      this.setState({
-        error: false
-      });
-    }
   }
 
   handleInputChange(event) {
@@ -74,18 +48,24 @@ class RegisterModal extends React.Component {
                 password: this.state.password,
                 birthday: this.state.birthday
               })
-          }).then(function(response) {
+          }).then((response) => {
               if (response.ok) {
                   return response.json()
               } else {
                   return null
               }
-          }).then(function(response) {
+          }).then((response) => {
             if(!response) {
-              Helper.setErrorRegister();
+              this.setState({
+                error: true
+              });
             } else{
               console.log("Successfully registered.");
-              Helper.setSuccessRegistered();
+              this.setState({
+                registered: true,
+                error: false
+              });
+              this.props.getRegisterInfo(this.state.username);
             }
           });
   }
