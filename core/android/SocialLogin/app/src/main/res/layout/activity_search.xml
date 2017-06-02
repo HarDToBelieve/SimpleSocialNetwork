@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#ffffff"
+        android:layout_alignParentBottom="true">
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:background="#5ed3f9"/>
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottomNavView_Bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            app:menu="@menu/bottom_nav_menu">
+
+
+        </android.support.design.widget.BottomNavigationView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:background="#ffffff"
+        >
+
+        <TextView
+            android:id="@+id/searchText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="18dp"
+            android:text="SEARCH"
+            android:textColor="#5ed3f9"
+            android:textSize="18dp"
+            />
+
+        <View
+            android:id="@+id/chatLine"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="60dp"
+            android:background="#5ed3f9"/>
+    </RelativeLayout>
+
+</RelativeLayout>

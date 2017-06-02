@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/bottomBar"
+        android:background="#ffffff"
+        android:layout_alignParentBottom="true">
+
+        <View android:layout_alignParentTop="true"
+              android:layout_height="1dp"
+              android:background="#5ed3f9"
+              android:layout_width="fill_parent"/>
+
+        <android.support.design.widget.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/bottomNavView_Bar"
+            app:menu="@menu/bottom_nav_menu"
+            android:layout_alignParentStart="true">
+
+
+        </android.support.design.widget.BottomNavigationView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:id="@+id/topBar"
+        android:background="#ffffff"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+    <TextView
+        android:text="NEW POST"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:id="@+id/newpostText"
+        android:textColor="#1bb4e5"
+        android:textSize="18dp"
+        />
+
+    <View
+        android:layout_height="1dp"
+        android:background="#5ed3f9"
+        android:layout_width="fill_parent"
+        android:id="@+id/chatLine"
+        android:layout_marginTop="60dp"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:text="Cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#5ed3f9"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="19dp"
+        android:textSize="16dp"
+        android:id="@+id/cancelText"
+        android:layout_alignBottom="@+id/newpostText" />
+
+    <TextView
+        android:text="Post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="17dp"
+        android:textColor="#5ed3f9"
+        android:textSize="16dp"
+        android:id="@+id/postText"
+        android:layout_alignBottom="@+id/newpostText" />
+    </RelativeLayout>
+
+</RelativeLayout>

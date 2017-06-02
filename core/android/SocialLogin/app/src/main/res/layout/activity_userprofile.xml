@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#ffffff"
+        android:layout_alignParentBottom="true">
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:background="#5ed3f9"/>
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottomNavView_Bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            app:menu="@menu/bottom_nav_menu">
+
+
+        </android.support.design.widget.BottomNavigationView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:background="#ffffff"
+        >
+
+        <TextView
+            android:id="@+id/profileText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="18dp"
+            android:text="PROFILE"
+            android:textColor="#5ed3f9"
+            android:textSize="18dp"
+            />
+
+        <View
+            android:id="@+id/chatLine"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="60dp"
+            android:background="#5ed3f9"/>
+    </RelativeLayout>
+
+
+
+    <!--This is for body-->
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_below="@+id/topBar"
+        android:layout_above="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:id="@+id/infoProfile"
+                android:background="#ffffff"
+                android:layout_width="match_parent"
+                android:layout_height="150dp">
+
+                <TextView
+                    android:text="hoanganh"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_below="@+id/avatar"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/username"
+                    android:textSize="16sp"
+                    android:layout_width="136dp"
+                    android:layout_height="wrap_content"
+                    />
+
+
+                <TextView
+                    android:text="Posts"
+                    android:layout_alignParentBottom="true"
+                    android:textStyle="bold"
+                    android:textColor="#ffffff"
+                    android:background="#5ed3f9"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:id="@+id/textPost"
+                    />
+
+                <ImageView
+                    android:contentDescription="This is avatar"
+                    android:id="@+id/avatar"
+                    android:src="@mipmap/ic_launcher"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"/>
+
+                <TextView
+                    android:text="25-10-1996"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:gravity="center"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="60dp"
+                    android:layout_marginTop="18dp"
+                    android:id="@+id/birthday"
+                    android:layout_alignTop="@+id/avatar"
+                    android:layout_alignParentEnd="true"/>
+
+                <TextView
+                    android:text="Follow"
+                    android:textStyle="bold"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:background="#5ed3f9"
+                    android:layout_width="150dp"
+                    android:layout_height="28dp"
+                    android:layout_marginEnd="35dp"
+                    android:id="@+id/followText"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_below="@+id/infoProfile"
+                android:layout_above="@+id/bottomBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</RelativeLayout>

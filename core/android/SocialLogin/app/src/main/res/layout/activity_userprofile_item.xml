@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:text="Hello World"
+        android:textStyle="bold"
+        android:id="@+id/username"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:textSize="15sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_below="@+id/username"
+        android:textSize="16dp"
+        android:text="Hom nay la thu may chac chan la thu high"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/image"
+        android:src="@mipmap/ic_launcher"
+        android:layout_below="@id/content"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:text="12"
+        android:layout_marginLeft="50dp"
+        android:textSize="16dp"
+        android:textColor="#5ed3f9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/image"
+        android:id="@+id/likeNumber"
+        />
+
+    <TextView
+        android:text="LIKE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#5ed3f9"
+        android:id="@+id/like"
+        android:textSize="16dp"
+        android:layout_marginStart="5dp"
+        android:layout_alignBaseline="@+id/likeNumber"
+        android:layout_alignBottom="@+id/likeNumber"
+        android:layout_toEndOf="@+id/likeNumber"/>
+
+    <TextView
+        android:text="COMMENT"
+        android:layout_marginLeft="130dp"
+        android:textSize="16dp"
+        android:textColor="#5ed3f9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image"
+        android:layout_toEndOf="@+id/like"
+        android:layout_alignBaseline="@+id/like"
+        android:layout_alignBottom="@+id/like"
+        android:id="@+id/comment"/>
+
+    <View
+        android:layout_height="1dp"
+        android:background="#5ed3f9"
+        android:layout_width="fill_parent"
+        android:layout_below="@+id/comment"
+        android:layout_marginTop="10dp"
+        />
+
+
+</RelativeLayout>

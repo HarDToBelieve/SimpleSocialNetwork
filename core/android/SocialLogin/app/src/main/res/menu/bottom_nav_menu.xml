@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/newfeed"
+        android:icon="@drawable/newfeed"
+        android:title="Newfeed"
+        ></item>
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/search"
+        android:title="Search"
+        ></item>
+    <item
+        android:id="@+id/add"
+        android:icon="@drawable/add"
+        android:title="Post"
+        ></item>
+    <item
+        android:id="@+id/chat"
+        android:icon="@drawable/chat"
+        android:title="Chat"
+        ></item>
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/profile"
+        android:title="Profile"
+        ></item>
+</menu>
