@@ -137,7 +137,7 @@
                     android:layout_alignParentEnd="true"/>
 
                 <TextView
-                    android:text="Follow"
+                    android:text="My Profile"
                     android:textStyle="bold"
                     android:textColor="#ffffff"
                     android:textSize="16sp"

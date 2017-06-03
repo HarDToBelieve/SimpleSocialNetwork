@@ -22,14 +22,15 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,10 +48,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private UserProfileDataAdapter adapter;
     private RecyclerView recyclerView;
     List<UserProfileData> listItem;
-    private boolean isFollowed = false;
-    private boolean isCurrentUser = true;
-
-
+    public boolean isFollowed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +70,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         username.setText(userName);
 
-        loadProfileInfo();
+
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
@@ -80,7 +78,266 @@ public class UserProfileActivity extends AppCompatActivity {
 
         listItem = new ArrayList<>();
 
-        loadRecyclerViewData();
+
+        // Load profile info
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading data ... ");
+        progressDialog.show();
+        String profileUrl = "http://161.202.20.61:5000/user?action=getInfo&name=" + userName;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                profileUrl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            birthday.setText(jsonObject.getString("birthday"));
+                            String avatarUrl = jsonObject.getString("avatar");
+                            Log.d("Avatar Url", avatarUrl);
+
+                            Picasso.with(UserProfileActivity.this).load(avatarUrl).transform(new CircleTransform()).into(avatar);
+
+
+                            // Get list of followings
+                            JSONArray arrayFollowing = jsonObject.getJSONArray("followings_name");
+                            Log.d("followings_name", arrayFollowing.toString());
+                            if(arrayFollowing.length() == 1 && Singleton.getInstance().getUsername().equals(arrayFollowing.getString(0)) ||
+                                    Singleton.getInstance().getUsername().equals(userName)) {
+                                isFollowed = false;
+                                followText.setVisibility(View.GONE);
+                                loadRecyclerViewData();
+                                Log.d("isFollowed", String.valueOf(isFollowed));
+                            } else if (arrayFollowing.length() == 1) {
+                                isFollowed = false;
+                                followText.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        final ProgressDialog progressDialog = new ProgressDialog(UserProfileActivity.this);
+                                        progressDialog.setMessage("Loading data ... ");
+                                        progressDialog.show();
+                                        String followUrl = "http://161.202.20.61:5000/flwuser";
+                                        try {
+                                            JSONObject jsonBody = new JSONObject();
+                                            jsonBody.put("following", userName);
+                                            final String requestBody = jsonBody.toString();
+                                            StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                                                    followUrl,
+                                                    new Response.Listener<String>() {
+                                                        @Override
+                                                        public void onResponse(String response) {
+                                                            progressDialog.dismiss();
+                                                            followText.setText("Followed");
+                                                            isFollowed = true;
+                                                            loadRecyclerViewData();
+
+                                                        }
+                                                    },
+                                                    new Response.ErrorListener() {
+                                                        @Override
+                                                        public void onErrorResponse(VolleyError volleyError) {
+                                                            progressDialog.dismiss();
+                                                        }
+                                                    }
+                                            ) {
+
+                                                @Override
+                                                public String getBodyContentType() {
+                                                    return "application/json; charset=utf-8";
+                                                }
+
+                                                @Override
+                                                public byte[] getBody() throws AuthFailureError {
+                                                    try {
+                                                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                                                    } catch (UnsupportedEncodingException uee) {
+                                                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                                                        return null;
+                                                    }
+                                                }
+
+                                                @Override
+                                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                                    Map<String, String> headers = new HashMap<>();
+                                                    headers.put("Authorization", "JWT " + accessToken);
+                                                    return headers;
+                                                }
+
+
+                                            };
+                                            RequestQueue requestQueue = Volley.newRequestQueue(UserProfileActivity.this);
+                                            requestQueue.add(stringRequest);
+
+                                        }catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                            } else {
+                                for (int i = 0; i < arrayFollowing.length(); i++) {
+                                    if (Singleton.getInstance().getUsername().equals(arrayFollowing.getString(i))) {
+                                        isFollowed = true;
+                                        followText.setText("Followed");
+                                        loadRecyclerViewData();
+
+                                        //Unfollow
+                                        followText.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                final ProgressDialog progressDialog = new ProgressDialog(UserProfileActivity.this);
+                                                progressDialog.setMessage("Loading data ... ");
+                                                progressDialog.show();
+                                                String unfollowUrl = "http://161.202.20.61:5000/unflwuser";
+                                                try {
+                                                    JSONObject jsonBody = new JSONObject();
+                                                    jsonBody.put("unfollowing", userName);
+                                                    final String requestBody = jsonBody.toString();
+                                                    StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                                                            unfollowUrl,
+                                                            new Response.Listener<String>() {
+                                                                @Override
+                                                                public void onResponse(String response) {
+                                                                    progressDialog.dismiss();
+                                                                    followText.setText("Follow");
+                                                                    isFollowed = false;
+                                                                }
+                                                            },
+                                                            new Response.ErrorListener() {
+                                                                @Override
+                                                                public void onErrorResponse(VolleyError volleyError) {
+                                                                    progressDialog.dismiss();
+                                                                }
+                                                            }
+                                                    ) {
+
+                                                        @Override
+                                                        public String getBodyContentType() {
+                                                            return "application/json; charset=utf-8";
+                                                        }
+
+                                                        @Override
+                                                        public byte[] getBody() throws AuthFailureError {
+                                                            try {
+                                                                return requestBody == null ? null : requestBody.getBytes("utf-8");
+                                                            } catch (UnsupportedEncodingException uee) {
+                                                                VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                                                                return null;
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public Map<String, String> getHeaders() throws AuthFailureError {
+                                                            Map<String, String> headers = new HashMap<>();
+                                                            headers.put("Authorization", "JWT " + accessToken);
+                                                            return headers;
+                                                        }
+
+
+                                                    };
+                                                    RequestQueue requestQueue = Volley.newRequestQueue(UserProfileActivity.this);
+                                                    requestQueue.add(stringRequest);
+
+                                                }catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+                                        break;
+                                    } else {
+                                        isFollowed = false;
+                                        followText.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                final ProgressDialog progressDialog = new ProgressDialog(UserProfileActivity.this);
+                                                progressDialog.setMessage("Loading data ... ");
+                                                progressDialog.show();
+                                                String followUrl = "http://161.202.20.61:5000/flwuser";
+                                                try {
+                                                    JSONObject jsonBody = new JSONObject();
+                                                    jsonBody.put("following", userName);
+                                                    final String requestBody = jsonBody.toString();
+                                                    StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                                                            followUrl,
+                                                            new Response.Listener<String>() {
+                                                                @Override
+                                                                public void onResponse(String response) {
+                                                                    progressDialog.dismiss();
+                                                                    followText.setText("Followed");
+                                                                    isFollowed = true;
+                                                                    loadRecyclerViewData();
+                                                                }
+                                                            },
+                                                            new Response.ErrorListener() {
+                                                                @Override
+                                                                public void onErrorResponse(VolleyError volleyError) {
+                                                                    progressDialog.dismiss();
+                                                                }
+                                                            }
+                                                    ) {
+
+                                                        @Override
+                                                        public String getBodyContentType() {
+                                                            return "application/json; charset=utf-8";
+                                                        }
+
+                                                        @Override
+                                                        public byte[] getBody() throws AuthFailureError {
+                                                            try {
+                                                                return requestBody == null ? null : requestBody.getBytes("utf-8");
+                                                            } catch (UnsupportedEncodingException uee) {
+                                                                VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                                                                return null;
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public Map<String, String> getHeaders() throws AuthFailureError {
+                                                            Map<String, String> headers = new HashMap<>();
+                                                            headers.put("Authorization", "JWT " + accessToken);
+                                                            return headers;
+                                                        }
+
+
+                                                    };
+                                                    RequestQueue requestQueue = Volley.newRequestQueue(UserProfileActivity.this);
+                                                    requestQueue.add(stringRequest);
+
+                                                }catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+
+                            }
+                            Log.d("function isFollowed", String.valueOf(isFollowed));
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Toast.makeText(getApplicationContext(), volleyError.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders ()throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "JWT " + accessToken);
+                return headers;
+            }
+
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
 
 
 
@@ -118,77 +375,12 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
 
+
+
     }
 
-    private void loadProfileInfo() {
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading data ... ");
-        progressDialog.show();
-        String profileUrl = "http://161.202.20.61:5000/user?action=getInfo&name=" + userName;
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                profileUrl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        progressDialog.dismiss();
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            birthday.setText(jsonObject.getString("birthday"));
-                            String avatarUrl = jsonObject.getString("avatar");
-                            Log.d("Avatar Url", avatarUrl);
-
-                            Picasso.with(UserProfileActivity.this).load(avatarUrl).transform(new CircleTransform()).into(avatar);
-
-
-                            // Get list of follower
-                            JSONArray arrayFollower = jsonObject.getJSONArray("followers_name");
-                            for (int i = 0; i < arrayFollower.length(); i++) {
-                                if(userName.equals(Singleton.getInstance().getUsername())) {
-                                    isFollowed = false;
-                                    followText.setVisibility(View.GONE);
-                                    break;
-                                }
-                                if(userName.equals(arrayFollower.getString(i))) {
-                                    isFollowed = true;
-                                    break;
-                                }
-
-                            }
-
-                            if(isFollowed) {
-                                followText.setText("Followed");
-                            }
-
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), volleyError.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-        )
-        {
-            @Override
-            public Map<String, String> getHeaders ()throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", "JWT " + accessToken);
-                Log.d("Header", headers.toString());
-                //..add other headers
-                return headers;
-            }
-
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-    }
-
-    private void loadRecyclerViewData() {
+    public void loadRecyclerViewData() {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading data ... ");
         progressDialog.show();
@@ -315,4 +507,5 @@ public class UserProfileActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
+
 }
