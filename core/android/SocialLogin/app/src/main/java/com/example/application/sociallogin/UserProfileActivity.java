@@ -49,7 +49,7 @@ public class UserProfileActivity extends AppCompatActivity {
     List<UserProfileData> listItem;
     private boolean isFollowed = false;
     private boolean isCurrentUser = true;
-    private boolean isLiked = false;
+
 
 
     @Override
@@ -82,13 +82,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
         loadRecyclerViewData();
 
-        if(!isLiked){
-
-        } else {
-            likeText.setText("UNLIKE");
-        }
-
-
 
 
 
@@ -102,7 +95,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         startActivity(intentNewfeed);
                         break;
                     case R.id.search:
-                        Intent intentSearch = new Intent(UserProfileActivity.this, HomeActivity.class);
+                        Intent intentSearch = new Intent(UserProfileActivity.this, SearchActivity.class);
                         startActivity(intentSearch);
                         break;
                     case R.id.add:
@@ -144,11 +137,8 @@ public class UserProfileActivity extends AppCompatActivity {
                             birthday.setText(jsonObject.getString("birthday"));
                             String avatarUrl = jsonObject.getString("avatar");
                             Log.d("Avatar Url", avatarUrl);
-//                            if((avatarUrl.substring(avatarUrl.length() - 4)).equals(".jpg")) {
-                                Picasso.with(UserProfileActivity.this).load(avatarUrl).transform(new CircleTransform()).into(avatar);
-//                            } else {
-//                                Picasso.with(UserProfileActivity.this).load(R.drawable.noavatar).transform(new CircleTransform()).into(avatar);
-//                            }
+
+                            Picasso.with(UserProfileActivity.this).load(avatarUrl).transform(new CircleTransform()).into(avatar);
 
 
                             // Get list of follower

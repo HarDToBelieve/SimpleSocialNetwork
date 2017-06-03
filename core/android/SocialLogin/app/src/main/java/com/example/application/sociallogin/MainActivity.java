@@ -100,7 +100,6 @@ public class MainActivity extends Activity {
                         try {
                             info.put("username", name);
                             info.put("password", password);
-                            Log.d("json api", "json object converted from array: " + info.toString());
                             Singleton.getInstance().setUsername(userName.getText().toString());
                             new DoLogin().execute(info.toString());
 
@@ -114,32 +113,6 @@ public class MainActivity extends Activity {
         );
     }
 
-//    public String getPostDataString(JSONObject params) throws Exception {
-//
-//        StringBuilder result = new StringBuilder();
-//        boolean first = true;
-//
-//        Iterator<String> itr = params.keys();
-//
-//        while(itr.hasNext()){
-//
-//            String key= itr.next();
-//            Object value = params.get(key);
-//
-//            if (first)
-//                first = false;
-//            else
-//                result.append("&");
-//
-//            result.append(URLEncoder.encode(key, "UTF-8"));
-//            result.append("=");
-//            result.append(URLEncoder.encode(value.toString(), "UTF-8"));
-//
-//        }
-//        return result.toString();
-//    }
-
-    //Another way
     class DoLogin extends AsyncTask<String, String, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -174,7 +147,6 @@ public class MainActivity extends Activity {
                 while((byteCharacter = is.read()) != -1) {
                         result += (char) byteCharacter;
                 }
-                Log.d("json api", "DoLogin.doInBackground return: " + result);
 
                 JSONObject obj = new JSONObject(result);
                 String accessToken = obj.getString("access_token");
@@ -201,9 +173,6 @@ public class MainActivity extends Activity {
                 accessToken = response;
                 Singleton.getInstance().setAccessToken(accessToken);
                 Intent homeIntent = new Intent(getApplicationContext(), HomeActivity.class);
-//                Bundle accessTokenBundle = new Bundle();
-//                accessTokenBundle.putString("access_token", response);
-//                homeIntent.putExtras(accessTokenBundle);
                 MainActivity.this.startActivity(homeIntent);
             }
 
