@@ -111,13 +111,7 @@ public class RegisterActivity extends AppCompatActivity {
                             signupYear.setError("Error input year");
                             return;
                         }
-//                        else if (bitmap == null) {
-//                            Toast imgProfileToast = Toast.makeText(RegisterActivity.this, "Blank profile picture",
-//                                    Toast.LENGTH_SHORT);
-//                            imgProfileToast.setGravity(Gravity.LEFT|Gravity.CENTER_HORIZONTAL, 275, 300);
-//                            imgProfileToast.show();
-//                            return;
-//                        }
+
                         JSONObject infoReg = new JSONObject();
                         try {
                             infoReg.put("username", signupName.getText().toString());

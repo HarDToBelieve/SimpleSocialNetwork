@@ -31,4 +31,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.koushikdutta.ion:ion:2.1.9'
+    compile 'net.gotev:uploadservice:2.1'
 }

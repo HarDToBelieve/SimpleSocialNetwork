@@ -2,7 +2,16 @@ package com.example.application.sociallogin;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +35,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
+import net.gotev.uploadservice.MultipartUploadRequest;
+import net.gotev.uploadservice.UploadNotificationConfig;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -33,19 +45,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView username;
     TextView birthday;
     ImageView avatar;
     ImageView logout;
+    TextView followText;
     String name = Singleton.getInstance().getUsername();
     String accessToken = Singleton.getInstance().getAccessToken();
     private int postID = 0;
+    private final int IMG_REQUEST = 1;
     private RecyclerView recyclerView;
     private List<ProfileData> listItem;
     private ProfileDataAdapter adapter;
+    private Uri imgPath;
+    private Bitmap bitmap;
 
 
     @Override
@@ -62,15 +79,22 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         username = (TextView) findViewById(R.id.username);
-        birthday = (TextView) findViewById(R.id.birthday) ;
+        birthday = (TextView) findViewById(R.id.birthday);
         avatar = (ImageView) findViewById(R.id.avatar);
         logout = (ImageView) findViewById(R.id.logout);
+        followText = (TextView) findViewById(R.id.followText);
+        followText.setVisibility(View.GONE);
 
         username.setText(name);
 
-
         loadProfileInfo();
 
+         avatar.setOnClickListener(this);
+
+//        if(imgPath != null) {
+//            followText.setOnClickListener(this);
+//        }
+        followText.setOnClickListener(this);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
@@ -309,7 +333,112 @@ public class ProfileActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
+    private void selectImage() {
+        Intent intent = new Intent();
+        intent.setType(("image/*"));
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, IMG_REQUEST);
+    }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == IMG_REQUEST && resultCode == RESULT_OK && data != null) {
+            imgPath = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgPath);
+                bitmap = getCircularBitmap(bitmap);
+                avatar.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public String getPath(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        cursor.close();
+
+        cursor = getContentResolver().query(
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+        cursor.moveToFirst();
+        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+        cursor.close();
+
+        return path;
+    }
+
+    public void changeAvatar() {
+        String path = getPath(imgPath);
+
+        //Uploading code
+        try {
+            String uploadId = UUID.randomUUID().toString();
+
+            //Creating a multi part request
+            new MultipartUploadRequest(this, uploadId, "http://161.202.20.61:5000/userimg")
+                    .setMethod("POST")
+                    .addHeader("Authorization", "JWT " + accessToken)
+                    .addFileToUpload(path, "file") //Adding file
+                    .setNotificationConfig(new UploadNotificationConfig())
+                    .setMaxRetries(2)
+                    .startUpload(); //Starting the upload
+
+            Toast.makeText(this, "Changed avatar successfully", Toast.LENGTH_SHORT).show();
+
+
+        } catch (Exception exc) {
+            Toast.makeText(this, exc.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static Bitmap getCircularBitmap(Bitmap bitmap) {
+        Bitmap output;
+
+        if (bitmap.getWidth() > bitmap.getHeight()) {
+            output = Bitmap.createBitmap(bitmap.getHeight(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        } else {
+            output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getWidth(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        float r = 0;
+
+        if (bitmap.getWidth() > bitmap.getHeight()) {
+            r = bitmap.getHeight() / 2;
+        } else {
+            r = bitmap.getWidth() / 2;
+        }
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawCircle(r, r, r, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if ( v == avatar ) {
+            selectImage();
+            followText.setText("Change Avatar");
+            followText.setVisibility(View.VISIBLE);
+        }
+        if ( v == followText) {
+            changeAvatar();
+            loadProfileInfo();
+        }
+    }
 }
 
 

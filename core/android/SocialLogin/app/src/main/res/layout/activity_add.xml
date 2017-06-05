@@ -71,11 +71,50 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="17dp"
+        android:layout_marginEnd="20dp"
         android:textColor="#5ed3f9"
         android:textSize="16dp"
         android:id="@+id/postText"
         android:layout_alignBottom="@+id/newpostText" />
     </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/topBar"
+        android:layout_above="@id/bottomBar">
+    <RelativeLayout
+        android:id="@+id/statusArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/content"
+            android:hint="What are you thinking?"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            />
+
+        <ImageView
+            android:layout_below="@+id/content"
+            android:id="@+id/file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_below="@+id/file"
+            android:id="@+id/imgButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="15dp"
+            android:src="@drawable/imgic" />
+
+
+    </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>
