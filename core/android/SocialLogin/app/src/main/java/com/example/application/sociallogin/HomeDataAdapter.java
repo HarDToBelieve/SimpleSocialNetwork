@@ -52,6 +52,7 @@ public class HomeDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
 
+
     public HomeDataAdapter(RecyclerView recyclerView, List<HomeData> newfeedData, Context context) {
         this.newfeedData = newfeedData;
         this.context = context;
@@ -137,6 +138,14 @@ public class HomeDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         }
                     }
             );
+
+            //onClick like
+            statusViewHolder.like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
 
 
 

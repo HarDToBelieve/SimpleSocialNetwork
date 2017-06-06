@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -33,6 +34,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import net.gotev.uploadservice.MultipartUploadRequest;
@@ -41,6 +44,9 @@ import net.gotev.uploadservice.UploadNotificationConfig;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -174,12 +180,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                             JSONObject jsonObject = new JSONObject(response);
                             birthday.setText(jsonObject.getString("birthday"));
                             String avatarUrl = jsonObject.getString("avatar");
-                            Log.d("Avatar Url", avatarUrl);
-//                            if((avatarUrl.substring(avatarUrl.length() - 4)).equals(".jpg")) {
-                                Picasso.with(ProfileActivity.this).load(avatarUrl).transform(new CircleTransform()).into(avatar);
-//                            } else {
-//                                Picasso.with(ProfileActivity.this).load(R.drawable.noavatar).transform(new CircleTransform()).into(avatar);
-//                            }
+                            Log.d("Avatar", avatarUrl);
+//                            Picasso.with(ProfileActivity.this).invalidate(avatarUrl);
+//                            Picasso.with(ProfileActivity.this).load(avatarUrl).transform(new CircleTransform()).into(avatar);
+                            Picasso.with(ProfileActivity.this).load(avatarUrl).memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).transform(new CircleTransform()).into(avatar);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -437,6 +441,22 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         if ( v == followText) {
             changeAvatar();
             loadProfileInfo();
+        }
+    }
+
+    public Bitmap getbmpfromURL(String surl){
+        try {
+            URL url = new URL(surl);
+            HttpURLConnection urlcon = (HttpURLConnection) url.openConnection();
+            urlcon.setDoInput(true);
+            urlcon.connect();
+            InputStream in = urlcon.getInputStream();
+            Bitmap mIcon = BitmapFactory.decodeStream(in);
+            return  mIcon;
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+            e.printStackTrace();
+            return null;
         }
     }
 }
