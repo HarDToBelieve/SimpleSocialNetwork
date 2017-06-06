@@ -25,6 +25,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -97,7 +99,7 @@ public class UserProfileActivity extends AppCompatActivity {
                             String avatarUrl = jsonObject.getString("avatar");
                             Log.d("Avatar Url", avatarUrl);
 
-                            Picasso.with(UserProfileActivity.this).load(avatarUrl).transform(new CircleTransform()).into(avatar);
+                            Picasso.with(UserProfileActivity.this).load(avatarUrl).memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).transform(new CircleTransform()).into(avatar);
 
 
                             // Get list of followings

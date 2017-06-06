@@ -181,8 +181,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                             birthday.setText(jsonObject.getString("birthday"));
                             String avatarUrl = jsonObject.getString("avatar");
                             Log.d("Avatar", avatarUrl);
-//                            Picasso.with(ProfileActivity.this).invalidate(avatarUrl);
-//                            Picasso.with(ProfileActivity.this).load(avatarUrl).transform(new CircleTransform()).into(avatar);
                             Picasso.with(ProfileActivity.this).load(avatarUrl).memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).transform(new CircleTransform()).into(avatar);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -444,21 +442,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public Bitmap getbmpfromURL(String surl){
-        try {
-            URL url = new URL(surl);
-            HttpURLConnection urlcon = (HttpURLConnection) url.openConnection();
-            urlcon.setDoInput(true);
-            urlcon.connect();
-            InputStream in = urlcon.getInputStream();
-            Bitmap mIcon = BitmapFactory.decodeStream(in);
-            return  mIcon;
-        } catch (Exception e) {
-            Log.e("Error", e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
-    }
 }
 
 
